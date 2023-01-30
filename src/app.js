@@ -1,7 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
-import { sequelize } from "../database/models";
+import { sequelize } from "./database/models";
+import router from "./routes/router";
 
 dotenv.config();
 
@@ -21,6 +22,6 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-
+app.use('/', router)
 
 export default app;
