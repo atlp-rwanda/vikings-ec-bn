@@ -1,3 +1,14 @@
 node_modules/
 .env
+<<<<<<< HEAD
 package-lock.json
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+package-lock.json
+=======
+>>>>>>> 7b9e01f... chore: setup postgress and sequelize orm
+=======
+package-lock.json
+>>>>>>> 2a944a0... refactor src: added services and utils folders
+>>>>>>> # This is a combination of 4 commits.
