@@ -10,7 +10,6 @@
     "seed": "sequelize db:seed:all",
     "seeding": "npm run migrate:reset && npm run seed",
     "reset:db": "sequelize db:drop && sequelize db:create && npm run seeding",
-    "test": "cross-env NODE_ENV=test npm run seeding && better-npm-run test",
     "start": "better-npm-run prod"
   },
   "betterScripts": {
