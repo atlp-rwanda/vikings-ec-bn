@@ -1,2 +1,2 @@
 # vikings-ec-bn
-[![](https://img.shields.io/badge/Protected_by-Hound-a873d1.svg)](https://houndci.com)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/atlp-rwanda/vikings-ec-bn/tree/chore%2FIntegrate-Circleci-184347012.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/atlp-rwanda/vikings-ec-bn/tree/chore%2FIntegrate-Circleci-184347012)
