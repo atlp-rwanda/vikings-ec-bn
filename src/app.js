@@ -1,9 +1,10 @@
-
-import express from 'express';
-import dotenv from 'dotenv';
-import morgan from 'morgan';
-import { sequelize } from './database/models';
-import router from './routes/router';
+import express from "express";
+import dotenv from "dotenv";
+import morgan from "morgan";
+import swaggerUI from 'swagger-ui-express';
+import docs from'./documentation';
+import { sequelize } from "./database/models";
+import router from "./routes/welcome.router";
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/', router);
+app.use('/', router)
+app.use('/api-docs',swaggerUI.serve,swaggerUI.setup(docs));
 
 export default app;
