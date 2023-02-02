@@ -13,7 +13,7 @@ beforeEach(async () => {
 });
 
 describe('Test User Registration', () => {
-  beforeAll(function (done) {
+  afterAll(function (done) {
     User.sync({ force: true })
       .then(function () {
         done(null);
@@ -32,7 +32,6 @@ describe('Test User Registration', () => {
 
   test('Valid Token Data', async () => {
     const response = JwtUtility.verifyToken(process.env.TEST_TOKEN);
-    console.log(response);
     expect(response.email).toBeDefined();
   });
 
