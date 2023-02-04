@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
@@ -27,8 +28,8 @@ module.exports = {
             '$2b$10$loTArhq8vmd0bvzCP73VXut779UA1eltYXCsbPBL5Xddi7Y92oDka',
           createdAt: new Date(),
           updatedAt: new Date(),
-          verified: true
-        }
+          verified: true,
+        },
       ],
       {}
     );
