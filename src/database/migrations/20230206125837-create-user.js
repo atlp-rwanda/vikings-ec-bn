@@ -30,18 +30,32 @@ module.exports = {
       role: {
         type: Sequelize.STRING,
       },
-      status: {
-        type: Sequelize.STRING,
+      isActive: {
+        type: Sequelize.BOOLEAN,
       },
       avatar: {
         type: Sequelize.STRING,
       },
-      addressId: {
-        type: Sequelize.INTEGER,
+      billingAddress: {
+        type: Sequelize.JSON,
+        allowNull: true,
       },
       verified: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
+      },
+      birthdate:{
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
+      description: {
+        type: Sequelize.STRING,
+      },
+      authCode: {
+        type: Sequelize.STRING,
+      },
+      authCode: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,

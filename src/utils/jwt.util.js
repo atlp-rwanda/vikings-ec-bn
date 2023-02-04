@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export class JwtUtility {
-  static generateToken(userData) {
-    return JWT.sign(userData, process.env.SECRET_TOKEN);
+  static generateToken(userData, exp='1d') {
+    return JWT.sign(userData, process.env.SECRET_TOKEN, { expiresIn: exp });
   }
 
   static verifyToken(token) {
