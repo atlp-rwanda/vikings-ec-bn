@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   node: circleci/node@5.1.0
+  coveralls: coveralls/coveralls@1.0.6
 
 jobs:
   build:
@@ -16,3 +17,4 @@ jobs:
           name: Test
           command: |
             npm test
+      - coveralls/upload
