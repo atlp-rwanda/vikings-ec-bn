@@ -3,6 +3,7 @@ import { saveTokens } from '../services/token.service.js';
 import { BcryptUtility } from '../utils/bcrypt.util.js';
 import { JwtUtility } from '../utils/jwt.util.js';
 import models from '../database/models';
+import {uploadPhoto} from '../utils/cloudinary.util.js';
 
 export class UserController {
   static async registerUser(req, res) {
@@ -25,7 +26,6 @@ export class UserController {
       });
     }
   }
-
 
   static async googleAuthHandler(req, res) {
     const { value } = req.user.emails[0];
@@ -128,4 +128,35 @@ export class UserController {
     }
   }
 
+    static async getProfile(req, res){
+        try {
+            const user = await UserService.getUserById(req.user.id);
+            return res.status(200).json(user);
+        }catch (err){
+            return res.status(500).json({
+                error: err.message,
+                message: 'Failed to get user profile',
+            });
+        }
+    }
+    static async updateProfile(req, res){
+        try{
+            let payload = {
+                ...req.body,
+                billingAddress:JSON.parse(req.body.billingAddress) || {},
+                birthdate:new Date(req.body.birthdate || ''),
+            };
+            if(req.files?.avatar){
+                const {url} = await uploadPhoto(req,res,req.files.avatar);
+                payload['avatar'] = url;
+            }
+            await UserService.updateUser(req.user.id, payload);
+            return res.status(200).json({ message: 'updated successful'});
+        }catch (err){
+            return res.status(500).json({
+                error: err.message,
+                message: 'Failed to update user profile',
+            });
+        }
+    }
 }

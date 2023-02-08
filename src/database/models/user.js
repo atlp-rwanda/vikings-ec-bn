@@ -4,7 +4,8 @@ const { Model } = require('sequelize');
 const { Sequelize } = require('.');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    static associate(models) {}
+    static associate(models) {
+    }
   }
   User.init(
     {
@@ -26,8 +27,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       status: DataTypes.STRING,
       avatar: DataTypes.STRING,
-      addressId: DataTypes.INTEGER,
+      billingAddress: DataTypes.JSON,
       verified: DataTypes.BOOLEAN,
+      birthdate: DataTypes.DATE,
+      description: DataTypes.STRING,
     },
     {
       sequelize,
