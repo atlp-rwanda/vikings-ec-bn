@@ -13,7 +13,7 @@ module.exports = {
           email: 'unverified@gmail.com',
           phone: '0987654321',
           password:
-            '$2b$10$loTArhq8vmd0bvzCP73VXut779UA1eltYXCsbPBL5Xddi7Y92oDka',
+            '$2b$10$V18ICOCv3sSBMYpONxTH6.iLeG6f7xL57oLz/ZwqMXyO521qi1XBK',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
