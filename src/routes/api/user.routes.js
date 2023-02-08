@@ -9,11 +9,15 @@ import {
   checkUserVerified,
   CheckLoginPassword,
   checkValidOldPassword,
+  checkIfUserExistById
 } from '../../middlewares/user.middleware';
 import { UserController } from '../../controllers/user.controller';
 import { JwtUtility } from '../../utils/jwt.util.js';
 import { logout } from '../../controllers/logout.controller';
 import { googlePass } from '../../authentication/passport.authentication.js';
+import validateRole from '../../validations/user/role.validation.js';
+import { restrictTo } from '../../middlewares/restrictedTo.middleware';
+
 googlePass();
 
 const router = express.Router();
@@ -67,5 +71,21 @@ router.patch(
 );
 
 router.post('/logout', protectRoute, logout);
+
+router.get(
+  '/', 
+  protectRoute,
+  restrictTo('admin'),
+  UserController.getAllUsers
+);
+
+router.patch(
+  '/:id', 
+  protectRoute,
+  restrictTo('admin'),
+  validateRole,
+  checkIfUserExistById,
+  UserController.updateRole
+);
 
 export default router;
