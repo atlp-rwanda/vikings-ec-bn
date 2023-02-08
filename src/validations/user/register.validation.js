@@ -15,6 +15,8 @@ const validateRegister = async (req, res, next) => {
       .minOfNumeric(1)
       .required()
       .trim(),
+    verified: Joi.boolean(), 
+    role: Joi.string(),
   });
 
   const { error } = registerSchema.validate(req.body);

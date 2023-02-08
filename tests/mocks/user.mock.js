@@ -17,6 +17,8 @@ export const successRegister = {
   email: 'register@gmail.com',
   phone: '0987654321',
   password: '@Test123',
+  role: 'seller',
+  verified: false
 };
 
 export const passwordReg = {
@@ -33,6 +35,8 @@ export const successReg = {
   email: 'success@gmail.com',
   phone: '0987654321',
   password: '@Test123',
+  role: 'seller',
+  verified: false
 };
 
 export const verifiedLogin = {
