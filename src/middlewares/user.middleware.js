@@ -113,3 +113,10 @@ export const checkEmailExists = async (req, res, next) => {
   }
 };
 
+export const checkDisabledAccount= async(req, res, next)=> {
+  if (!req.user.isActive) {
+    return res.status(403).json({ message: 'Your account has been disabled' });
+  }
+  
+  next();
+};

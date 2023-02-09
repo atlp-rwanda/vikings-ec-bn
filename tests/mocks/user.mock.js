@@ -72,7 +72,7 @@ export const invalidPasswordUpdate = {
 export const token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJiMmM2MGMyLTFiMDctNGJjNC1hYTA4LTA2ZWQ3YTEyNTRhMCIsImVtYWlsIjoidGVzdG1haWxAZ21haWwuY29tIiwiaWF0IjoxNjc2MjM1MzA1fQ.LrI-2aK9YObdrGhtnbcBt-74ulBfYKmOLj9xl-8be64';
 
-export const adminCredentials = {
+  export const adminCredentials = {
 	email: 'admin@gmail.com',
 	password: 'Password@123',
 };

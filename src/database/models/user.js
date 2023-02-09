@@ -25,7 +25,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         defaultValue:'buyer'
       },
-      status: DataTypes.STRING,
+      isActive: {
+				type:DataTypes.BOOLEAN,
+				defaultValue: true
+			},
       avatar: DataTypes.STRING,
       billingAddress: DataTypes.JSON,
       verified: DataTypes.BOOLEAN,

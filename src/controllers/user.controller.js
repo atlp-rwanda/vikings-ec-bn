@@ -113,7 +113,7 @@ export class UserController {
         lastname,
         gender,
         role,
-        status,
+        isActive,
         avatar,
         verified,
       } = req.user;
@@ -125,7 +125,7 @@ export class UserController {
         firstname,
         lastname,
         gender,
-        status,
+        isActive,
         avatar,
         verified,
       };
@@ -206,6 +206,23 @@ export class UserController {
       return res.status(500).json({
         error: err.message,
         message: 'Failed to update user profile',
+      });
+    }
+  }
+  static async accountStatus(req, res) {
+    try {
+      const isActive = req.body.isActive;
+      await UserService.updateUser({ isActive }, req.user.id);
+      if (!isActive) {
+        return res.status(200).json({ message: 'Account is disabled' });
+      } else {
+        return res.status(200).json({ message: 'Account is enabled' });
+      }
+
+    } catch (error) {
+      return res.status(500).json({
+        error: error.message,
+        message: 'Failed to update',
       });
     }
   }
