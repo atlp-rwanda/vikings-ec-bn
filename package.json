@@ -23,7 +23,7 @@
       }
     },
     "test": {
-      "command": "jest --testTimeout=10000 tests --coverage --detectOpenHandles --forceExit",
+      "command": "npm run seeding && jest tests/ --coverage --detectOpenHandles --forceExit",
       "env": {
         "NODE_ENV": "test",
         "PORT": 5000
