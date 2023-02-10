@@ -1,7 +1,14 @@
 export const successRegister = {
 	firstname: 'NameOne',
 	lastname: 'NameTwo',
-	email: 'example@gmail.com',
+	email: 'register@gmail.com',
+	phone: '0987654321',
+	password: '@Test123',
+};
+export const successReg={
+	firstname: 'NameOne',
+	lastname: 'NameTwo',
+	email: 'success@gmail.com',
 	phone: '0987654321',
 	password: '@Test123',
 };
