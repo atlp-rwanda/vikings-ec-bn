@@ -17,6 +17,7 @@ module.exports = {
             '$2b$10$V18ICOCv3sSBMYpONxTH6.iLeG6f7xL57oLz/ZwqMXyO521qi1XBK',
           createdAt: new Date(),
           updatedAt: new Date(),
+          verified: false,
         },
         {
           id: '872526ad-76be-4f44-b5d9-8032f0925c2d',

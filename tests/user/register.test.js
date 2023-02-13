@@ -7,7 +7,7 @@ import { JwtUtility } from '../../src/utils/jwt.util';
 import dotenv from 'dotenv';
 dotenv.config();
 
-beforeEach(async () => {
+beforeAll(async () => {
   await connectDB();
 });
 

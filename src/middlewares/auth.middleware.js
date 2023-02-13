@@ -9,10 +9,11 @@ const protectRoute = async (req, res, next) => {
     let authToken = req.header('Authorization') || '';
     let token = authToken.split(' ')[1];
     jwt.verify(token, process.env.SECRET_TOKEN, async (err, user) => {
-      if (err)
+      if (err) {
         return res
           .status(400)
           .json({ message: 'Unauthorized request, try again' });
+      }
       if (await isAuthRevoked(token)) {
         return res
           .status(401)
@@ -26,7 +27,7 @@ const protectRoute = async (req, res, next) => {
   } catch (err) {
     return res
       .status(500)
-      .json({ error: err, message: 'Something went wrong, try again' });
+      .json({ error: err.message, message: 'Something went wrong, try again' });
   }
 };
 export default protectRoute;

@@ -43,6 +43,19 @@ export class UserController {
     return res.redirect(`/api/v1/users/redirect?key=${token}`);
   }
 
+  static async updatePassword(req, res) {
+    try {
+      const password = await BcryptUtility.hashPassword(req.body.new_password);
+      await UserService.updateUser({ password }, req.user.id);
+      return res.status(200).json({ message: 'success' });
+    } catch (err) {
+      return res.status(500).json({
+        error: err.message,
+        message: 'Failed to update the password',
+      });
+    }
+  }
+
   static async loginUser(req, res) {
     try {
       const {

@@ -12,12 +12,10 @@ export const checkUserExists = async (req, res, next) => {
   next();
 };
 
-export const getExistUser = async (req, res, next) => {
-  const email = req.body.email;
-
-  const user = await User.findOne({ where: { email: email } });
+export const getUserByEmail = async (req, res, next) => {
+  const user = await User.findOne({ where: { email: req.body.email } });
   if (!user) {
-    return res.status(400).json({ message: 'Wrong credentials, try again.' });
+    return res.status(404).json({ message: 'Wrong credentials, try again.' });
   }
   req.user = user;
   next();
@@ -26,19 +24,33 @@ export const getExistUser = async (req, res, next) => {
 export const checkUserVerified = async (req, res, next) => {
   const user = req.user;
   if (!user.verified) {
-    return res.status(400).json({ message: 'User email is not verified' });
+    return res.status(409).json({ message: 'User email is not verified' });
   }
   next();
 };
 
-export const checkValidPassword = async (req, res, next) => {
+export const CheckLoginPassword = async (req, res, next) => {
   const { password } = req.body;
   const user = req.user;
   const isValidPassword = await BcryptUtility.verifyPassword(
     password,
     user.password
   );
-  if (!isValidPassword)
-    return res.status(400).json({ message: 'Wrong credentials, try again.' });
+  if (!isValidPassword) {
+    return res.status(409).json({ message: 'Wrong credentials, try again.' });
+  }
+  next();
+};
+
+export const checkValidOldPassword = async (req, res, next) => {
+  const { old_password } = req.body;
+  const user = await User.findByPk(req.user.id);
+  const isValidPassword = await BcryptUtility.verifyPassword(
+    old_password,
+    user.password
+  );
+  if (!isValidPassword) {
+    return res.status(409).json({ message: 'Wrong credentials, try again.' });
+  }
   next();
 };
