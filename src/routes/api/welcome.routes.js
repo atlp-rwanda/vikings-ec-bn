@@ -3,7 +3,7 @@ import express from 'express';
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.status(200).json({message:'Welcome! to the ecommerce api'});
+  res.status(200).json({ message: 'Welcome! to the ecommerce api' });
 });
 
 export default router;
