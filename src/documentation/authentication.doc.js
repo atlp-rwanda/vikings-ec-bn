@@ -111,6 +111,55 @@ const register = {
     },
   },
 };
+
+const passwordUpdate = {
+  tags: ['Update'],
+  description: 'User Password Update',
+  requestBody: {
+    required: true,
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            old_password: {
+              type: 'string',
+              required: true,
+            },
+            new_password: {
+              type: 'string',
+              required: true,
+            },
+          },
+          example: {
+            old_password: '@Test123',
+            new_password: 'Test@123',
+          },
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'SUCCESS',
+    },
+    400: {
+      description: 'VALIDATION ERROR',
+    },
+    409: {
+      description: 'INVALID OLD PASSWORD',
+    },
+    500: {
+      description: 'INTERNAL SERVER ERROR',
+    },
+  },
+  security: [
+    {
+      bearerAuth: [],
+    },
+  ],
+};
+
 const logout = {
   tags: ['Logout'],
   description: 'Invalidating jwt token',
@@ -139,11 +188,14 @@ const authenticationRouteDocs = {
   '/api/v1/users/register': {
     post: register,
   },
-  '/api/v1/users/logout': {
-    post: logout,
-  },
   '/api/v1/users/redirect': {
     get: google,
+  },
+  '/api/v1/users/update-password': {
+    patch: passwordUpdate,
+  },
+  '/api/v1/users/logout': {
+    post: logout,
   },
 };
 

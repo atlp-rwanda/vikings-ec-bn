@@ -21,7 +21,7 @@ const basicInfo = {
         flows: {
           authorizationCode: {
             authorizationUrl:
-              'http://localhost:5000/api/v1/users/auth/google?redirect',
+              'http://localhost:5000/api/v1/users/auth/google/redirect',
           },
         },
       },

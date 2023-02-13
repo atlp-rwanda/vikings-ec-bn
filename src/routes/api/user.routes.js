@@ -1,17 +1,19 @@
 import express from 'express';
 import passport from 'passport';
 import validateRegister from '../../validations/user/register.validation.js';
+import validatePassword from '../../validations/user/updatePassword.validation.js';
+import protectRoute from '../../middlewares/auth.middleware.js';
 import {
   checkUserExists,
+  getUserByEmail,
   checkUserVerified,
-  checkValidPassword,
-  getExistUser,
+  CheckLoginPassword,
+  checkValidOldPassword,
 } from '../../middlewares/user.middleware';
-import { logout } from '../../controllers/logout.controller';
-import protectRoute from '../../middlewares/auth.middleware.js';
 import { UserController } from '../../controllers/user.controller';
-import { googlePass } from '../../authentication/passport.authentication.js';
 import { JwtUtility } from '../../utils/jwt.util.js';
+import { logout } from '../../controllers/logout.controller';
+import { googlePass } from '../../authentication/passport.authentication.js';
 googlePass();
 
 const router = express.Router();
@@ -33,13 +35,12 @@ router.post(
   checkUserExists,
   UserController.registerUser
 );
-router.post('/logout', protectRoute, logout);
 
 router.post(
   '/login',
-  getExistUser,
+  getUserByEmail,
   checkUserVerified,
-  checkValidPassword,
+  CheckLoginPassword,
   UserController.loginUser
 );
 
@@ -56,5 +57,15 @@ router.get(
   }),
   UserController.googleAuthHandler
 );
+
+router.patch(
+  '/update-password',
+  validatePassword,
+  protectRoute,
+  checkValidOldPassword,
+  UserController.updatePassword
+);
+
+router.post('/logout', protectRoute, logout);
 
 export default router;

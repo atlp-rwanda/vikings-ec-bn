@@ -18,6 +18,15 @@ export const successRegister = {
   phone: '0987654321',
   password: '@Test123',
 };
+
+export const passwordReg = {
+  firstname: 'NameOne',
+  lastname: 'NameTwo',
+  email: 'password@gmail.com',
+  phone: '0987654321',
+  password: '@Test123',
+};
+
 export const successReg = {
   firstname: 'NameOne',
   lastname: 'NameTwo',
@@ -25,6 +34,7 @@ export const successReg = {
   phone: '0987654321',
   password: '@Test123',
 };
+
 export const verifiedLogin = {
   email: 'verified@gmail.com',
   password: 'Pass@123',
@@ -43,6 +53,16 @@ export const unregisteredLogin = {
 export const invalidPassword = {
   email: 'verified@gmail.com',
   password: 'Password',
+};
+
+export const successPasswordUpdate = {
+  old_password: 'Pass@123',
+  new_password: 'Pass@123',
+};
+
+export const invalidPasswordUpdate = {
+  old_password: 'Qwerty1234',
+  new_password: 'Qwerty12',
 };
 
 export const token =
