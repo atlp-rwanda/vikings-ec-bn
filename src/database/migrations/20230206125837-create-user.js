@@ -37,12 +37,20 @@ module.exports = {
       avatar: {
         type: Sequelize.STRING,
       },
-      addressId: {
-        type: Sequelize.INTEGER,
+      billingAddress: {
+        type: Sequelize.JSON,
+        allowNull: true,
       },
       verified: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
+      },
+      birthdate:{
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
+      description: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
@@ -54,6 +62,7 @@ module.exports = {
       },
     });
   },
+  // eslint-disable-next-line no-unused-vars
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Users');
   },

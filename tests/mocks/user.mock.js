@@ -19,6 +19,14 @@ export const successRegister = {
   password: '@Test123',
 };
 
+export const successResetRegister = {
+  firstname: 'NameOne',
+  lastname: 'NameTwo',
+  email: 'reseter@gmail.com',
+  phone: '0987654321',
+  password: '@Test123',
+};
+
 export const passwordReg = {
   firstname: 'NameOne',
   lastname: 'NameTwo',
@@ -76,3 +84,26 @@ export const adminCredentials = {
 export const id='76432d88-a891-4c4f-9b8f-aca96513f4dd';
 
 export const invalidId = '711149da-2e9c-4ce5-a90f-55dc433dafa9';
+
+export const profileSeeds = {
+	firstname: 'paterne',
+	lastname: 'NameTwo',
+	billingAddress : '{"street":"kv 343 c","province":"Kigali","city":"Kicukiro","zip_code":"0000","country":"rwanda"}',
+	socialLinks:'{"facebook": "https://web.facebook.com/?_rdc=1&_rdr","instagram": "https://www.instagram.com/","twitter": "https://twitter.com/home"}',
+	birthdate:'2022-04-29',
+};
+export const userToRegister = {
+	firstname: 'NameOne',
+	lastname: 'NameTwo',
+	email: 'uKnow@gmail.com',
+	phone: '0987654321',
+	password: '@Test123',
+};
+
+export const resetEmail = {
+  email: 'reseter@gmail.com'
+}
+
+export const resetPassword = {
+  newPassword: 'Sracerimo@123'
+}

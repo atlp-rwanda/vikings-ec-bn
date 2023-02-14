@@ -1,4 +1,3 @@
-
 const getAllUsers = {
     tags:['Users'],
     summary:'List of all the users',
@@ -15,6 +14,85 @@ const getAllUsers = {
         bearerAuth: []
       }]
   };
+
+const forgotPassword = {
+  tags:['Users'],
+  summary:'send email to user',
+  description:'Send email to reset password',
+  requestBody: {
+    required: true,
+    content: {
+        'application/json': {
+            schema: {
+                type: 'object',
+                properties: {
+                    email: {
+                        type: 'string',
+                        required: true,
+                    },
+                },
+            },
+            example: {
+                email: 'verified@gmail.com',
+            },
+        },
+    },
+},
+  responses:{
+    200:{
+      description: 'OK',
+    },
+    500: {
+      description: 'Internal Server Error'
+    }
+  },
+};
+
+
+
+const resetPassword = {
+  tags:['Users'],
+  summary:'reset the password',
+  description:'Reset password through the email',
+  parameters:[
+    {
+        name:'token',
+        in:'path',
+        description:'reset token',
+        schema:{
+            type: 'string',
+        }   
+    },
+],
+  requestBody: {
+    required: true,
+    content: {
+        'application/json': {
+            schema: {
+                type: 'object',
+                properties: {
+                    password: {
+                        type: 'string',
+                        required: true,
+                    },
+                },
+            },
+            example: {
+                newPassword: 'Sracerolif@123',
+            },
+        },
+    },
+},
+  responses:{
+    200:{
+      description: 'OK',
+    },
+    500: {
+      description: 'Internal Server Error'
+    }
+  },
+};
+
   
   const updateRole = {
     tags: ['Users'],
@@ -24,7 +102,7 @@ const getAllUsers = {
         {
             name:'id',
             in:'path',
-            description:'User Id',
+            description:'User id',
             schema:{
                 type: 'string',
             }   
@@ -65,6 +143,13 @@ const getAllUsers = {
   const userRouteDocs = {
     '/api/v1/users': {
         get: getAllUsers,
+      },
+
+    '/api/v1/users/reset': {
+        post: forgotPassword,
+      },
+      '/api/v1/users/reset-password/{token}': {
+        patch: resetPassword,
       },
     
     '/api/v1/users/{id}': {

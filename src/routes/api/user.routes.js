@@ -3,6 +3,7 @@ import passport from 'passport';
 import validateRegister from '../../validations/user/register.validation.js';
 import validatePassword from '../../validations/user/updatePassword.validation.js';
 import protectRoute from '../../middlewares/auth.middleware.js';
+import validateNewPassword from '../../validations/user/resetPassword.validation.js';
 import {
   checkUserExists,
   getUserByEmail,
@@ -61,6 +62,8 @@ router.get(
   }),
   UserController.googleAuthHandler
 );
+router.get('/profile', protectRoute, UserController.getProfile);
+router.put('/profile', protectRoute, UserController.updateProfile);
 
 router.patch(
   '/update-password',
@@ -88,4 +91,13 @@ router.patch(
   UserController.updateRole
 );
 
+router.post('/reset',
+  UserController.forgotpass
+);
+
+router.patch('/reset-password/:token',
+  validateNewPassword,
+  UserController.resetpass
+  );
+  
 export default router;

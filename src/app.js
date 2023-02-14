@@ -7,6 +7,7 @@ import swaggerUI from 'swagger-ui-express';
 import docs from './documentation';
 import { sequelize } from './database/models';
 import routes from './routes/index';
+import fileUpload from 'express-fileupload';
 
 let options = {
   validatorUrl: null,
@@ -39,11 +40,18 @@ export const connectDB = async () => {
     process.exit(1);
   }
 };
-
+app.use(fileUpload(
+    {
+      useTempFiles: true
+    }
+));
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(docs, false, options));
 app.use('/api/v1', routes);
 
+app.use('*', (req, res) => {  // keep this at the bottom
+  res.status(404).json({error: 'resource not found'});
+});
 export default app;
