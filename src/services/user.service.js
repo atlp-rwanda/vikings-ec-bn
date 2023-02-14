@@ -9,3 +9,4 @@ export class UserService {
     return await User.update({ ...fields }, { where: { id: id } });
   }
 }
+

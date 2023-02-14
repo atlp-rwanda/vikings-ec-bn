@@ -28,6 +28,17 @@ export const checkUserVerified = async (req, res, next) => {
   }
   next();
 };
+export const checkIfUserExistById = async(req, res, next) => {
+
+    const id = req.params.id;
+    const user =await User.findByPk(id);
+    if (!user) {
+        return res.status(404).json({ error: `User with ID = ${id} does not exist` });
+    }
+    req.user = user;
+    next();
+
+};
 
 export const CheckLoginPassword = async (req, res, next) => {
   const { password } = req.body;
