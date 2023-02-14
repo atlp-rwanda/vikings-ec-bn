@@ -20,6 +20,8 @@ describe('Testing profile', () => {
 			.post('/api/v1/users/register')
 			.send({...userToRegister, email:'email@gmail.com'});
 		const {token} = response.body;
+
+		expect(response.body.token).toBeDefined();
 		const res = await request(app).put('/api/v1/users/profile').set('Authorization', 'Bearer '+token)
 			.attach('avatar', `${process.cwd()}/assets/images/clean_the_room.png`)
 			.field('firstname', profileSeeds.firstname)

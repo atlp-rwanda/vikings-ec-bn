@@ -95,3 +95,16 @@ export const userToRegister = {
 	phone: '0987654321',
 	password: '@Test123',
 };
+
+export const sellerUser = {
+  email: 'kwizsam@gmail.com',
+  password: 'Pass@123'
+};
+
+export const sellerId = 'b53278a7-daf3-4c6a-99ef-7579d9b43c32';
+
+export const randomId = 'afa9b976-5ec0-4b46-8068-45b9fc4d156d';
+
+export const invalidOTP = '000000';
+
+export const expiredOTP = '123456';

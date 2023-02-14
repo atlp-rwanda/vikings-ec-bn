@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import request from 'supertest';
 import app from '../../src/app';
 import { connectDB } from '../../src/app';
@@ -7,6 +6,8 @@ import {
   invalidPasswordUpdate,
   verifiedLogin,
 } from '../mocks/user.mock';
+import {expect, describe, test, jest, beforeAll} from '@jest/globals';
+import { UserService } from '../../src/services/user.service';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -57,5 +58,19 @@ describe('Test Password Update', () => {
       .set('Authorization', `Bearer ${token}`)
       .send(invalidPasswordUpdate);
     expect(response.statusCode).toBe(409);
+  });
+
+  test('update user: catch statement', async()=>{
+    const requestSpy = jest.spyOn(UserService, 'updateUser');
+    requestSpy.mockRejectedValue(new Error('Failed to update'));
+
+    const response = await request(app)
+      .patch('/api/v1/users/update-password')
+      .set('Authorization', `Bearer ${token}`)
+      .send(successPasswordUpdate);
+
+    expect(response.statusCode).toBe(500);
+    requestSpy.mockRestore();
+
   });
 });

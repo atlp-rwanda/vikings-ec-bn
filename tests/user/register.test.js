@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import request from 'supertest';
 import app from '../../src/app';
 import { connectDB } from '../../src/app';
@@ -32,7 +31,7 @@ describe('Test User Registration', () => {
   test('Email confirmation successfully', async() => {
     const response = await request(app)
       .get(`/api/v1/users/verify-email/${userToken}`);
-    expect(response.statusCode).toBe(200); 
+    expect(response.statusCode).toBe(200);
     });
 
     test('should return status 500 when failed to update user verification', async () => {
@@ -40,18 +39,18 @@ describe('Test User Registration', () => {
         where: { token: userToken }
     });
       const mockVerify = jest.spyOn(UserService, 'updateUser');
-      mockVerify.mockRejectedValue(new Error('Failed to retrieve update a user')); 
+      mockVerify.mockRejectedValue(new Error('Failed to retrieve update a user'));
       const response = await request(app)
       .get(`/api/v1/users/verify-email/${userToken}`);
-    
-      expect(response.status).toBe(500); 
-      mockVerify.mockRestore(); 
+
+      expect(response.status).toBe(500);
+      mockVerify.mockRestore();
     });
 
-    test('Envilid token to verify email', async() => {
+    test('Invalid token to verify email', async() => {
       const response = await request(app)
         .get('/api/v1/users/verify-email/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQwNmM3ZDM1LTkzOWItNGUwZi1hNDk4LTJjMzg4MTZkNjUxYiIsImVtYWlsIjoibnNoaW1peWVqYXlkMjAwQGdtYWlsLmNvbSIsInJvbGUiOiJzZWxsZXIiLCJpYXQiOjE2NzYzMjEyNjN9.wyzXakVFWGaLd0gIubc3BX_Bx2ta4KyyNcqxfskjLHU7');
-      expect(response.statusCode).toBe(403); 
+      expect(response.statusCode).toBe(403);
       });
 
   test('Valid Token Data', async () => {

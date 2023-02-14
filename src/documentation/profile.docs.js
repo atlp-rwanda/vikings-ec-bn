@@ -35,7 +35,7 @@ const profile = {
                                     format: 'date',
                                     description: 'The user\'s birthdate',
                                     default:'2022-04-29',
-                                  },
+                                },
                                 lastname: {
                                     type: 'string',
                                     description: 'The user\'s last name',
