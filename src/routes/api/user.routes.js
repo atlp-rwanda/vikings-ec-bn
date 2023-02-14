@@ -61,6 +61,8 @@ router.get(
   }),
   UserController.googleAuthHandler
 );
+router.get('/profile', protectRoute, UserController.getProfile);
+router.put('/profile', protectRoute, UserController.updateProfile);
 
 router.patch(
   '/update-password',
