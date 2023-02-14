@@ -2,6 +2,7 @@ import { UserService } from '../services/user.service.js';
 import { saveTokens } from '../services/token.service.js';
 import { BcryptUtility } from '../utils/bcrypt.util.js';
 import { JwtUtility } from '../utils/jwt.util.js';
+import models from '../database/models';
 
 export class UserController {
   static async registerUser(req, res) {
@@ -24,6 +25,7 @@ export class UserController {
       });
     }
   }
+
 
   static async googleAuthHandler(req, res) {
     const { value } = req.user.emails[0];
@@ -99,4 +101,31 @@ export class UserController {
       });
     }
   }
+
+
+  static async getAllUsers(req, res) {
+    try {
+      const users = await models.User.findAll();
+      res.status(200).json({ status: 200, message: 'All Users retrieved successfully', data: users });
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ error: err.message, message: 'Failed to get all users' });
+    }
+  }
+
+  static async updateRole(req, res) {
+    try {
+      const role = req.body.role;
+      await UserService.updateUser({ role }, req.user.id);
+      return res.status(200).json({ message: 'Updated successfully' });
+
+    } catch (error) {
+      return res.status(500).json({
+        error: error.message,
+        message: 'Failed to update role',
+      });
+    }
+  }
+
 }
