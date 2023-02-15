@@ -150,7 +150,7 @@ export class UserController {
                 const {url} = await uploadPhoto(req,res,req.files.avatar);
                 payload['avatar'] = url;
             }
-            await UserService.updateUser(req.user.id, payload);
+            await UserService.updateUser(payload, req.user.id);
             return res.status(200).json({ message: 'updated successful'});
         }catch (err){
             return res.status(500).json({
