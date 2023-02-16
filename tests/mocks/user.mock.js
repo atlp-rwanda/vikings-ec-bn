@@ -72,7 +72,7 @@ export const invalidPasswordUpdate = {
 export const token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJiMmM2MGMyLTFiMDctNGJjNC1hYTA4LTA2ZWQ3YTEyNTRhMCIsImVtYWlsIjoidGVzdG1haWxAZ21haWwuY29tIiwiaWF0IjoxNjc2MjM1MzA1fQ.LrI-2aK9YObdrGhtnbcBt-74ulBfYKmOLj9xl-8be64';
 
-export const adminCredentials = {
+  export const adminCredentials = {
 	email: 'admin@gmail.com',
 	password: 'Password@123',
 };
@@ -95,3 +95,17 @@ export const userToRegister = {
 	phone: '0987654321',
 	password: '@Test123',
 };
+export const successResetRegister = {
+  firstname: 'NameOne',
+  lastname: 'NameTwo',
+  email: 'reseter@gmail.com',
+  phone: '0987654321',
+  password: '@Test123',
+};
+export const resetEmail = {
+  email: 'reseter@gmail.com'
+}
+
+export const resetPassword = {
+  newPassword: 'Sracerimo@123'
+}

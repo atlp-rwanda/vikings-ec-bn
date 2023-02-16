@@ -31,8 +31,8 @@ module.exports = {
       role: {
         type: Sequelize.STRING,
       },
-      status: {
-        type: Sequelize.STRING,
+      isActive: {
+        type: Sequelize.BOOLEAN,
       },
       avatar: {
         type: Sequelize.STRING,

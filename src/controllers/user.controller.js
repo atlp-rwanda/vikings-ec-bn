@@ -1,13 +1,16 @@
 import { UserService } from '../services/user.service.js';
 import { saveTokens } from '../services/token.service.js';
 import { BcryptUtility } from '../utils/bcrypt.util.js';
+import JWT from 'jsonwebtoken';
 import { JwtUtility } from '../utils/jwt.util.js';
 import models from '../database/models';
 import { sendEmail } from '../utils/sendEmail.js';
-import { MailConfigurations } from '../utils/mailConfigurations.js';
+import { User } from '../database/models/index';
 import dotenv from 'dotenv';
 dotenv.config();
 import { uploadPhoto } from '../utils/cloudinary.util.js';
+import { Mail } from '../utils/mail.util.js';
+import { resetPasswordTemplate } from '../utils/mailTemplates.util.js';
 
 export class UserController {
   static async registerUser(req, res) {
@@ -113,7 +116,7 @@ export class UserController {
         lastname,
         gender,
         role,
-        status,
+        isActive,
         avatar,
         verified,
       } = req.user;
@@ -125,7 +128,7 @@ export class UserController {
         firstname,
         lastname,
         gender,
-        status,
+        isActive,
         avatar,
         verified,
       };
@@ -209,4 +212,73 @@ export class UserController {
       });
     }
   }
+  static async accountStatus(req, res) {
+    try {
+      const isActive = req.body.isActive;
+      await UserService.updateUser({ isActive }, req.user.id);
+      if (!isActive) {
+        return res.status(200).json({ message: 'Account is disabled' });
+      } else {
+        return res.status(200).json({ message: 'Account is enabled' });
+      }
+
+    } catch (error) {
+      return res.status(500).json({
+        error: error.message,
+        message: 'Failed to update',
+      });
+    }
+  }
+
+
+  static async forgotpass(req, res) {
+    try {
+    const { email } = req.body;
+    const user = await User.findOne({
+      where: { email: email },
+    });
+    
+    if (!user) {
+    return res.status(400).json({ message: `user does not exist` });
+    }
+    
+        const resetLink = JWT.sign({ user_email: user.email,
+         user_id: user.id}, 
+          process.env.SECRET_TOKEN, { expiresIn: '10m' });
+          const link = `${process.env.BASE_URL}/reset-password?token=${resetLink}`
+          const resetMessage = resetPasswordTemplate(user.email,link)
+          sendEmail(Mail.emailConfig({
+            email: user.email,
+            subject: "reset password",
+            content: resetMessage,
+          })
+          );
+        return res.status(200).json({ message: link} );
+      } catch(error) {
+      res.status(500).json({ message: error.message });
+    }
+    }
+    
+    static async resetpass(req, res) {
+      try {
+      const {token} = req.params
+      const { newPassword } = req.body
+      const ver = JwtUtility.verifyToken(token)
+      const id = ver.user_id
+      const user = await User.findOne({
+        where: { id: id },
+      });
+      if (!user) {
+      return res.status(404).json({ message: `user does not exist` });
+      }
+        const password = await BcryptUtility.hashPassword(newPassword)
+        console.log(password)
+        await UserService.updateUser({ password },id)
+        return res.status(200).json({ message:"password updated"})
+      } catch (error) {
+        console.log(error)
+        return res.status(500).json({message: "not reset"})
+      }
+  
+    }
 }

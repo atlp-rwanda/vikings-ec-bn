@@ -1,7 +1,9 @@
 import express from 'express';
 import passport from 'passport';
 import validatePassword from '../../validations/user/updatePassword.validation.js';
+import validateNewPassword from '../../validations/user/resetPassword.validation.js';
 import validateRegister from '../../validations/user/register.validation.js';
+import { protectRoute , restrictTo } from '../../middlewares/auth.middleware.js';
 import {
   checkUserExists,
   getUserByEmail,
@@ -12,14 +14,14 @@ import {
   checkIfUserExistById,
   checkEmailExists,
   checkTokenNotRevoked,
+  checkDisabledAccount
 } from '../../middlewares/user.middleware';
 import { logout } from '../../controllers/logout.controller';
 import { UserController } from '../../controllers/user.controller';
 import { JwtUtility } from '../../utils/jwt.util.js';
-import protectRoute from '../../middlewares/auth.middleware.js';
 import { googlePass } from '../../authentication/passport.authentication.js';
 import validateRole from '../../validations/user/role.validation.js';
-import { restrictTo } from '../../middlewares/restrictedTo.middleware';
+import validateStatus from '../../validations/user/status.validation.js';
 
 googlePass();
 
@@ -46,8 +48,9 @@ router.post(
 router.post(
   '/login',
   getUserByEmail,
-  CheckLoginPassword,
   checkUserVerified,
+  checkDisabledAccount,
+  CheckLoginPassword,  
   UserController.loginUser
 );
 
@@ -100,5 +103,21 @@ router.patch(
   checkIfUserExistById,
   UserController.updateRole
 );
+router.put(
+  '/:id', 
+  protectRoute,
+  restrictTo('admin'),
+  validateStatus,
+  checkIfUserExistById,
+  UserController.accountStatus
+);
+router.post('/reset',
+  UserController.forgotpass
+);
+
+router.patch('/reset-password/:token',
+  validateNewPassword,
+  UserController.resetpass
+  );
 
 export default router;
