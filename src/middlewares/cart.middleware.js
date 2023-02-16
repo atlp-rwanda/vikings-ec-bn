@@ -23,3 +23,14 @@ export const addProductToCart = async (req, res, next) => {
 	req.cart = cart;
 	next();
 };
+
+export const checkProductInCart = async (req, res, next)=>{
+	const cart = req.cart;
+	const {productId} = req.body;
+
+	if(!cart) return next();
+	const products = cart.products;
+	const product = products.find((p) => p.productId === productId);
+	if(!product) return res.status(404).json({message: 'Product not in cart'});
+	next();
+};
