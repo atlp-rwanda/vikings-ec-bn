@@ -9,12 +9,12 @@ import {
   afterEach,
   jest,
 } from '@jest/globals';
-import { beans, buyerToken, jordan, randomProductId } from '../mocks/cart.mock';
+import { beans, beansId, buyerToken, jordan, jordanId, randomId, randomProductId } from '../mocks/cart.mock';
 import { CartService } from '../../src/services/cart.service';
 import { closeAll } from '../../src/utils/scheduling.util';
 
 beforeAll(async () => {
-  await connectDB();
+	await connectDB();
 });
 
 describe('/cart', () => {
@@ -40,6 +40,16 @@ describe('/cart', () => {
       .send();
 
     expect(response.statusCode).toEqual(400);
+  });
+  test('Clear non existent cart: 500', async () =>{
+    const response = await request(app).put('/api/v1/carts').set('Authorization', `Bearer ${buyerToken}`);
+
+    expect(response.statusCode).toBe(500);
+  });
+  test('Remove product when there is no cart: 500', async() =>{
+    const response = await request(app).patch(`/api/v1/carts/${jordanId}`).set('Authorization', `Bearer ${buyerToken}`);
+
+    expect(response.statusCode).toBe(500);
   });
   test('Product: 200', async () => {
     const requestSpy = jest.spyOn(CartService, 'createCart');
@@ -105,7 +115,48 @@ describe('/cart', () => {
       .set('Authorization', `Bearer ${buyerToken}`)
       .send(randomProductId);
 
+		expect(response.statusCode).toBe(404);
+	});
+  test('Product: 200', async () => {
+    const requestSpy = jest.spyOn(CartService, 'updateCart');
+    requestSpy.mockRejectedValue(new Error('Failed to create Cart'));
+    const response = await request(app)
+      .put('/api/v1/carts/')
+      .set('Authorization', `Bearer ${buyerToken}`)
+      .send(jordan);
+
+    expect(response.statusCode).toBe(500);
+    requestSpy.mockRestore();
+  });
+  test('Cleared cart: 200', async () =>{
+    const response = await request(app).put('/api/v1/carts').set('Authorization', `Bearer ${buyerToken}`);
+
+    expect(response.statusCode).toBe(200);
+  });
+  test('Clear empty cart: 400', async () =>{
+    const response = await request(app).put('/api/v1/carts').set('Authorization', `Bearer ${buyerToken}`);
+
+    expect(response.statusCode).toBe(400);
+  });
+  test('New product: 200', async ()=>{
+    const response = await request(app).post('/api/v1/carts').set('Authorization', `Bearer ${buyerToken}`).send(beans);
+
+    expect(response.statusCode).toBe(201);
+  });
+  test('Remove product when product not available: 400', async ()=>{
+    const response = await request(app).patch(`/api/v1/carts/${randomId}`).set('Authorization', `Bearer ${buyerToken}`);
+
     expect(response.statusCode).toBe(404);
+  });
+  test('Remove product when product not in cart: 400', async() =>{
+    const response = await request(app).patch(`/api/v1/carts/${jordanId}`).set('Authorization', `Bearer ${buyerToken}`);
+
+    expect(response.statusCode).toBe(404);
+  });
+  test('Remove product: 200', async ()=>{
+    const response =  await request(app).patch(`/api/v1/carts/${beansId}`).set('Authorization', `Bearer ${buyerToken}`);
+
+    expect(response.statusCode).toBe(200);
   });
 });
 

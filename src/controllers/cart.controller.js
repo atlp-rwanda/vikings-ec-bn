@@ -44,12 +44,49 @@ export class CartController {
 			return res.status(200).json({
 				id: cart.id,
 				products: productsDataWithQuantity,
-				total: cartTotal
+				total: cartTotal,
 			});
 		} catch (error) {
 			return res.status(500).json({
 				error: error.message,
 				message: 'Could not retrieve cart, try again',
+			});
+		}
+	}
+	static async clearCart(req, res) {
+		try {
+			const cart = req.cart;
+			cart.products = [];
+			await CartService.updateCart({ products: cart.products }, cart.id);
+			return res.status(200).json({
+				id: cart.id,
+				message: 'Cart cleared successfully',
+			});
+		} catch (error) {
+			return res.status(500).json({
+				error: error.message,
+				message: 'Could not clear cart, try again',
+			});
+		}
+	}
+
+	static async removeFromCart(req, res) {
+		try {
+			const cart = req.cart;
+			const { productId } = req.params;
+			const productToRemove = cart.products.findIndex(
+				(product) => product.productId === productId
+			);
+			cart.products.splice(productToRemove, 1);
+			await CartService.updateCart({ products: cart.products }, cart.id);
+			return res.status(200).json({
+				id: cart.id,
+				message: 'Item removed from cart successfully',
+			});
+		} catch (error) {
+			return res.status(500).json({
+				error: error.message,
+				message: 'Could not remove item from cart, try again',
 			});
 		}
 	}
