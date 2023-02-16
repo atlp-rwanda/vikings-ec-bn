@@ -8,6 +8,7 @@ import cartRoutes from './api/cart.routes.js';
 import wishlistrouter from './api/wishlist.routes.js';
 import orderRoutes from './api/order.routes.js';
 import salesRoutes from './api/sales.routes.js';
+import paymentRoutes from './api/payment.routes';
 
 const routes = express.Router();
 
@@ -20,5 +21,6 @@ routes.use('/carts', cartRoutes);
 routes.use('/wishlist',wishlistrouter);
 routes.use('/orders',orderRoutes);
 routes.use('/sales',salesRoutes);
+routes.use('/payments', paymentRoutes);
 
 export default routes;

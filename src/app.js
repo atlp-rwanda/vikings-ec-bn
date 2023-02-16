@@ -53,7 +53,14 @@ app.use(
   })
 );
 app.use(morgan('dev'));
-app.use(express.json());
+app.use(
+  express.json({
+    limit: '5mb',
+    verify: (req, res, buf) => {
+      req.rawBody = buf.toString();
+    },
+  })
+);
 app.use(express.urlencoded({ extended: false }));
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(docs, false, options));
 app.use('/api/v1', routes);

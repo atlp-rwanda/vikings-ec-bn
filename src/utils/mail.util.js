@@ -1,6 +1,6 @@
 export function emailConfig({ email, subject, content } = {}) {
 	return {
-		from: process.env.EMAIL_USERNAME,
+		from: process.env.YVES_EMAIL,
 		to: `${email}`,
 		subject: `${subject}`,
 		html: `${content}`,
