@@ -62,15 +62,61 @@ const getAllUsers = {
       }]
     };
   
-  const userRouteDocs = {
-    '/api/v1/users': {
-        get: getAllUsers,
+const disableAccount = {
+  tags: ['Users'],
+  summary: 'Disable account',
+  description: 'Updating status of a user',
+  parameters:[
+      {
+          name:'id',
+          in:'path',
+          description:'User Id',
+          schema:{
+              type: 'string',
+          }   
       },
-    
-    '/api/v1/users/{id}': {
-      patch: updateRole,
+  ],
+  requestBody: {
+    required: true,
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            isActive: {
+              type: 'string',
+              required: true,
+            },
+          },
+          example: {
+            isActive: 'disactive',
+          },
+        },
+      },
     },
+  },
+  responses: {
+    200: {
+      description: 'OK',
+    },
+    500: {
+      description: 'Internal Server Error',
+    },
+  },
+  security: [{
+      bearerAuth: []
+    }]
   };
+
+const userRouteDocs = {
+  '/api/v1/users': {
+      get: getAllUsers,
+    },
   
-  export default userRouteDocs;
-  
+  '/api/v1/users/{id}': {
+    patch: updateRole,
+    put: disableAccount,
+  },
+};
+
+export default userRouteDocs;

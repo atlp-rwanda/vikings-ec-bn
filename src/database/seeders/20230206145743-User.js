@@ -15,6 +15,7 @@ module.exports = {
           phone: '0987654321',
           password:'$2b$10$UZX4Fy9x4yJp4rTgiw0imelLLg.7JnGrrHqoPvbq9ThUlOu8e4n1e',
           role:'admin',
+          isActive: true,
           createdAt: new Date(),
           updatedAt: new Date(),
           verified: true
@@ -28,6 +29,7 @@ module.exports = {
           password:
             '$2b$10$V18ICOCv3sSBMYpONxTH6.iLeG6f7xL57oLz/ZwqMXyO521qi1XBK',
           role:'buyer',
+          isActive: true,
           createdAt: new Date(),
           updatedAt: new Date(),
           verified: false,
@@ -41,6 +43,7 @@ module.exports = {
           password:
             '$2b$10$loTArhq8vmd0bvzCP73VXut779UA1eltYXCsbPBL5Xddi7Y92oDka',
           role:'buyer',
+          isActive: true,
           createdAt: new Date(),
           updatedAt: new Date(),
           verified: true,
