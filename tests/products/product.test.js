@@ -178,6 +178,6 @@ describe('GET /Product', () => {
         isAvailable:false
       });
 
-    expect(response.body.message).toEqual('Expired product was removed successfully');    
+    expect(response.body.message).toEqual('Expired product was removed successfully');
   });
 });

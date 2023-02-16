@@ -22,6 +22,14 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          id: '1c84c3d3-3ef0-4bba-8eb9-e3e9231b55d7',
+          token:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3MjUyNmFkLTc2YmUtNGY0NC1iNWQ5LTgwMzJmMDkyNWMyZCIsImVtYWlsIjoidmVyaWZpZWRAZ21haWwuY29tIiwicm9sZSI6ImJ1eWVyIiwibXVzdFVwZGF0ZVBhc3N3b3JkIjpudWxsLCJpYXQiOjE2NzcxNDQxNzIsImV4cCI6MTcwODY4MDE3Mn0.tgs7nBut8C2QmtgRTxD1s4I3FFQaq_4NRMED0L7Nfjc',
+          revoked: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

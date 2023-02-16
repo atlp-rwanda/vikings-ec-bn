@@ -5,6 +5,7 @@ import welcomeRouteDocs from './welcome.docs';
 import profileDocs from './profile.docs.js';
 import confirmEmailRoute from './emailVerification.js';
 import productDocs from './products.docs';
+import cartRouteDocs from './cart.docs';
 
 export default {
   ...basicInfo,
@@ -14,6 +15,7 @@ export default {
     ...userRouteDocs,
     ...profileDocs,
     ...confirmEmailRoute,
-    ...productDocs
+    ...productDocs,
+    ...cartRouteDocs
   },
 };
