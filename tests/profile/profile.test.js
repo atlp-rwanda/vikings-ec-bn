@@ -28,7 +28,7 @@ describe('Testing profile', () => {
 			.field('billingAddress',profileSeeds.billingAddress)
 		;
 
-		expect(res.statusCode).toBe(200);
+		expect(res.statusCode).toEqual(200);
 	});
 
 	test('fail to update profile', async () => {

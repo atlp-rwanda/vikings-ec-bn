@@ -3,26 +3,72 @@ import { saveTokens } from '../services/token.service.js';
 import { BcryptUtility } from '../utils/bcrypt.util.js';
 import { JwtUtility } from '../utils/jwt.util.js';
 import models from '../database/models';
-import {uploadPhoto} from '../utils/cloudinary.util.js';
+import { sendEmail } from '../utils/sendEmail.js';
+import { MailConfigurations } from '../utils/mailConfigurations.js';
+import dotenv from 'dotenv';
+dotenv.config();
+import { uploadPhoto } from '../utils/cloudinary.util.js';
 
 export class UserController {
   static async registerUser(req, res) {
     try {
       const user = { ...req.body };
       user.password = await BcryptUtility.hashPassword(req.body.password);
-      const { id, email } = await UserService.register(user);
-      const userData = { id, email };
+      const { id, email, role } = await UserService.register(user);
+      const userData = { id, email, role };
+      const userToken = JwtUtility.generateToken(userData, '1h');
+      const data = {
+        token: userToken,
+        revoked: false,
+      };
+      await saveTokens.saveToken(data);
+      sendEmail(MailConfigurations.emailVerificationConfig(email, userToken));
+      return res.status(201).json({
+        message: 'Check your email to verify your account',
+        user: userData,
+        token: userToken,
+      });
+    } catch (err) {
+      return res.status(500).json({
+        error: err.message,
+        message: 'Failed to register a new user',
+      });
+    }
+  }
+
+  static async updateUserVerified(req, res) {
+    try {
+      const user = req.user;
+      await UserService.updateUser({ verified: true }, user.id);
+      return res.status(200).json({
+        message: 'Your account has verified successfully!',
+      });
+    } catch (err) {
+      return res.status(500).json({
+        error: err.message,
+        message: 'Failed to confirm user verification',
+      });
+    }
+  }
+
+  static async resendVerificationEmail(req, res) {
+    const { id, email, role } = req.user;
+    try {
+      const userData = { id: id, email: email, role: role };
       const userToken = JwtUtility.generateToken(userData);
       const data = {
         token: userToken,
         revoked: false,
       };
       await saveTokens.saveToken(data);
-      return res.status(201).json({ user: userData, token: userToken });
+      sendEmail(MailConfigurations.emailVerificationConfig(email, userToken));
+      return res.status(200).json({
+        message: 'Email has been sent successfully',
+      });
     } catch (err) {
       return res.status(500).json({
         error: err.message,
-        message: 'Failed to register a new user',
+        message: 'Failed to send email',
       });
     }
   }
@@ -102,11 +148,16 @@ export class UserController {
     }
   }
 
-
   static async getAllUsers(req, res) {
     try {
       const users = await models.User.findAll();
-      res.status(200).json({ status: 200, message: 'All Users retrieved successfully', data: users });
+      res
+        .status(200)
+        .json({
+          status: 200,
+          message: 'All Users retrieved successfully',
+          data: users,
+        });
     } catch (err) {
       return res
         .status(500)
@@ -119,7 +170,6 @@ export class UserController {
       const role = req.body.role;
       await UserService.updateUser({ role }, req.user.id);
       return res.status(200).json({ message: 'Updated successfully' });
-
     } catch (error) {
       return res.status(500).json({
         error: error.message,
@@ -128,35 +178,35 @@ export class UserController {
     }
   }
 
-    static async getProfile(req, res){
-        try {
-            const user = await UserService.getUserById(req.user.id);
-            return res.status(200).json(user);
-        }catch (err){
-            return res.status(500).json({
-                error: err.message,
-                message: 'Failed to get user profile',
-            });
-        }
+  static async getProfile(req, res) {
+    try {
+      const user = await UserService.getUserById(req.user.id);
+      return res.status(200).json(user);
+    } catch (err) {
+      return res.status(500).json({
+        error: err.message,
+        message: 'Failed to get user profile',
+      });
     }
-    static async updateProfile(req, res){
-        try{
-            let payload = {
-                ...req.body,
-                billingAddress:JSON.parse(req.body.billingAddress) || {},
-                birthdate:new Date(req.body.birthdate || ''),
-            };
-            if(req.files?.avatar){
-                const {url} = await uploadPhoto(req,res,req.files.avatar);
-                payload['avatar'] = url;
-            }
-            await UserService.updateUser(req.user.id, payload);
-            return res.status(200).json({ message: 'updated successful'});
-        }catch (err){
-            return res.status(500).json({
-                error: err.message,
-                message: 'Failed to update user profile',
-            });
-        }
+  }
+  static async updateProfile(req, res) {
+    try {
+      let payload = {
+        ...req.body,
+        billingAddress: JSON.parse(req.body.billingAddress) || {},
+        birthdate: new Date(req.body.birthdate || ''),
+      };
+      if (req.files?.avatar) {
+        const { url } = await uploadPhoto(req, res, req.files.avatar);
+        payload['avatar'] = url;
+      }
+      await UserService.updateUser(payload, req.user.id);
+      return res.status(200).json({ message: 'updated successful' });
+    } catch (err) {
+      return res.status(500).json({
+        error: err.message,
+        message: 'Failed to update user profile',
+      });
     }
+  }
 }
