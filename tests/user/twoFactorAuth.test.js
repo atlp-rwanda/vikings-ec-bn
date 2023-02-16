@@ -1,4 +1,4 @@
-import { expect, describe, test, beforeAll } from '@jest/globals';
+import {expect, describe, test, beforeAll, afterEach} from '@jest/globals';
 import request from 'supertest';
 import app from '../../src/app';
 import { connectDB } from '../../src/app';
@@ -9,6 +9,7 @@ import {
 	sellerUser,
 	randomId
 } from '../mocks/user.mock';
+import {closeAll} from '../../src/utils/scheduling.util';
 
 
 beforeAll(async () => {
@@ -46,4 +47,7 @@ describe('Testing 2 FA', () => {
 		expect(response.body.message).toBe('Code does not match. Try again');
 	});
 
+});
+afterEach(async () =>{
+	await closeAll();
 });

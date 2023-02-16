@@ -5,6 +5,8 @@ import { UserController } from '../../src/controllers/user.controller';
 import { googleProfile, token } from '../mocks/user.mock';
 import { connectDB } from '../../src/app';
 import { googlePass } from '../../src/authentication/passport.authentication';
+import {afterEach} from '@jest/globals';
+import {closeAll} from '../../src/utils/scheduling.util';
 googlePass();
 
 beforeAll(async () => {
@@ -38,4 +40,7 @@ describe('Testing google authentication', () => {
     expect(response.body.error).toEqual('Unauthorized');
     expect(response.statusCode).toEqual(401);
   });
+});
+afterEach(async () =>{
+  await closeAll();
 });

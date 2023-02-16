@@ -7,6 +7,8 @@ import {
   invalidCategory,
   validToken,
 } from '../mocks/product.mock';
+import {afterEach} from '@jest/globals';
+import {closeAll} from '../../src/utils/scheduling.util';
 
 beforeAll(async () => {
   await connectDB();
@@ -30,4 +32,7 @@ describe('POST /categories', () => {
     expect(response.body.message).toEqual('Category added successfully');
     expect(response.statusCode).toEqual(201);
   });
+});
+afterEach(async () =>{
+  await closeAll();
 });

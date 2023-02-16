@@ -13,5 +13,8 @@ export class UserService {
   static async updateUser(fields, id) {
     return await User.update({ ...fields }, { where: { id: id } });
   }
+  static async findAll(){
+    return await User.findAll();
+  }
 }
 

@@ -62,6 +62,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
+      mustUpdatePassword: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      lastTimePasswordUpdated: {
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {

@@ -1,8 +1,9 @@
 import request from 'supertest';
 import app from '../../src/app';
 import {userToRegister,profileSeeds} from '../mocks/user.mock';
-import {expect, describe, test,it,jest} from '@jest/globals';
+import {expect, describe, test, it, jest, afterEach} from '@jest/globals';
 import {UserService} from '../../src/services/user.service';
+import {closeAll} from '../../src/utils/scheduling.util';
 describe('Testing profile', () => {
 
 	test('Successful get profile', async () => {
@@ -91,4 +92,7 @@ describe('Testing profile', () => {
 
 
 
+});
+afterEach(async () =>{
+	await closeAll();
 });

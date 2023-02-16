@@ -8,6 +8,8 @@ import docs from './documentation';
 import { sequelize } from './database/models';
 import routes from './routes/index';
 import fileUpload from 'express-fileupload';
+import * as http from 'http';
+import {SocketUtil} from './utils/socket.util';
 
 let options = {
   validatorUrl: null,
@@ -21,6 +23,8 @@ let options = {
 dotenv.config();
 
 const app = express();
+const server = http.createServer(app);
+SocketUtil.config(server);
 app.use(
   session({
     secret: process.env.CAT,
@@ -54,4 +58,4 @@ app.use('/api/v1', routes);
 app.use('*', (req, res) => {
   res.status(404).json({error: 'Path does not found, try again'});
 });
-export default app;
+export default server;

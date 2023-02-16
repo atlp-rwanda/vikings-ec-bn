@@ -7,8 +7,9 @@ import {
   unregisteredLogin,
   invalidPassword,
 } from '../mocks/user.mock';
-import {expect, describe, test, jest, beforeAll} from '@jest/globals';
+import {expect, describe, test, jest, beforeAll, afterEach} from '@jest/globals';
 import { saveTokens } from '../../src/services/token.service';
+import {closeAll} from '../../src/utils/scheduling.util';
 
 beforeAll(async () => {
   await connectDB();
@@ -65,4 +66,7 @@ describe('POST /login', () => {
     expect(response.body.error).toBeDefined();
     requestSpy.mockRestore();
   });
+});
+afterEach(async () =>{
+  await closeAll();
 });

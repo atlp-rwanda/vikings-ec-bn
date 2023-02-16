@@ -2,6 +2,8 @@ import nodemailer from 'nodemailer';
 import { sendEmail } from '../../src/utils/sendEmail.util';
 import { verifyEmailTemplate } from '../../src/utils/mailTemplates.util';
 import { emailConfig } from '../../src/utils/mail.util';
+import {afterEach} from '@jest/globals';
+import {closeAll} from '../../src/utils/scheduling.util';
 
 describe('sendVerificationEmail', () => {
   it('Sends an email', async () => {
@@ -20,3 +22,6 @@ describe('sendVerificationEmail', () => {
   });
 });
 
+afterEach(async () =>{
+  await closeAll();
+});

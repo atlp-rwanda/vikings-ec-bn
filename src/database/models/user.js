@@ -33,6 +33,11 @@ module.exports = (sequelize, DataTypes) => {
       birthdate: DataTypes.DATE,
       description: DataTypes.STRING,
       authCode: DataTypes.STRING,
+      mustUpdatePassword:{
+          type: DataTypes.BOOLEAN,
+          defaultValue:false
+      },
+      lastTimePasswordUpdated:DataTypes.DATE,
     },
     {
       sequelize,

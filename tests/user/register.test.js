@@ -6,6 +6,8 @@ import { JwtUtility } from '../../src/utils/jwt.util';
 import { UserService } from '../../src/services/user.service';
 import { jwtTokens } from '../../src/database/models/index';
 import dotenv from 'dotenv';
+import {afterEach} from '@jest/globals';
+import {closeAll} from '../../src/utils/scheduling.util';
 dotenv.config();
 
 let userToken = '';
@@ -90,4 +92,7 @@ test('Valid Token Data', async () => {
     expect(response.statusCode).toBe(409);
   });
 
+});
+afterEach(async () =>{
+  await closeAll();
 });

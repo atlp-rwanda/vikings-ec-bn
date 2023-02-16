@@ -4,19 +4,53 @@ import { BcryptUtility } from '../utils/bcrypt.util.js';
 import { JwtUtility } from '../utils/jwt.util.js';
 import models from '../database/models';
 import { sendEmail } from '../utils/sendEmail.util';
-import { emailConfig } from '../../src/utils/mail.util';
+import { emailConfig } from '../utils/mail.util';
 import { verifyEmailTemplate } from '../utils/mailTemplates.util.js';
 import dotenv from 'dotenv';
 dotenv.config();
 import { uploadPhoto } from '../utils/cloudinary.util.js';
+import {knownSchedulingTime, schedule} from '../utils/scheduling.util';
+import {addDurationOnDate, durationToCronRepetition} from '../utils/date.util';
+import {SocketUtil} from '../utils/socket.util';
+import {eventEmit, knownEvents, subscribe} from '../utils/events.util';
+
+const repetitionDuration =process.env.CRON_PERIOD? durationToCronRepetition(process.env.CRON_PERIOD): knownSchedulingTime.everySecond;
+schedule(repetitionDuration, async () => {
+  const now = new Date();
+  const users = await UserService.findAll();
+  users.forEach((eachUser) => {
+    const lastTimePasswordUpdated = eachUser.lastTimePasswordUpdated;
+    let checkList = !!lastTimePasswordUpdated &&
+        eachUser.isActive && eachUser.verified;
+    if(!checkList){
+      return;
+    }
+    if(
+        addDurationOnDate(process.env.PASSWORD_EXPIRATION_IN || '1s',
+            lastTimePasswordUpdated) < now ){
+        UserService.updateUser({mustUpdatePassword:true}, eachUser.id);
+      SocketUtil.socketEmit('notification', {
+        notificationType:'changePassword',
+        message:'Please it is to change your password for security purpose',
+        userId: eachUser.id,
+      });
+    }
+  });
+});
+subscribe(knownEvents.changePassword, async (data) => {
+  await UserService.updateUser({
+    lastTimePasswordUpdated: new Date(),
+    mustUpdatePassword:false}, data.userId
+  );
+});
 
 export class UserController {
   static async registerUser(req, res) {
     try {
-      const user = { ...req.body };
+      const user = { ...req.body, lastTimePasswordUpdated: new Date() };
       user.password = await BcryptUtility.hashPassword(req.body.password);
-      const { id, email, role } = await UserService.register(user);
-      const userData = { id, email, role };
+      const { id, email, role,lastTimePasswordUpdated } = await UserService.register(user);
+      const userData = { id, email, role,lastTimePasswordUpdated };
       const userToken = JwtUtility.generateToken(userData, '1h');
       const data = {
         token: userToken,
@@ -110,6 +144,9 @@ export class UserController {
     try {
       const password = await BcryptUtility.hashPassword(req.body.new_password);
       await UserService.updateUser({ password }, req.user.id);
+      eventEmit(knownEvents.changePassword, {
+        userId:req.user.id
+      });
       return res.status(200).json({ message: 'success' });
     } catch (err) {
       return res.status(500).json({
@@ -124,11 +161,15 @@ export class UserController {
       const {
         id,
         email,
-        role} = req.user;
+        role,
+        mustUpdatePassword,
+      } = req.user;
       const userData = {
         id,
         email,
-        role};
+        role,
+        mustUpdatePassword
+      };
       const token = JwtUtility.generateToken(userData);
       const data = {
         token: token,

@@ -11,6 +11,8 @@ import {
   validProduct2,
   invalidProduct,
 } from '../mocks/product.mock';
+import {afterEach} from '@jest/globals';
+import {closeAll} from '../../src/utils/scheduling.util';
 
 beforeAll(async () => {
   await connectDB();
@@ -51,7 +53,7 @@ describe('POST /Product', () => {
       .set('Authorization', `Bearer ${validToken}`)
       .field(invaliCategoryProduct);
 
-    expect(response.body.message).toEqual("Category doesn't exist");
+    expect(response.body.message).toEqual('Category doesn\'t exist');
     expect(response.statusCode).toEqual(404);
   });
 
@@ -65,7 +67,7 @@ describe('POST /Product', () => {
       .attach('images', `${__dirname}/sample.pdf`)
       .field(validProduct);
     expect(response.body.message).toEqual(
-      "Invalid extension for file 'sample.pdf'"
+      'Invalid extension for file \'sample.pdf\''
     );
     expect(response.statusCode).toEqual(400);
   });
@@ -94,4 +96,7 @@ describe('POST /Product', () => {
     expect(response.body.message).toEqual('Please insert at least 4 images');
     expect(response.statusCode).toEqual(400);
   });
+});
+afterEach(async () =>{
+  await closeAll();
 });
