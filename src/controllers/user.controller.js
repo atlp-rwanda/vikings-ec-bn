@@ -283,7 +283,7 @@ export class UserController {
         const resetLink = JwtUtility.generateToken(userData);
           const link = `${process.env.BASE_URL}/reset-password?token=${resetLink}`
           const resetMessage = resetPasswordTemplate(user.email,link)
-          sendEmail( 
+          sendEmail(
             emailConfig({
             email: user.email,
             subject: "reset password",
@@ -298,7 +298,7 @@ export class UserController {
         });
     }
     }
-    
+
     static async resetPassword(req, res) {
       try {
       const id = req.id
@@ -312,6 +312,6 @@ export class UserController {
           message: 'Error occured while resetting password',
         });
       }
-  
+
     }
 }

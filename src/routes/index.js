@@ -11,6 +11,6 @@ routes.use('/', welcomeRoutes);
 routes.use('/users', userRoutes);
 routes.use('/products', productRoutes);
 routes.use('/categories', categoryRoutes);
-routes.use('/cart', cartRoutes);
+routes.use('/carts', cartRoutes);
 
 export default routes;
