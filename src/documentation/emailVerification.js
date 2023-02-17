@@ -1,5 +1,5 @@
 const confirmEmail = {
-    tags: ['Eamail verification'],
+    tags: ['Users'],
     description: 'Confirm your email',
     parameters: [{
         name: 'token',
