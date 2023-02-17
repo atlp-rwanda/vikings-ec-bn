@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import request from 'supertest';
 import app from '../../src/app';
 import { connectDB } from '../../src/app';
@@ -7,6 +6,7 @@ import dotenv from 'dotenv';
 import { UserService } from '../../src/services/user.service';
 import { UserController } from '../../src/controllers/user.controller';
 import { checkDisabledAccount } from '../../src/middlewares/user.middleware';
+import {expect, describe, test, jest, it, beforeEach} from '@jest/globals';
 dotenv.config();
 
 beforeEach(async () => {
@@ -14,7 +14,7 @@ beforeEach(async () => {
 });
 
 describe('Users Endpoints', () => {
-  
+
   let token;
   let invalidToken;
 
@@ -36,13 +36,27 @@ describe('Users Endpoints', () => {
     invalidToken=res.body.token;
   });
 
-  it('should return 200 on successful update of user role', async () => {    
+  it('should return 200 on successful update of user role', async () => {
     const res = await request(app)
       .patch(`/api/v1/users/${id}`)
       .set('Authorization', `Bearer ${token}`)
       .send({ role: 'seller' })
       .expect(200);
     expect(res.body).toHaveProperty('message', 'Updated successfully');
+  });
+
+  it('should return 500', async()=>{
+    const requestSpy = jest.spyOn(UserService, 'updateUser');
+    requestSpy.mockRejectedValue(new Error('Failed to update'));
+
+   const res = await request(app)
+      .patch(`/api/v1/users/${id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ role: 'seller' });
+
+    expect(res.statusCode).toBe(500);
+    requestSpy.mockRestore();
+
   });
 
   it('should return 400 if the request is not made by an authenticated admin', async () => {
@@ -67,7 +81,7 @@ describe('Users Endpoints', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({ role: 'seller' })
       .expect(404);
-    expect(res.body).toHaveProperty('error', `User with ID = ${invalidId} does not exist`);
+    expect(res.body).toHaveProperty('message', 'User does not exist');
 });
 
 it('should restrict access to specified roles', async () => {
@@ -88,10 +102,10 @@ it('should get all The users', async () => {
     .set('Authorization', `Bearer ${token}`)
     .send()
     .expect(200);
-}); 
+});
 
 //Update isActive
-it('should return 200 on successful disabling of account', async () => {    
+it('should return 200 on successful disabling of account', async () => {
   const res = await request(app)
     .put(`/api/v1/users/${id}`)
     .set('Authorization', `Bearer ${token}`)
@@ -100,7 +114,7 @@ it('should return 200 on successful disabling of account', async () => {
   expect(res.body).toHaveProperty('message', 'Account is disabled');
 });
 
-it('should return 200 on successful enabling of account', async () => {    
+it('should return 200 on successful enabling of account', async () => {
   const res = await request(app)
     .put(`/api/v1/users/${id}`)
     .set('Authorization', `Bearer ${token}`)
@@ -133,7 +147,7 @@ it('should return 404 if the user with the given ID is not found', async () => {
 .set('Authorization', `Bearer ${token}`)
 .send({ isActive: true })
 .expect(404);
-expect(res.body).toHaveProperty('error', `User with ID = ${invalidId} does not exist`);
+expect(res.body).toHaveProperty('message', 'User does not exist');
 });
 
 it('should restrict access to specified roles', async () => {

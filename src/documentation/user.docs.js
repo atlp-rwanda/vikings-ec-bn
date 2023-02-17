@@ -15,7 +15,7 @@ const getAllUsers = {
         bearerAuth: []
       }]
   };
-  
+
   const updateRole = {
     tags: ['Users'],
     summary: 'Update Role',
@@ -27,7 +27,7 @@ const getAllUsers = {
             description:'User Id',
             schema:{
                 type: 'string',
-            }   
+            }
         },
     ],
     requestBody: {
@@ -61,7 +61,7 @@ const getAllUsers = {
         bearerAuth: []
       }]
     };
-  
+
 const disableAccount = {
   tags: ['Users'],
   summary: 'Disable account',
@@ -73,7 +73,7 @@ const disableAccount = {
           description:'User Id',
           schema:{
               type: 'string',
-          }   
+          }
       },
   ],
   requestBody: {
@@ -112,8 +112,8 @@ const userRouteDocs = {
   '/api/v1/users': {
       get: getAllUsers,
     },
-  
-  '/api/v1/users/{id}': {
+
+  '/api/v1/users/{userId}': {
     patch: updateRole,
     put: disableAccount,
   },

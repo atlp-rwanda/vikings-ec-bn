@@ -13,7 +13,10 @@ import {
   checkIfUserExistById,
   checkEmailExists,
   checkTokenNotRevoked,
-  checkDisabledAccount
+  checkDisabledAccount,
+  checkSeller,
+  verifyAuthCode,
+  removeAuthCode
 } from '../../middlewares/user.middleware';
 import { logout } from '../../controllers/logout.controller';
 import { UserController } from '../../controllers/user.controller';
@@ -21,6 +24,8 @@ import { JwtUtility } from '../../utils/jwt.util.js';
 import { googlePass } from '../../authentication/passport.authentication.js';
 import validateRole from '../../validations/user/role.validation.js';
 import validateStatus from '../../validations/user/status.validation.js';
+import validateLogin from '../../validations/user/login.validation.js';
+import validateAuthCode from '../../validations/user/2facode.validation.js';
 
 googlePass();
 
@@ -46,12 +51,16 @@ router.post(
 
 router.post(
   '/login',
+  validateLogin,
   getUserByEmail,
-  checkUserVerified,
   checkDisabledAccount,
-  CheckLoginPassword,  
+  checkUserVerified,
+  CheckLoginPassword,
+  checkSeller,
   UserController.loginUser
 );
+
+router.post('/login/verify/:userId', validateAuthCode, checkIfUserExistById, verifyAuthCode, removeAuthCode, UserController.loginUser);
 
 router.get(
   '/verify-email/:token',
@@ -95,7 +104,7 @@ router.post('/logout', protectRoute, logout);
 router.get('/', protectRoute, restrictTo('admin'), UserController.getAllUsers);
 
 router.patch(
-  '/:id',
+  '/:userId',
   protectRoute,
   restrictTo('admin'),
   validateRole,
@@ -103,7 +112,7 @@ router.patch(
   UserController.updateRole
 );
 router.put(
-  '/:id', 
+  '/:userId',
   protectRoute,
   restrictTo('admin'),
   validateStatus,

@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { JwtUtility } from '../../src/utils/jwt.util';
 
 describe('Testing Jwt functions', () => {

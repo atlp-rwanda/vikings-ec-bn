@@ -3,8 +3,9 @@ import { saveTokens } from '../services/token.service.js';
 import { BcryptUtility } from '../utils/bcrypt.util.js';
 import { JwtUtility } from '../utils/jwt.util.js';
 import models from '../database/models';
-import { sendEmail } from '../utils/sendEmail.js';
-import { MailConfigurations } from '../utils/mailConfigurations.js';
+import { sendEmail } from '../utils/sendEmail.util';
+import { emailConfig } from '../../src/utils/mail.util';
+import { verifyEmailTemplate } from '../utils/mailTemplates.util.js';
 import dotenv from 'dotenv';
 dotenv.config();
 import { uploadPhoto } from '../utils/cloudinary.util.js';
@@ -22,7 +23,14 @@ export class UserController {
         revoked: false,
       };
       await saveTokens.saveToken(data);
-      sendEmail(MailConfigurations.emailVerificationConfig(email, userToken));
+      const verificationEmail = verifyEmailTemplate(userToken);
+      sendEmail(
+				emailConfig({
+					email: email,
+					subject: 'Vikings email verification',
+					content: verificationEmail,
+				})
+			);
       return res.status(201).json({
         message: 'Check your email to verify your account',
         user: userData,
@@ -61,7 +69,14 @@ export class UserController {
         revoked: false,
       };
       await saveTokens.saveToken(data);
-      sendEmail(MailConfigurations.emailVerificationConfig(email, userToken));
+      const verificationEmail = verifyEmailTemplate(userToken);
+      sendEmail(
+				emailConfig({
+					email: email,
+					subject: 'Vikings email verification',
+					content: verificationEmail,
+				})
+			);
       return res.status(200).json({
         message: 'Email has been sent successfully',
       });
@@ -109,26 +124,11 @@ export class UserController {
       const {
         id,
         email,
-        firstname,
-        lastname,
-        gender,
-        role,
-        isActive,
-        avatar,
-        verified,
-      } = req.user;
-
+        role} = req.user;
       const userData = {
         id,
         email,
-        role,
-        firstname,
-        lastname,
-        gender,
-        isActive,
-        avatar,
-        verified,
-      };
+        role};
       const token = JwtUtility.generateToken(userData);
       const data = {
         token: token,

@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import request from 'supertest';
 import app from '../../src/app';
 import { connectDB } from '../../src/app';
@@ -8,6 +7,8 @@ import {
   unregisteredLogin,
   invalidPassword,
 } from '../mocks/user.mock';
+import {expect, describe, test, jest, beforeAll} from '@jest/globals';
+import { saveTokens } from '../../src/services/token.service';
 
 beforeAll(async () => {
   await connectDB();
@@ -20,7 +21,7 @@ describe('POST /login', () => {
         .post('/api/v1/users/login')
         .send(unregisteredLogin);
 
-      expect(response.body.message).toEqual('Wrong credentials, try again.');
+      expect(response.body.message).toEqual('User has not found, try again');
       expect(response.statusCode).toEqual(404);
     });
     test('Unverified password: 409 status and error message', async () => {
@@ -36,7 +37,7 @@ describe('POST /login', () => {
         .post('/api/v1/users/login')
         .send(invalidPassword);
 
-      expect(response.body.message).toEqual('Wrong credentials, try again.');
+      expect(response.body.message).toEqual('Invalid password, try again.');
       expect(response.statusCode).toEqual(409);
     });
   });
@@ -48,5 +49,20 @@ describe('POST /login', () => {
     expect(response.body.message).toEqual('Login successful');
     expect(response.body.token).toBeDefined();
     expect(response.body.user).toBeDefined();
+  });
+
+  test('No email: 400', async()=>{
+    const response = await request(app).post('/api/v1/users/login');
+
+    expect(response.statusCode).toBe(400);
+  });
+
+  test('login user: catch statement', async()=>{
+    const requestSpy = jest.spyOn(saveTokens, 'saveToken');
+    requestSpy.mockRejectedValue(new Error('Failed to save token'));
+    const response = await request(app).post('/api/v1/users/login').send(verifiedLogin);
+
+    expect(response.body.error).toBeDefined();
+    requestSpy.mockRestore();
   });
 });
