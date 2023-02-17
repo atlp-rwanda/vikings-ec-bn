@@ -13,6 +13,7 @@ describe('Test User Logout', () => {
     const response = await request(app)
       .post('/api/v1/users/register')
       .send(successReg);
+      console.log(response.body)
     expect(response.body.token).toBeDefined();
     testToken = response.body.token;
   });

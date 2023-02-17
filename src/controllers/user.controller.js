@@ -9,35 +9,43 @@ import { User } from '../database/models/index';
 import dotenv from 'dotenv';
 dotenv.config();
 import { uploadPhoto } from '../utils/cloudinary.util.js';
+import { verifyEmailTemplate } from '../utils/mailTemplates.util.js';
 import { Mail } from '../utils/mail.util.js';
 import { resetPasswordTemplate } from '../utils/mailTemplates.util.js';
 
-export class UserController {
-  static async registerUser(req, res) {
-    try {
-      const user = { ...req.body };
-      user.password = await BcryptUtility.hashPassword(req.body.password);
-      const { id, email, role } = await UserService.register(user);
-      const userData = { id, email, role };
-      const userToken = JwtUtility.generateToken(userData, '1h');
-      const data = {
-        token: userToken,
-        revoked: false,
-      };
-      await saveTokens.saveToken(data);
-      sendEmail(MailConfigurations.emailVerificationConfig(email, userToken));
-      return res.status(201).json({
-        message: 'Check your email to verify your account',
-        user: userData,
-        token: userToken,
-      });
-    } catch (err) {
-      return res.status(500).json({
-        error: err.message,
-        message: 'Failed to register a new user',
-      });
+  export class UserController {
+    static async registerUser(req, res) {
+      try {
+        const user = { ...req.body };
+        user.password = await BcryptUtility.hashPassword(req.body.password);
+        const { id, email, role } = await UserService.register(user);
+        const userData = { id, email, role };
+        const userToken = JwtUtility.generateToken(userData, '1h');
+        const data = {
+          token: userToken,
+          revoked: false,
+        };
+        await saveTokens.saveToken(data);
+        const verificationEmail = verifyEmailTemplate(userToken);
+        sendEmail(
+          Mail.emailConfig({
+            email: email,
+            subject: 'Vikings email verification',
+            content: verificationEmail,
+          })
+        );
+        return res.status(201).json({
+          message: 'Check your email to verify your account',
+          user: userData,
+          token: userToken,
+        });
+      } catch (err) {
+        return res.status(500).json({
+          error: err.message,
+          message: 'Failed to register a new user',
+        });
+      }
     }
-  }
 
   static async updateUserVerified(req, res) {
     try {
@@ -64,7 +72,14 @@ export class UserController {
         revoked: false,
       };
       await saveTokens.saveToken(data);
-      sendEmail(MailConfigurations.emailVerificationConfig(email, userToken));
+      const verificationEmail = verifyEmailTemplate(userToken);
+      sendEmail(
+				Mail.emailConfig({
+					email: email,
+					subject: 'Vikings email verification',
+					content: verificationEmail,
+				})
+			);
       return res.status(200).json({
         message: 'Email has been sent successfully',
       });

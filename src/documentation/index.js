@@ -3,6 +3,7 @@ import basicInfo from './basicInfo';
 import userRouteDocs from './user.docs';
 import welcomeRouteDocs from './welcome.docs';
 import profileDocs from './profile.docs.js';
+import confirmEmailRoute from './emailVerification.js';
 
 export default {
   ...basicInfo,
@@ -11,5 +12,6 @@ export default {
     ...authenticationRouteDocs,
     ...userRouteDocs,
     ...profileDocs,
+    ...confirmEmailRoute
   },
 };

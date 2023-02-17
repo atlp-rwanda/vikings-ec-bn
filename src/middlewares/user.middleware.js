@@ -75,6 +75,7 @@ export const checkTokenNotRevoked = async (req, res, next) => {
     where: { token: userToken },
   });
   if (getToken && !getToken.revoked) {
+    req.token = userToken;
     next();
   } else {
     return res
@@ -84,7 +85,7 @@ export const checkTokenNotRevoked = async (req, res, next) => {
 };
 
 export const verifyAndRevokeToken = async (req, res, next) => {
-  const userToken = req.params.token;
+  const userToken = req.token;
   const decoded = JwtUtility.verifyToken(userToken);
   if (decoded) {
     await jwtTokens.update(
