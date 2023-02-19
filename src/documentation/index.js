@@ -4,6 +4,7 @@ import userRouteDocs from './user.docs';
 import welcomeRouteDocs from './welcome.docs';
 import profileDocs from './profile.docs.js';
 import confirmEmailRoute from './emailVerification.js';
+import productDocs from './products.docs';
 
 export default {
   ...basicInfo,
@@ -12,6 +13,7 @@ export default {
     ...authenticationRouteDocs,
     ...userRouteDocs,
     ...profileDocs,
-    ...confirmEmailRoute
+    ...confirmEmailRoute,
+    ...productDocs
   },
 };
