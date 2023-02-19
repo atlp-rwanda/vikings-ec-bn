@@ -51,7 +51,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(docs, false, options));
 app.use('/api/v1', routes);
 
-app.use('*', (req, res) => {  // keep this at the bottom
-  res.status(404).json({error: 'resource not found'});
+app.use('*', (req, res) => {
+  res.status(404).json({error: 'Path does not found, try again'});
 });
 export default app;

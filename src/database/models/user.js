@@ -3,8 +3,7 @@ const { Model } = require('sequelize');
 const { Sequelize } = require('.');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    static associate(models) {
-    }
+    static associate(models) {}
   }
   User.init(
     {
@@ -22,12 +21,12 @@ module.exports = (sequelize, DataTypes) => {
       gender: DataTypes.STRING,
       role: {
         type: DataTypes.STRING,
-        defaultValue:'buyer'
+        defaultValue: 'buyer',
       },
       isActive: {
-				type:DataTypes.BOOLEAN,
-				defaultValue: true
-			},
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
       avatar: DataTypes.STRING,
       billingAddress: DataTypes.JSON,
       verified: DataTypes.BOOLEAN,

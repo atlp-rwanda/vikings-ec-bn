@@ -1,10 +1,12 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class jwtTokens extends Model {
-    static associate(models) {}
+  class Categories extends Model {
+    static associate(models) {
+      this.hasMany(models.Products, { foreignKey: 'categoryId' });
+    }
   }
-  jwtTokens.init(
+  Categories.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -12,13 +14,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         primaryKey: true,
       },
-      token: DataTypes.TEXT,
-      revoked: DataTypes.BOOLEAN,
+      name: DataTypes.STRING,
     },
     {
       sequelize,
-      modelName: 'jwtTokens',
+      modelName: 'Categories',
     }
   );
-  return jwtTokens;
+  return Categories;
 };
