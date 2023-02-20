@@ -77,7 +77,7 @@ export const checkIfSellerOwnsProduct = async (req, res, next) => {
   const { id, role } = req.user;
   if (role === 'seller' && id !== sellerId) {
     return res.status(400).json({
-      message: "Product doesn't exists in your collection",
+      message: 'Product doesn\'t exists in your collection',
     });
   }
   next();

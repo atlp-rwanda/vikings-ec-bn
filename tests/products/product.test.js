@@ -22,6 +22,7 @@ import {
   validProduct,
   validProduct2,
   invalidProduct,
+  id,
   productId,
   productId1,
   admin,
@@ -31,6 +32,7 @@ import { ProductService } from '../../src/services/product.service';
 import { removeExpiredProducts } from '../../src/controllers/product.controller';
 import { validCategory } from '../mocks/product.mock';
 import { successBuyerRegister, buyerToken } from '../mocks/user.mock';
+import { response } from 'express';
 
 beforeAll(async () => {
   await connectDB();
@@ -349,6 +351,7 @@ afterEach(async () => {
   await closeAll();
 });
 
+
 describe('GET /Product', () => {
   test('List all products for role seller', async () => {
     const response = await request(app)
@@ -389,5 +392,71 @@ describe('GET /Product', () => {
       .set('Authorization', `Bearer ${validToken}`);
     expect(response.statusCode).toBe(500);
     requestSpy.mockRestore();
+  });
+});
+describe('UPDATE/product',() => {
+ test('should  update product', async () => {
+    const response = await request(app)
+    
+      .patch(`/api/v1/products/${id}`)
+      .set('Authorization', `Bearer ${validToken}`)
+      .send(validProduct);
+      
+      expect(response.statusCode).toBe(200);
+  });
+  test('should mark product ', async () => {
+    const response = await request(app)
+    
+      .put(`/api/v1/products/${id}`)
+      .set('Authorization', `Bearer ${validToken}`)
+      .send({isAvailable: false});
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toHaveProperty('message', 'product is available now');
+      
+  });
+  
+  it('should return 500', async () => {
+    const requestSpy = jest.spyOn(ProductService, 'updateProduct');
+    requestSpy.mockRejectedValue(new Error('Error occured while updating for a product'));
+
+    const res = await request(app)
+      .patch(`/api/v1/products/${id}`)
+      .set('Authorization', `Bearer ${validToken}`)
+      .send(validProduct);
+    expect(res.statusCode).toBe(500);
+    requestSpy.mockRestore();
+
+  }); 
+  it('should return 500', async () => {
+    const requestSpy = jest.spyOn(ProductService, 'updateProduct');
+    requestSpy.mockRejectedValue(new Error('Error occured while marking product'));
+
+    const res = await request(app)
+      .put(`/api/v1/products/${id}`)
+      .set('Authorization', `Bearer ${validToken}`)
+      .send({isAvailable: true});
+    expect(res.statusCode).toBe(500);
+    requestSpy.mockRestore();
+
+  });
+
+  it('should return 500', async () => {
+    const requestSpy = jest.spyOn(ProductService, 'deleteProduct');
+    requestSpy.mockRejectedValue(new Error('Error occured while deleting product'));
+
+    const res = await request(app)
+      .delete(`/api/v1/products/${id}`)
+      .set('Authorization', `Bearer ${validToken}`)
+    expect(res.statusCode).toBe(500);
+    requestSpy.mockRestore();
+
+  }); 
+  test('should delete product', async () => {
+    const response = await request(app)
+    
+      .delete(`/api/v1/products/${id}`)
+      .set('Authorization', `Bearer ${validToken}`);
+     
+      expect(response.statusCode).toBe(200);
   });
 });

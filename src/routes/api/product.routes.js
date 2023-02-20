@@ -5,9 +5,14 @@ import {
   getAllProducts,
   removeExpiredProducts,
   getSpecificProduct,
+  markAvailableProduct,
+  updateProduct,
+  deleteProduct 
 } from '../../controllers/product.controller.js';
 import productValidation from '../../validations/product/product.validation';
+import validateAvailable from '../../validations/product/isAvailable.validation';
 import { checkIfCategoryExistById } from '../../middlewares/category.middleware';
+
 import {
   checkExtensions,
   checkIfProductExists,
@@ -15,7 +20,6 @@ import {
   checkIfProductIsAvailableById,
   checkIfSellerOwnsProduct,
   checkNumberOfImages,
-  checkProductAvailable,
   uploadImages,
   receivedQueryFormat,
 } from '../../middlewares/product.middleware';
@@ -59,4 +63,33 @@ productRoutes.get(
   checkIfSellerOwnsProduct,
   getSpecificProduct
 );
+productRoutes.patch('/:productId',
+  protectRoute,
+  restrictTo('seller', 'admin'),
+  productValidation,
+  checkIfProductExistsById,
+  checkIfSellerOwnsProduct,
+  updateProduct,
+  
+);
+
+productRoutes.put(
+  '/:productId',
+  protectRoute,
+  restrictTo('seller','admin'),
+  validateAvailable,
+  checkIfProductExistsById,
+  checkIfProductIsAvailableById,
+  checkIfSellerOwnsProduct,
+  markAvailableProduct,
+);
+
+   productRoutes.delete(
+    '/:productId',
+    protectRoute,
+    restrictTo('seller', 'admin'),
+    checkIfProductExistsById,
+    checkIfSellerOwnsProduct,
+    deleteProduct
+  );
 export default productRoutes;

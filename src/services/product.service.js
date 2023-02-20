@@ -54,5 +54,8 @@ export class ProductService {
     return await Categories.findOne({
       where: { name: categoryName.toLowerCase() },
     });
+  }
+static async deleteProduct(id){
+  return await Products.destroy({ where: { id: id }});
 }
 }

@@ -50,6 +50,7 @@ export const invalidCategory = {
 export const existingCategory = {
   name: 'shoes',
 };
+export const id='b1093b42-f577-4c7f-86db-13a35b6e1112';
 export const validToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3MjUyNmFkLTc2YmUtNGY0NC1iNWQ5LTgwMzJmMDkyNWMyZCIsImVtYWlsIjoidmVyaWZpZWRAZ21haWwuY29tIiwicm9sZSI6InNlbGxlciIsImZpcnN0bmFtZSI6IkphbmUiLCJsYXN0bmFtZSI6IkRvZSIsImdlbmRlciI6bnVsbCwic3RhdHVzIjpudWxsLCJhdmF0YXIiOm51bGwsInZlcmlmaWVkIjp0cnVlLCJpYXQiOjE2NzYyNzk2NjN9.ZG0Pyw4394QUzwqnd61La4x6DTXNf5LqUjN3Al7zlEM';
 export const notSeller =
@@ -72,6 +73,9 @@ export const expiredProduct2 = {
   userId: 2,
 };
 
+export const isAvailableSchema = {
+  isAvailable: true,
+};
 export const productId1 = '6717e8c7-c058-4670-90c3-5c8953cc844a';
 
 export const productId = '05239123-3bce-480b-bb95-e9c844b3e9de';
@@ -84,4 +88,4 @@ export const sellerToken =
 export const validProductId = '6717e8c7-c058-4670-90c3-5c8953cc844a';
 export const validProductId1 = 'b5e75a01-5e67-44ad-91bd-f36ab3564a48';
 export const unavailableProduct = 'b5e75a01-5e67-44ad-91bd-f36ab3564a48';
-export const admin='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhlNGM2NWQwLWFiZTktNDA1YS1hMmY0LTViNzFhMjMzOGNkZCIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwibXVzdFVwZGF0ZVBhc3N3b3JkIjpudWxsLCJpYXQiOjE2NzcyNzQwODIsImV4cCI6MTcwODgxMDA4Mn0.8kMCpB7JHqLrsggJlT2mlu5ZCOrEfJn1k-ImUYWWZ4M'
+export const admin='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhlNGM2NWQwLWFiZTktNDA1YS1hMmY0LTViNzFhMjMzOGNkZCIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwibXVzdFVwZGF0ZVBhc3N3b3JkIjpudWxsLCJpYXQiOjE2NzcyNzQwODIsImV4cCI6MTcwODgxMDA4Mn0.8kMCpB7JHqLrsggJlT2mlu5ZCOrEfJn1k-ImUYWWZ4M';

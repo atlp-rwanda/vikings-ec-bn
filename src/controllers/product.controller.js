@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { ProductService } from '../services/product.service';
 import { knownSchedulingTime, schedule } from '../utils/scheduling.util';
 import { durationToCronRepetition } from '../utils/date.util';
@@ -5,6 +6,7 @@ import { delistExpiredProducts } from '../services/delistExpiredProduct.service'
 import { sendEmail } from '../utils/sendEmail.util';
 import { emailConfig } from '../utils/mail.util';
 import { expiredProductMessage } from '../utils/mailTemplates.util';
+
 
 export const createProduct = async (req, res) => {
   try {
@@ -108,6 +110,44 @@ export const getSpecificProduct = async (req, res) => {
     return res.status(500).json({
       error: err.message,
       message: 'Error occured while retrieving a product',
+      
     });
+  }
+};
+export const markAvailableProduct = async (req, res) => {
+  try {
+    const {isAvailable} = req.body;
+    const productId = req.product.id;
+    await ProductService.updateProduct( {isAvailable}, productId);
+   return res.status(200).json({ message: 'product is available now' });
+   
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+      message: 'Error occured while marking product',
+    });
+  }
+};
+export const updateProduct = async (req, res) => {
+  try{
+    const productId = req.product.id;
+     await ProductService.updateProduct(req.body, productId);
+    return res.status(200)
+    .json({ message: 'Product updated successfuly' });
+  } catch (err) {
+    res.status(500).json({ error: err.message,
+       message: 'Error occured while updating for a product'});
+  }
+};
+ 
+export const deleteProduct = async (req, res) => {
+  try {
+    const productId = req.product.id;
+     await ProductService.deleteProduct(productId);
+   return res.status(200)
+    .json({message:'Product deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message,
+      message: 'Error occured while deleting product' });
   }
 };
