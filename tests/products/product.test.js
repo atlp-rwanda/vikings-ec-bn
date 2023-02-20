@@ -85,6 +85,19 @@ describe('POST /Product', () => {
     expect(response.statusCode).toEqual(201);
   });
 
+  test('Check existing product', async () => {
+    const response = await request(app)
+      .post('/api/v1/products')
+      .set('Authorization', `Bearer ${validToken}`)
+      .attach('images', `${__dirname}/1.sm.webp`)
+      .attach('images', `${__dirname}/1.sm.webp`)
+      .attach('images', `${__dirname}/1.sm.webp`)
+      .attach('images', `${__dirname}/1.sm.webp`)
+      .field(validProduct);
+    expect(response.body.message).toEqual('Product already exists');
+    expect(response.statusCode).toEqual(409);
+  });
+
   test('Check if images are atleast 4', async () => {
     const response = await request(app)
       .post('/api/v1/products')
@@ -99,4 +112,24 @@ describe('POST /Product', () => {
 });
 afterEach(async () =>{
   await closeAll();
+});
+
+describe('GET /Product', () => {
+  test('List all products for role seller', async () => {
+    const response = await request(app)
+      .get('/api/v1/products?limit=1&&page=1')
+      .set('Authorization', `Bearer ${validToken}`);
+
+    expect(response.body).toHaveProperty('products');
+    expect(response.statusCode).toEqual(200);
+  });
+
+  test('List all products for role buyer', async () => {
+    const response = await request(app)
+      .get('/api/v1/products?limit=1&&page=1')
+      .set('Authorization', `Bearer ${notSeller}`);
+
+    expect(response.body).toHaveProperty('products');
+    expect(response.statusCode).toEqual(200);
+  });
 });
