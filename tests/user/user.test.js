@@ -6,7 +6,8 @@ import dotenv from 'dotenv';
 import { UserService } from '../../src/services/user.service';
 import { UserController } from '../../src/controllers/user.controller';
 import { checkDisabledAccount } from '../../src/middlewares/user.middleware';
-import {expect, describe, test, jest, it, beforeEach} from '@jest/globals';
+import {expect, describe, test, jest, it, beforeEach, afterEach} from '@jest/globals';
+import {closeAll} from '../../src/utils/scheduling.util';
 dotenv.config();
 
 beforeEach(async () => {
@@ -192,4 +193,21 @@ test('should return 403 status code and error message if user account is disable
   expect(next).not.toHaveBeenCalled();
 });
 
+test('User find all ', async () => {
+  let result = await UserService.findAll();
+  expect(result).toBeDefined();
+});
+
+test('Force user to change password', async () => {
+  const res = await request(app)
+      .post('/api/v1/users/login')
+      .send({email:'paterne@gmail.com', password: 'Password@2023'});
+  const{token} = res.body;
+  const response = await request(app).get('/api/v1/users/profile').set('Authorization', 'Bearer '+token);
+
+  expect(response.statusCode).toBe(401);
+});
+});
+afterEach(async () =>{
+  await closeAll();
 });

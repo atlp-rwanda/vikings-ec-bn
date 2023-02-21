@@ -19,6 +19,12 @@ export const protectRoute = async (req, res, next) => {
           .status(401)
           .json({ message: 'You are not authorized to access' });
       } else {
+        if(user.mustUpdatePassword && !req.path.includes('update-password')){
+          return res
+              .status(401)
+              .json({ message: 'You have to update the password first' });
+
+        }
         req.user = user;
         req.token = token;
         next();

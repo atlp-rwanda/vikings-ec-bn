@@ -76,6 +76,22 @@ module.exports = {
           verified: true,
           isActive: true,
         },
+        {
+          id: '5e9713e3-7a39-4538-9998-4f3a534bea1f',
+          firstname: 'paterne',
+          lastname: 'Samuel Seller',
+          email: 'paterne@gmail.com',
+          phone: '0987654321',
+          password:
+              '$2b$10$9AhkGEt2V1aYAVlgqGBsYuG4vJPip8kxQcFcEnXki9mYqc2yKsmBS', //Password@2023
+          role: 'buyer',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          lastTimePasswordUpdated: new Date('1/1/2022'),
+          verified: true,
+          isActive: true,
+          mustUpdatePassword:true,
+        },
       ],
       {}
     );

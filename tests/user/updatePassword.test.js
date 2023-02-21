@@ -6,9 +6,10 @@ import {
   invalidPasswordUpdate,
   verifiedLogin,
 } from '../mocks/user.mock';
-import {expect, describe, test, jest, beforeAll} from '@jest/globals';
+import {expect, describe, test, jest, beforeAll, afterEach} from '@jest/globals';
 import { UserService } from '../../src/services/user.service';
 import dotenv from 'dotenv';
+import {closeAll} from '../../src/utils/scheduling.util';
 dotenv.config();
 
 beforeAll(async () => {
@@ -73,4 +74,7 @@ describe('Test Password Update', () => {
     requestSpy.mockRestore();
 
   });
+});
+afterEach(async () =>{
+  await closeAll();
 });

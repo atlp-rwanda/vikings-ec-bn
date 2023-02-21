@@ -2,6 +2,8 @@ import app from '../../src/app';
 import request from 'supertest';
 import { connectDB } from '../../src/app';
 import { successReg } from '../mocks/user.mock';
+import {afterEach} from '@jest/globals';
+import {closeAll} from '../../src/utils/scheduling.util';
 
 beforeEach(async () => {
   await connectDB();
@@ -33,4 +35,7 @@ describe('Test User Logout', () => {
       .set('Authorization', 'Bearer ');
     expect(response.statusCode).toBe(400);
   });
+});
+afterEach(async () =>{
+  await closeAll();
 });
