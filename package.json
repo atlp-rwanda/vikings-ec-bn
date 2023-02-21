@@ -64,6 +64,7 @@
     "joi-password": "^4.0.0",
     "jsonwebtoken": "^9.0.0",
     "jwt-redis": "^7.0.3",
+    "node-cron": "^3.0.2",
     "nodemailer": "^6.9.1",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",

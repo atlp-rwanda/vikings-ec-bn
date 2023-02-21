@@ -3,12 +3,15 @@ import { protectRoute, restrictTo } from '../../middlewares/auth.middleware';
 import {
   createProduct,
   getAllProducts,
+  removeExpiredProducts
 } from '../../controllers/product.controller.js';
 import productValidation from '../../validations/product/product.validation';
 import { checkIfCategoryExistById } from '../../middlewares/category.middleware';
 import {
   checkExtensions,
   checkIfProductExists,
+  checkIfProductExistsById,
+  checkIfSellerOwnsProduct,
   checkNumberOfImages,
   uploadImages,
 } from '../../middlewares/product.middleware';
@@ -28,4 +31,13 @@ productRoutes.post(
 );
 
 productRoutes.get('/', protectRoute, getAllProducts);
+productRoutes.patch(
+  '/:productId/expired',
+  protectRoute,
+  restrictTo('seller','admin'),
+  checkIfProductExistsById,
+  checkIfSellerOwnsProduct,
+  removeExpiredProducts,
+);
+
 export default productRoutes;

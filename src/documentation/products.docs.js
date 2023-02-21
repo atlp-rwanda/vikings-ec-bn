@@ -117,15 +117,67 @@ const createProduct={
   },
   consumes: ['application/json'],
   responses,
-}
+};
+
+const removeExpiredProducts = {
+  tags: ['Products'],
+  summary: 'Removing expired product',
+  description: 'Mark Product as expired and unavailable',
+  parameters: [
+    {
+      name: 'productId',
+      in: 'path',
+      description: 'Product Id',
+      required: true,
+      schema: {
+        type: 'string',
+      }
+    },
+  ],
+  requestBody: {
+    required: true,
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            isExpired: {
+              type: 'Boolean',
+              required: true,
+            },
+            isAvailable: {
+              type: 'Boolean',
+              required: true,
+            },
+          },
+          example: {
+            isExpired: 'true',
+            isAvailable: 'False',
+          },
+        },
+      },
+    },
+  },
+
+  consumes: ['application/json'],
+  responses,
+  security: [
+    {
+      bearerAuth: [],
+    },
+  ],
+};
 
 const productDocs = {
   '/api/v1/categories': {
     post: category,
-  },  
+  },
   '/api/v1/products': {
     post: createProduct,
     get: getAllProducts
   },
+  '/api/v1/products/{productId}/expired': {
+    patch: removeExpiredProducts,
+  }
 };
 export default productDocs;

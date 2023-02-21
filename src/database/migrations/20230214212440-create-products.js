@@ -24,6 +24,12 @@ module.exports = {
       bonus: {
         type: Sequelize.INTEGER,
       },
+      isExpired: {
+        type: Sequelize.BOOLEAN,
+      },
+      isAvailable: {
+        type: Sequelize.BOOLEAN,
+      },
       categoryId: {
         type: Sequelize.UUID,
         references: {

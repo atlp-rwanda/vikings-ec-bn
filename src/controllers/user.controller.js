@@ -37,6 +37,7 @@ schedule(repetitionDuration, async () => {
     }
   });
 });
+
 subscribe(knownEvents.changePassword, async (data) => {
   await UserService.updateUser({
     lastTimePasswordUpdated: new Date(),
