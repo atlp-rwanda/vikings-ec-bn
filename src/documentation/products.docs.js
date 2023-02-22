@@ -1,5 +1,30 @@
 import responses from './responses.js';
 
+const getSingleProduct = {
+  tags: ['Products'],
+  summary: 'Get specific product',
+  description: 'List a specific product',
+  parameters: [
+    {
+      name: 'productId',
+      in: 'path',
+      description: 'Id of product specified',
+      required: true,
+      schema: {
+        type: 'string',
+        minimum: 1,
+      },
+    },
+  ],
+  consumes: ['application/json'],
+  responses,
+  security: [
+    {
+      bearerAuth: [],
+    },
+  ],
+};
+
 const category = {
   tags: ['Categories'],
   summary: 'Create category',
@@ -44,9 +69,10 @@ const getAllProducts = {
       required: false,
       schema: {
         type: 'integer',
-        minimum: 1
-      }
-    },    {
+        minimum: 1,
+      },
+    },
+    {
       name: 'page',
       in: 'query',
       description: 'The page number to retrieve',
@@ -101,7 +127,7 @@ const getAllProducts = {
   ],
 };
 
-const createProduct={
+const createProduct = {
   tags: ['Products'],
   security: [
     {
@@ -167,7 +193,7 @@ const removeExpiredProducts = {
       required: true,
       schema: {
         type: 'string',
-      }
+      },
     },
   ],
   requestBody: {
@@ -210,10 +236,13 @@ const productDocs = {
   },
   '/api/v1/products': {
     post: createProduct,
-    get: getAllProducts
+    get: getAllProducts,
   },
   '/api/v1/products/{productId}/expired': {
     patch: removeExpiredProducts,
-  }
+  },
+    '/api/v1/products/{productId}': {
+      get: getSingleProduct,
+    },
 };
 export default productDocs;

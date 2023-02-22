@@ -33,12 +33,24 @@ describe('POST /categories', () => {
     expect(response.body.message).toEqual('Category added successfully');
     expect(response.statusCode).toEqual(201);
   });
-  test('Invalid category', async()=>{
-    const response = await request(app).post('/api/v1/categories').set('Authorization', `Bearer ${validToken}`).send(invalidCategory);
+  test('Invalid category', async () => {
+    const response = await request(app)
+      .post('/api/v1/categories')
+      .set('Authorization', `Bearer ${validToken}`)
+      .send(invalidCategory);
 
     expect(response.statusCode).toBe(400);
   });
 });
-afterEach(async () =>{
+test('Given invalid category', async () => {
+  const response = await request(app)
+    .post('/api/v1/categories')
+    .set('Authorization', `Bearer ${validToken}`)
+    .send(invalidCategory);
+
+  expect(response.body.error).toEqual('name is not allowed to be empty');
+  expect(response.statusCode).toEqual(400);
+});
+afterEach(async () => {
   await closeAll();
 });

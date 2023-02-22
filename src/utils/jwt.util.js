@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export class JwtUtility {
-  static generateToken(userData, exp='1d') {
+  static generateToken(userData, exp='1y') {
     return JWT.sign(userData, process.env.SECRET_TOKEN, { expiresIn: exp });
   }
 

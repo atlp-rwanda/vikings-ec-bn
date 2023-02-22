@@ -2,13 +2,10 @@ import request from "supertest";
 import app from "../../src/app";
 import { connectDB } from "../../src/app";
 import { resetEmail, successResetRegister } from "../mocks/user.mock";
-import { JwtUtility } from "../../src/utils/jwt.util";
 import { closeAll } from '../../src/utils/scheduling.util';
 import {
-  successPasswordUpdate,
-  invalidPasswordUpdate,
-  verifiedLogin,
   resetPassword,
+  token
 } from "../mocks/user.mock";
 import dotenv from "dotenv";
 import { describe, expect, test, afterEach, beforeAll } from '@jest/globals';
@@ -52,6 +49,12 @@ describe("Test Password reset", () => {
     .patch(`/api/v1/users/reset-password/${resetToken}`)
     .send(resetPassword);
     expect(response.statusCode).toBe(200);
+  });
+  test('check user doesn\'t exists', async() => {
+    const response = await request(app)
+    .patch(`/api/v1/users/reset-password/${token}`)
+    .send(resetPassword);
+    expect(response.statusCode).toBe(404);
   })
 
 describe('resetValidation file test', () => {

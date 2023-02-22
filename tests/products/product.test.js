@@ -1,22 +1,36 @@
 /* eslint-disable no-undef */
 import app from '../../src/app';
-import { expect, describe, test, jest, it, beforeAll, afterEach } from '@jest/globals';
+import {
+  expect,
+  describe,
+  test,
+  jest,
+  it,
+  beforeAll,
+  afterEach,
+} from '@jest/globals';
 import { connectDB } from '../../src/app';
 import request from 'supertest';
 import {
   invaliCategoryProduct,
+  invalidProductId,
   notSeller,
+  sellerToken,
+  unavailableProduct,
+  validProductId,
+  validProductId1,
   validToken,
   validProduct,
   validProduct2,
   invalidProduct,
   productId,
-  productId1
+  productId1,
+  admin,
 } from '../mocks/product.mock';
 import { closeAll } from '../../src/utils/scheduling.util';
 import { ProductService } from '../../src/services/product.service';
 import { removeExpiredProducts } from '../../src/controllers/product.controller';
-import {validCategory} from '../mocks/product.mock';
+import { validCategory } from '../mocks/product.mock';
 import { successBuyerRegister, buyerToken } from '../mocks/user.mock';
 
 beforeAll(async () => {
@@ -58,7 +72,7 @@ describe('POST /Product', () => {
       .set('Authorization', `Bearer ${validToken}`)
       .field(invaliCategoryProduct);
 
-    expect(response.body.message).toEqual('Category doesn\'t exist');
+    expect(response.body.message).toEqual("Category doesn't exist");
     expect(response.statusCode).toEqual(404);
   });
 
@@ -72,11 +86,24 @@ describe('POST /Product', () => {
       .attach('images', `${__dirname}/sample.pdf`)
       .field(validProduct);
     expect(response.body.message).toEqual(
-      'Invalid extension for file \'sample.pdf\''
+      "Invalid extension for file 'sample.pdf'"
     );
     expect(response.statusCode).toEqual(400);
   });
-
+  test('Check fail to create product', async () => {
+    const requestSpy = jest.spyOn(ProductService, 'createProduct');
+    requestSpy.mockRejectedValue(new Error('Failed to create product'));
+    const response = await request(app)
+      .post('/api/v1/products')
+      .set('Authorization', `Bearer ${validToken}`)
+      .attach('images', `${__dirname}/1.sm.webp`)
+      .attach('images', `${__dirname}/1.sm.webp`)
+      .attach('images', `${__dirname}/1.sm.webp`)
+      .attach('images', `${__dirname}/1.sm.webp`)
+      .field(validProduct);
+    expect(response.statusCode).toBe(500);
+    requestSpy.mockRestore();
+  });
   test('valid product details', async () => {
     const response = await request(app)
       .post('/api/v1/products')
@@ -125,14 +152,14 @@ describe('POST /Product', () => {
     requestSpy.mockRestore();
   });
 
-
   it('should return a 500 error if ProductService.updateProduct() throws an error', async () => {
     const errorMessage = 'Failed to update product';
     jest.spyOn(ProductService, 'updateProduct').mockImplementation(() => {
       throw new Error(errorMessage);
     });
     const req = {
-      body: { isExpired: true, isAvailable: false, }, params: { productId: productId, },
+      body: { isExpired: true, isAvailable: false },
+      params: { productId: productId },
     };
     const res = {
       status: jest.fn(() => res),
@@ -151,117 +178,172 @@ describe('POST /Product', () => {
     const response = await request(app)
       .post('/api/v1/users/register')
       .send(successBuyerRegister);
-      buyerToken.token = response.body.token;
+    buyerToken.token = response.body.token;
     expect(response.statusCode).toBe(201);
   });
 
-  test('Searching for a product with name', async()=>{
+  test('Searching for a product with name', async () => {
     const response = await request(app)
       .get('/api/v1/products')
-      .query({name: validProduct.name, limit:1, page: 1})
+      .query({ name: validProduct.name, limit: 1, page: 1 })
       .set('Authorization', `Bearer ${buyerToken.token}`);
     expect(response.statusCode).toBe(200);
   });
 
-  test('Searching for a product with maximum price', async()=>{
+  test('Searching for a product with maximum price', async () => {
     const response = await request(app)
       .get('/api/v1/products')
-      .query({maxPrice: validProduct.price, limit:1, page: 1})
+      .query({ maxPrice: validProduct.price, limit: 1, page: 1 })
       .set('Authorization', `Bearer ${buyerToken.token}`);
     expect(response.statusCode).toBe(200);
   });
 
-  test('Searching for a product with minimum price', async()=>{
+  test('Searching for a product with minimum price', async () => {
     const response = await request(app)
       .get('/api/v1/products')
-      .query({minPrice: validProduct.price, limit:1, page: 1})
+      .query({ minPrice: validProduct.price, limit: 1, page: 1 })
       .set('Authorization', `Bearer ${buyerToken.token}`);
     expect(response.statusCode).toBe(200);
   });
-  test('Searching for a product with minimum and maximum price', async()=>{
+  test('Searching for a product with minimum and maximum price', async () => {
     const response = await request(app)
       .get('/api/v1/products')
-      .query({maxPrice: validProduct.price, minPrice: validProduct.price, limit:1, page: 1})
+      .query({
+        maxPrice: validProduct.price,
+        minPrice: validProduct.price,
+        limit: 1,
+        page: 1,
+      })
       .set('Authorization', `Bearer ${buyerToken.token}`);
     expect(response.statusCode).toBe(200);
   });
-  
-  test('Searching for a product with expire date', async()=>{
+
+  test('Searching for a product with expire date', async () => {
     const response = await request(app)
       .get('/api/v1/products')
-      .query({expireDate: validProduct.expiryDate, limit:1, page: 1})
+      .query({ expireDate: validProduct.expiryDate, limit: 1, page: 1 })
       .set('Authorization', `Bearer ${buyerToken.token}`);
     expect(response.statusCode).toBe(200);
   });
-  
-  test('Searching for a product with category', async()=>{
+
+  test('Searching for a product with category', async () => {
     validCategory.name = 'food';
     await request(app)
-    .post('/api/v1/categories')
-    .set('Authorization', `Bearer ${validToken}`)
-    .send(validCategory);
+      .post('/api/v1/categories')
+      .set('Authorization', `Bearer ${validToken}`)
+      .send(validCategory);
     const response = await request(app)
       .get('/api/v1/products')
-      .query({category: validCategory.name, limit:1, page: 1 })
+      .query({ category: validCategory.name, limit: 1, page: 1 })
       .set('Authorization', `Bearer ${buyerToken.token}`);
     expect(response.statusCode).toBe(200);
   });
 
-  test('Searching for a product with invalid category', async()=>{
+  test('Searching for a product with invalid category', async () => {
     const response = await request(app)
       .get('/api/v1/products')
-      .query({category: 'clothingf',  limit:1, page: 1 })
+      .query({ category: 'clothingf', limit: 1, page: 1 })
       .set('Authorization', `Bearer ${buyerToken.token}`);
     expect(response.statusCode).toBe(500);
   });
 
-  test('Searching for a product with empty values', async()=>{
+  test('Searching for a product with empty values', async () => {
     const response = await request(app)
       .get('/api/v1/products')
       .set('Authorization', `Bearer ${buyerToken.token}`);
     expect(response.statusCode).toBe(500);
   });
 
-  test('Searching for a product with invalid product name', async()=>{
+  test('Searching for a product with invalid product name', async () => {
     const response = await request(app)
       .get('/api/v1/products')
-      .query({name: 'clothingf&%>' })
+      .query({ name: 'clothingf&%>' })
       .set('Authorization', `Bearer ${buyerToken.token}`);
     expect(response.statusCode).toBe(400);
   });
 
-  test('Searching for a product with invalid category name', async()=>{
+  test('Searching for a product with invalid category name', async () => {
     const response = await request(app)
       .get('/api/v1/products')
-      .query({category: 'clothingf&%>' })
+      .query({ category: 'clothingf&%>' })
       .set('Authorization', `Bearer ${buyerToken.token}`);
     expect(response.statusCode).toBe(400);
   });
 
-  test('Searching for a product with invalid minimum price', async()=>{
+  test('Searching for a product with invalid minimum price', async () => {
     const response = await request(app)
       .get('/api/v1/products')
-      .query({minPrice: '1000a' })
+      .query({ minPrice: '1000a' })
       .set('Authorization', `Bearer ${buyerToken.token}`);
     expect(response.statusCode).toBe(400);
   });
 
-  test('Searching for a product with invalid maximum price', async()=>{
+  test('Searching for a product with invalid maximum price', async () => {
     const response = await request(app)
       .get('/api/v1/products')
-      .query({maxPrice: '1000a' })
+      .query({ maxPrice: '1000a' })
       .set('Authorization', `Bearer ${buyerToken.token}`);
     expect(response.statusCode).toBe(400);
   });
 
-  test('Searching for a product with invalid expire date', async()=>{
+  test('Searching for a product with invalid expire date', async () => {
     const response = await request(app)
       .get('/api/v1/products')
-      .query({expireDate: '2022-02-212' })
+      .query({ expireDate: '2022-02-212' })
       .set('Authorization', `Bearer ${buyerToken.token}`);
     expect(response.statusCode).toBe(400);
   });
+});
+describe('GET /Products:productId', () => {
+  test("Check seller doesn't own the product", async () => {
+    const response = await request(app)
+      .get(`/api/v1/products/${validProductId}`)
+      .set('Authorization', `Bearer ${sellerToken}`);
+    expect(response.body.message).toEqual(
+      "Product doesn't exists in your collection"
+    );
+    expect(response.statusCode).toEqual(400);
+  });
 
+  test('Check seller own the product', async () => {
+    const response = await request(app)
+      .get(`/api/v1/products/${validProductId1}`)
+      .set('Authorization', `Bearer ${sellerToken}`);
+    expect(response.body).toHaveProperty('product');
+    expect(response.statusCode).toEqual(200);
+  });
+
+  test("Check product doesn't exist", async () => {
+    const response = await request(app)
+      .get(`/api/v1/products/${invalidProductId}`)
+      .set('Authorization', `Bearer ${validToken}`);
+    expect(response.body.message).toEqual('Product not found');
+    expect(response.statusCode).toEqual(404);
+  });
+
+  test('Given valid productId but not available', async () => {
+    const response = await request(app)
+      .get(`/api/v1/products/${unavailableProduct}`)
+      .set('Authorization', `Bearer ${notSeller}`);
+    expect(response.body.message).toEqual('Product is not available');
+    expect(response.statusCode).toEqual(404);
+  });
+
+  test('Given valid productId and available', async () => {
+    const response = await request(app)
+      .get(`/api/v1/products/${validProductId}`)
+      .set('Authorization', `Bearer ${notSeller}`);
+    expect(response.body).toHaveProperty('product');
+    expect(response.statusCode).toEqual(200);
+  });
+
+  test('Check failed to retrieve', async () => {
+    const response = await request(app)
+      .get(`/api/v1/products/`)
+      .set('Authorization', `Bearer ${notSeller}`);
+    expect(response.body.message).toBe('Failed to retrieve products');
+    expect(response.statusCode).toEqual(500);
+  });
 });
 
 afterEach(async () => {
@@ -269,7 +351,6 @@ afterEach(async () => {
 });
 
 describe('GET /Product', () => {
-  
   test('List all products for role seller', async () => {
     const response = await request(app)
       .get('/api/v1/products?limit=1&&page=1')
@@ -291,14 +372,23 @@ describe('GET /Product', () => {
   test('Expired product was removed successfully', async () => {
     const response = await request(app)
       .patch(`/api/v1/products/${productId1}/expired`)
-      .set('Authorization', `Bearer ${validToken}`)
+      .set('Authorization', `Bearer ${admin}`)
       .send({
-        isExpired:true,
-        isAvailable:false
+        isExpired: true,
+        isAvailable: false,
       });
 
-    expect(response.body.message).toEqual('Expired product was removed successfully');
+    expect(response.body.message).toEqual(
+      'Expired product was removed successfully'
+    );
+  });
+  test('Check fail to create product', async () => {
+    const requestSpy = jest.spyOn(ProductService, 'getAllProducts');
+    requestSpy.mockRejectedValue(new Error('Failed to retrieve product'));
+    const response = await request(app)
+      .get('/api/v1/products')
+      .set('Authorization', `Bearer ${validToken}`);
+    expect(response.statusCode).toBe(500);
+    requestSpy.mockRestore();
   });
 });
-
-
