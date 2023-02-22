@@ -3,13 +3,10 @@ require('dotenv').config();
 module.exports = {
   development: {
     url: process.env.DEV_DATABASE_URL,
-    dialect: 'postgres',
-  //   logging:false
+    dialect: 'postgres'
    },
   test: {
-    // url: process.env.YVES_REMOTE,
     url: process.env.TEST_DATABASE_URL,
-    // url: process.env.HUGUE_REMOTE,
     dialect: 'postgres',
     dialectOptions: {
       ssl: {

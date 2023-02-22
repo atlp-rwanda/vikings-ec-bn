@@ -3,6 +3,7 @@ import app from "../../src/app";
 import { connectDB } from "../../src/app";
 import { resetEmail, successResetRegister } from "../mocks/user.mock";
 import { JwtUtility } from "../../src/utils/jwt.util";
+import { closeAll } from '../../src/utils/scheduling.util';
 import {
   successPasswordUpdate,
   invalidPasswordUpdate,
@@ -10,7 +11,7 @@ import {
   resetPassword,
 } from "../mocks/user.mock";
 import dotenv from "dotenv";
-import { describe, expect, test } from '@jest/globals';
+import { describe, expect, test, afterEach, beforeAll } from '@jest/globals';
 dotenv.config();
 
 beforeAll(async () => {
@@ -62,30 +63,6 @@ describe('resetValidation file test', () => {
   })
 });
 });
-//     expect(res.body.error).toEqual('newPassword length must be at least 8 characters long');
-//   });
-
-//   it('returns a 400 error if the password does not contain uppercase letters', async () => {
-//     const res = await request(app)
-//       .post('/register')
-//       .send({ newPassword: 'password1' })
-//       .expect(400);
-
-//     expect(res.body.error).toEqual('newPassword must contain at least 1 uppercase letter');
-//   });
-
-//   it('returns a 400 error if the password does not contain numeric characters', async () => {
-//     const res = await request(app)
-//       .post('/register')
-//       .send({ newPassword: 'Password' })
-//       .expect(400);
-
-//     expect(res.body.error).toEqual('newPassword must contain at least 1 numeric character');
-//   });
-
-//   it('returns a 200 success if the password is valid', async () => {
-//     const res = await request(app)
-//       .post('/register')
-//       .send({ newPassword: 'Password1' })
-//       .expect(200);
-//   });
+afterEach(async () => {
+  await closeAll();
+});

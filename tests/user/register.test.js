@@ -8,6 +8,7 @@ import { jwtTokens } from '../../src/database/models/index';
 import dotenv from 'dotenv';
 import {afterEach} from '@jest/globals';
 import {closeAll} from '../../src/utils/scheduling.util';
+import {sellerToken} from '../mocks/user.mock';
 dotenv.config();
 
 let userToken = '';
