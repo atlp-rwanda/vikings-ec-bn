@@ -1,6 +1,9 @@
 import express from 'express';
 import { protectRoute, restrictTo } from '../../middlewares/auth.middleware';
-import { createProduct } from '../../controllers/product.controller.js';
+import {
+  createProduct,
+  getAllProducts,
+} from '../../controllers/product.controller.js';
 import productValidation from '../../validations/product/product.validation';
 import { checkIfCategoryExistById } from '../../middlewares/category.middleware';
 import {
@@ -14,7 +17,7 @@ const productRoutes = express.Router();
 productRoutes.post(
   '/',
   protectRoute,
-  restrictTo('seller','admin'),
+  restrictTo('seller', 'admin'),
   productValidation,
   checkIfCategoryExistById,
   checkIfProductExists,
@@ -23,4 +26,6 @@ productRoutes.post(
   uploadImages,
   createProduct
 );
+
+productRoutes.get('/', protectRoute, getAllProducts);
 export default productRoutes;
