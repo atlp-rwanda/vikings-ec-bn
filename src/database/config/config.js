@@ -7,6 +7,7 @@ module.exports = {
   //   logging:false
    },
   test: {
+    // url: process.env.YVES_REMOTE,
     url: process.env.TEST_DATABASE_URL,
     dialect: 'postgres',
     dialectOptions: {
@@ -15,7 +16,7 @@ module.exports = {
         rejectUnauthorized: false,
       },
     },
-     logging:false
+     logging:false,
   },
   production: {
     url: process.env.DATABASE_URL,

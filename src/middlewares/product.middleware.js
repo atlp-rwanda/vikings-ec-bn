@@ -12,6 +12,15 @@ export const checkIfProductExists = async (req, res, next) => {
   else next();
 };
 
+export const checkProductAvailable = async(req, res, next)=>{
+  const { productId } = req.body;
+  const getProduct = await Products.findOne({
+    where: {id: productId},
+  });
+  if (!getProduct) return res.status(404).json({message: 'Product not found'});
+  next();
+};
+
 export const uploadImages = async (req, res, next) => {
   const images = [];
   for (let i = 0; i < req.files.images.length; i++) {

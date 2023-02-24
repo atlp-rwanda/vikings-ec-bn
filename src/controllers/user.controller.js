@@ -171,7 +171,7 @@ export class UserController {
         role,
         mustUpdatePassword
       };
-      const token = JwtUtility.generateToken(userData);
+      const token = JwtUtility.generateToken(userData, '365d');
       const data = {
         token: token,
         revoked: false,

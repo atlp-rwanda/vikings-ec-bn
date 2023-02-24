@@ -21,7 +21,7 @@ describe('Testing 2 FA', () => {
 		const response = await request(app)
 			.post('/api/v1/users/login/')
 			.send(sellerUser);
-			
+
 		expect(response.statusCode).toEqual(403);
 		expect(response.body.message).toBe('Check your email for verification code');
 	});
