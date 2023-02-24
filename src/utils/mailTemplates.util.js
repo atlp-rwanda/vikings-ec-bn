@@ -26,3 +26,7 @@ export const login2FATemplate = (otpCode, firstname, id)=>{
   </div>
 </body>`;
 };
+
+export const expiredProductMessage= (product) =>{
+ return `The product " ${product.name}" has expired.`;
+};

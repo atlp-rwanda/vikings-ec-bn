@@ -20,6 +20,14 @@ module.exports = (sequelize, DataTypes) => {
       expiryDate: DataTypes.DATE,
       images: DataTypes.ARRAY(DataTypes.STRING),
       bonus: DataTypes.INTEGER,
+      isExpired: {
+        type:DataTypes.BOOLEAN,
+        defaultValue:false
+      },
+      isAvailable: {
+        type:DataTypes.BOOLEAN,
+        defaultValue:true
+      },
       categoryId: {
         type: DataTypes.UUID,
         references: { model: 'Categories', key: 'id' },

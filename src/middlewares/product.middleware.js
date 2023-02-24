@@ -1,6 +1,7 @@
 import path from 'path';
 import { Products } from '../database/models/index';
 import { uploadPhoto } from '../utils/cloudinary.util';
+import { ProductService } from '../services/product.service';
 
 export const checkIfProductExists = async (req, res, next) => {
   const { name } = req.body;
@@ -40,4 +41,27 @@ export const checkNumberOfImages = (req, res, next) => {
   if (images.length <= 3 || images.length == null)
     return res.status(400).json({ message: 'Please insert at least 4 images' });
   next();
+};
+
+export const checkIfProductExistsById= async (req, res, next) => {
+  const  productId  = req.params.productId;
+  const product = await ProductService.getProductById(productId);
+  if (!product){
+    res.status(404).json({ message: 'Product not found' });
+  }else {
+    req.product = product;
+    next();
+  }
+};
+
+export const checkIfSellerOwnsProduct= async (req, res, next) => {
+  const  productId  = req.params.productId;
+  const product = await ProductService.getProductById(productId);
+  const sellerId = product.userId;
+
+  if (req.user.id !== sellerId){
+    res.status(400).json({ message: 'Product is owned by other seller' });
+  }else {
+    next();
+  }
 };
