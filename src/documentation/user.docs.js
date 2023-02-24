@@ -16,20 +16,10 @@ const getAllUsers = {
       }]
   };
 
-  const updateRole = {
+const forgetPassword = {
     tags: ['Users'],
-    summary: 'Update Role',
-    description: 'Updating role endpoint',
-    parameters:[
-        {
-            name:'id',
-            in:'path',
-            description:'User Id',
-            schema:{
-                type: 'string',
-            }
-        },
-    ],
+    summary: 'forget password',
+    description: 'user get email to reset password',
     requestBody: {
       required: true,
       content: {
@@ -37,13 +27,13 @@ const getAllUsers = {
           schema: {
             type: 'object',
             properties: {
-              role: {
+              email: {
                 type: 'string',
                 required: true,
               },
             },
             example: {
-              role: 'seller',
+              email: 'verify@gmail.com',
             },
           },
         },
@@ -57,10 +47,96 @@ const getAllUsers = {
         description: 'Internal Server Error',
       },
     },
-    security: [{
-        bearerAuth: []
-      }]
     };
+
+const resetPassword = {
+      tags: ['Users'],
+      summary: 'reset password',
+      description: 'user use email to reset password',
+      parameters:[
+          {
+              name:'token',
+              in:'path',
+              description:'Token',
+              schema:{
+                  type: 'string',
+              }
+          },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                newPassword: {
+                  type: 'string',
+                  required: true,
+                },
+              },
+              example: {
+                newPassword: 'verify@gmail.com',
+              },
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: 'OK',
+        },
+        500: {
+          description: 'Internal Server Error',
+        },
+      },
+      };
+
+    const updateRole = {
+      tags: ['Users'],
+      summary: 'Update Role',
+      description: 'Updating role endpoint',
+      parameters:[
+          {
+              name:'id',
+              in:'path',
+              description:'User Id',
+              schema:{
+                  type: 'string',
+              }
+          },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                role: {
+                  type: 'string',
+                  required: true,
+                },
+              },
+              example: {
+                role: 'seller',
+              },
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: 'OK',
+        },
+        500: {
+          description: 'Internal Server Error',
+        },
+      },
+      security: [{
+          bearerAuth: []
+        }]
+      };
 
 const disableAccount = {
   tags: ['Users'],
@@ -111,6 +187,14 @@ const disableAccount = {
 const userRouteDocs = {
   '/api/v1/users': {
       get: getAllUsers,
+    },
+
+  '/api/v1/users/forgot-password': {
+      post: forgetPassword,
+    },
+
+    '/api/v1/users/reset-password/{token}': {
+      patch: resetPassword,
     },
 
   '/api/v1/users/{userId}': {

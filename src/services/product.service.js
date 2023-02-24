@@ -31,4 +31,11 @@ export class ProductService {
     const totalItems = count;
     return { totalPages, currentPage, totalItems, rows };
   }
+  static async updateProduct(fields, id) {
+    return await Products.update({ ...fields }, { where: { id: id } });
+  }
+
+  static async getProductById(id) {
+    return await Products.findByPk (id);
+  }
 }

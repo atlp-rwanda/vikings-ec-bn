@@ -1,6 +1,7 @@
 import express from 'express';
 import passport from 'passport';
 import validatePassword from '../../validations/user/updatePassword.validation.js';
+import validateNewPassword from '../../validations/resetPassword.validation';
 import validateRegister from '../../validations/user/register.validation.js';
 import { protectRoute , restrictTo } from '../../middlewares/auth.middleware.js';
 import {
@@ -16,7 +17,8 @@ import {
   checkDisabledAccount,
   checkSeller,
   verifyAuthCode,
-  removeAuthCode
+  removeAuthCode,
+  VerifyResetPasswordToken
 } from '../../middlewares/user.middleware';
 import { logout } from '../../controllers/logout.controller';
 import { UserController } from '../../controllers/user.controller';
@@ -26,6 +28,7 @@ import validateRole from '../../validations/user/role.validation.js';
 import validateStatus from '../../validations/user/status.validation.js';
 import validateLogin from '../../validations/user/login.validation.js';
 import validateAuthCode from '../../validations/user/2facode.validation.js';
+import validateEmail from '../../validations/email.validation.js';
 
 googlePass();
 
@@ -119,5 +122,17 @@ router.put(
   checkIfUserExistById,
   UserController.accountStatus
 );
+
+router.post('/forgot-password',
+ validateEmail,
+ checkEmailExists,
+  UserController.forgotPassword
+);
+
+router.patch('/reset-password/:token',
+  validateNewPassword,
+  VerifyResetPasswordToken,
+  UserController.resetPassword
+  );
 
 export default router;

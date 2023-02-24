@@ -1,18 +1,20 @@
 import app from '../../src/app';
+import { expect, describe, test, jest, it, beforeAll, afterEach } from '@jest/globals';
 import { connectDB } from '../../src/app';
 import request from 'supertest';
 import {
   invaliCategoryProduct,
   notSeller,
   validToken,
-} from '../mocks/product.mock';
-import {
   validProduct,
   validProduct2,
   invalidProduct,
+  productId,
+  productId1
 } from '../mocks/product.mock';
-import {afterEach} from '@jest/globals';
-import {closeAll} from '../../src/utils/scheduling.util';
+import { closeAll } from '../../src/utils/scheduling.util';
+import { ProductService } from '../../src/services/product.service';
+import { removeExpiredProducts } from '../../src/controllers/product.controller';
 
 beforeAll(async () => {
   await connectDB();
@@ -109,8 +111,42 @@ describe('POST /Product', () => {
     expect(response.body.message).toEqual('Please insert at least 4 images');
     expect(response.statusCode).toEqual(400);
   });
+
+  test('Check fail to create product', async () => {
+    const requestSpy = jest.spyOn(ProductService, 'getAllProducts');
+    requestSpy.mockRejectedValue(new Error('Failed to retrieve product'));
+    const response = await request(app)
+      .get('/api/v1/products')
+      .set('Authorization', `Bearer ${validToken}`);
+    expect(response.statusCode).toBe(500);
+    requestSpy.mockRestore();
+  });
+
+
+  it('should return a 500 error if ProductService.updateProduct() throws an error', async () => {
+    const errorMessage = 'Failed to update product';
+    jest.spyOn(ProductService, 'updateProduct').mockImplementation(() => {
+      throw new Error(errorMessage);
+    });
+    const req = {
+      body: { isExpired: true, isAvailable: false, }, params: { productId: productId, },
+    };
+    const res = {
+      status: jest.fn(() => res),
+      json: jest.fn(),
+    };
+    await removeExpiredProducts(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({
+      error: errorMessage,
+      message: 'Failed to remove expired product from list',
+    });
+    ProductService.updateProduct.mockRestore();
+  });
 });
-afterEach(async () =>{
+
+afterEach(async () => {
   await closeAll();
 });
 
@@ -131,5 +167,17 @@ describe('GET /Product', () => {
 
     expect(response.body).toHaveProperty('products');
     expect(response.statusCode).toEqual(200);
+  });
+
+  test('Expired product was removed successfully', async () => {
+    const response = await request(app)
+      .patch(`/api/v1/products/${productId1}/expired`)
+      .set('Authorization', `Bearer ${validToken}`)
+      .send({
+        isExpired:true,
+        isAvailable:false
+      });
+
+    expect(response.body.message).toEqual('Expired product was removed successfully');    
   });
 });
