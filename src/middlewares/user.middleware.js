@@ -146,3 +146,17 @@ export const removeAuthCode = async(req, res, next)=>{
   await UserService.updateUser({authCode}, req.user.id);
   next();
 };
+
+export const VerifyResetPasswordToken = async(req,res,next) =>{
+	const {token} = req.params
+      const verify = JwtUtility.verifyToken(token)
+      const id = verify.id
+	  req.id = id
+	  const user = await User.findByPk(id);
+      if (!user) {
+      return res.status(404).json({ message: `User does not exist` });
+      }
+	  next();
+	  
+      
+}

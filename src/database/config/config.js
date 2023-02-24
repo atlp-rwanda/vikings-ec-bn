@@ -9,6 +9,7 @@ module.exports = {
   test: {
     // url: process.env.YVES_REMOTE,
     url: process.env.TEST_DATABASE_URL,
+    // url: process.env.HUGUE_REMOTE,
     dialect: 'postgres',
     dialectOptions: {
       ssl: {

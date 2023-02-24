@@ -108,3 +108,18 @@ export const randomId = 'afa9b976-5ec0-4b46-8068-45b9fc4d156d';
 export const invalidOTP = '000000';
 
 export const expiredOTP = '123456';
+
+export const successResetRegister = {
+  firstname: 'NameOne',
+  lastname: 'NameTwo',
+  email: 'reseter@gmail.com',
+  phone: '0987654321',
+  password: '@Test123',
+};
+export const resetEmail = {
+  email: 'reseter@gmail.com'
+}
+
+export const resetPassword = {
+  newPassword: 'Sracerimo@123'
+}
