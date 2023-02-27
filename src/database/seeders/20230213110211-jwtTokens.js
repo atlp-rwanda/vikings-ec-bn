@@ -33,6 +33,14 @@ module.exports = {
         {
           id: '1c84c3d3-3ef0-4bba-8eb9-e3e9231b55d7',
           token:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3MjUyNmFkLTc2YmUtNGY0NC1iNWQ5LTgwMzJmMDkyNWMyZCIsImVtYWlsIjoidmVyaWZpZWRAZ21haWwuY29tIiwicm9sZSI6ImJ1eWVyIiwibXVzdFVwZGF0ZVBhc3N3b3JkIjpmYWxzZSwiaWF0IjoxNjc3MDU2MzU5LCJleHAiOjE2NzcxNDI3NTl9.c971QztK-_jdubOn4sXHr6lez3BumlsBHXVUzoJLp5o',
+          revoked: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: '10f3f744-ab25-4a3a-8b02-745834cf7056',
+          token:
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3MjUyNmFkLTc2YmUtNGY0NC1iNWQ5LTgwMzJmMDkyNWMyZCIsImVtYWlsIjoidmVyaWZpZWRAZ21haWwuY29tIiwicm9sZSI6ImJ1eWVyIiwibXVzdFVwZGF0ZVBhc3N3b3JkIjpudWxsLCJpYXQiOjE2NzcxNDQxNzIsImV4cCI6MTcwODY4MDE3Mn0.tgs7nBut8C2QmtgRTxD1s4I3FFQaq_4NRMED0L7Nfjc',
           revoked: false,
           createdAt: new Date(),

@@ -5,7 +5,7 @@ import { describe,beforeEach,it, afterEach,expect,jest } from '@jest/globals';
 import { removeAuthCode } from '../../src/middlewares/user.middleware';
 import { UserService } from '../../src/services/user.service';
 import { verifyAuthCode } from '../../src/middlewares/user.middleware';
-
+import { closeAll } from '../../src/utils/scheduling.util';
 describe('verifyAndRevokeToken', () => {
   let req, res, next, updateSpy;
 
@@ -66,7 +66,7 @@ describe('verifyAuthCode', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'Code does not match. Try again' });
     expect(next).not.toHaveBeenCalled();
   });
-  
+
   it('should call next when auth code matches', async () => {
     req.body.authCode = '5678';
 
@@ -97,4 +97,7 @@ describe('removeAuthCode', () => {
     expect(next).toHaveBeenCalled();
   });
 
+});
+afterEach(async () => {
+  await closeAll();
 });

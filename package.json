@@ -74,10 +74,10 @@
     "redis": "^4.6.4",
     "sequelize": "^6.28.0",
     "sinon": "^15.0.1",
+    "socket.io": "^4.5.3",
     "supertest": "^6.3.3",
     "swagger-ui-express": "^4.6.0",
-    "uuid": "^9.0.0",
-    "socket.io": "^4.5.3"
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "eslint": "^8.33.0",

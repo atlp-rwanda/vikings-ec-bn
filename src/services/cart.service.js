@@ -16,10 +16,7 @@ export class CartService {
 	static async getCartProducts(products) {
 		return await Promise.all(
 			products.map(async (product) => {
-				const productDetails = await ProductService.getProductById(
-					product.productId
-				);
-				return { ...product, ...productDetails.dataValues };
+				return await ProductService.getProductById(product);
 			})
 		);
 	}
