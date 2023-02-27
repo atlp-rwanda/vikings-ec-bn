@@ -6,6 +6,7 @@ import profileDocs from './profile.docs.js';
 import confirmEmailRoute from './emailVerification.js';
 import productDocs from './products.docs';
 import cartRouteDocs from './cart.docs';
+import chat from './chat.docs';
 
 export default {
   ...basicInfo,
@@ -16,6 +17,7 @@ export default {
     ...profileDocs,
     ...confirmEmailRoute,
     ...productDocs,
-    ...cartRouteDocs
+    ...cartRouteDocs,
+    ...chat,
   },
 };

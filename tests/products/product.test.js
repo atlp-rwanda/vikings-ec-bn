@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import app from '../../src/app';
 import {
   expect,
@@ -339,7 +338,7 @@ describe('GET /Products:productId', () => {
 
   test('Check failed to retrieve', async () => {
     const response = await request(app)
-      .get(`/api/v1/products/`)
+      .get('/api/v1/products/')
       .set('Authorization', `Bearer ${notSeller}`);
     expect(response.body.message).toBe('Failed to retrieve products');
     expect(response.statusCode).toEqual(500);

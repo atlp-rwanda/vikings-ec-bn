@@ -7,12 +7,9 @@ import {
   afterEach,
 } from '@jest/globals';
 import { connectDB } from '../../src/app';
-import { JwtUtility } from '../../src/utils/jwt.util';
+import { closeAll } from '../../src/utils/scheduling.util';
 import { ProductService } from '../../src/services/product.service';
-import {
-  checkIfProductExistsById,
-  checkIfSellerOwnsProduct,
-} from '../../src/middlewares/product.middleware';
+import { checkIfProductExistsById } from '../../src/middlewares/product.middleware';
 import { schedule } from '../../src/utils/scheduling.util';
 
 beforeAll(async () => {
@@ -64,4 +61,8 @@ describe('checkIfProductExistsById middleware', () => {
     jest.advanceTimersByTime(24 * 60 * 60 * 1000);
     expect(callback).toHaveBeenCalledTimes(2);
   });
+});
+
+afterEach(async () => {
+  await closeAll();
 });
