@@ -2,12 +2,11 @@ import app from '../../src/app';
 import request from 'supertest';
 import { connectDB } from '../../src/app';
 import { successReg } from '../mocks/user.mock';
-import {afterEach} from '@jest/globals';
-import {closeAll} from '../../src/utils/scheduling.util';
+import { afterEach } from '@jest/globals';
+import { closeAll } from '../../src/utils/scheduling.util';
 import { logoutService } from '../../src/services/token.service';
 import { validToken } from '../mocks/product.mock';
-import { expect, describe, jest,test, beforeEach} from '@jest/globals';
-
+import { expect, describe, jest, test, beforeEach } from '@jest/globals';
 
 beforeEach(async () => {
   await connectDB();
@@ -43,12 +42,12 @@ describe('Test User Logout', () => {
     const requestSpy = jest.spyOn(logoutService, 'revokeToken');
     requestSpy.mockRejectedValue(new Error('Failed to logout'));
     const response = await request(app)
-    .post('/api/v1/users/logout')
-    .set('Authorization', `Bearer ${validToken}`);
+      .post('/api/v1/users/logout')
+      .set('Authorization', `Bearer ${validToken}`);
     expect(response.statusCode).toBe(500);
     requestSpy.mockRestore();
   });
 });
-afterEach(async () =>{
+afterEach(async () => {
   await closeAll();
 });

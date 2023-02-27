@@ -13,12 +13,22 @@ export const checkIfProductExists = async (req, res, next) => {
   else next();
 };
 
-export const checkProductAvailable = async(req, res, next)=>{
+export const checkProductAvailable = async (req, res, next) => {
   const { productId } = req.body;
   const getProduct = await Products.findOne({
-    where: {id: productId},
+    where: { id: productId },
   });
-  if (!getProduct) return res.status(404).json({message: 'Product not found'});
+  if (!getProduct)
+    return res.status(404).json({ message: 'Product not found' });
+  next();
+};
+
+export const checkIfProductIsAvailableById = async (req, res, next) => {
+  const product = req.product;
+  const { role } = req.user;
+  if (role === 'buyer' && !product.isAvailable) {
+    return res.status(404).json({ message: 'Product is not available' });
+  }
   next();
 };
 
@@ -36,11 +46,9 @@ export const checkExtensions = (...extensions) => {
     for (let i = 0; i < req.files.images.length; i++) {
       const ext = path.extname(req.files.images[i].name);
       if (!extensions.includes(ext)) {
-        return res
-          .status(400)
-          .json({
-            message: `Invalid extension for file '${req.files.images[i].name}'`,
-          });
+        return res.status(400).json({
+          message: `Invalid extension for file '${req.files.images[i].name}'`,
+        });
       }
     }
     next();
@@ -53,53 +61,54 @@ export const checkNumberOfImages = (req, res, next) => {
   next();
 };
 
-export const checkIfProductExistsById= async (req, res, next) => {
-  const  productId  = req.params.productId;
+export const checkIfProductExistsById = async (req, res, next) => {
+  const productId = req.params.productId;
   const product = await ProductService.getProductById(productId);
-  if (!product){
-    res.status(404).json({ message: 'Product not found' });
-  }else {
-    req.product = product;
-    next();
+  if (!product) {
+    return res.status(404).json({ message: 'Product not found' });
   }
+  req.product = product;
+  next();
 };
 
-export const checkIfSellerOwnsProduct= async (req, res, next) => {
-  const  productId  = req.params.productId;
-  const product = await ProductService.getProductById(productId);
+export const checkIfSellerOwnsProduct = async (req, res, next) => {
+  const product = req.product;
   const sellerId = product.userId;
-
-  if (req.user.id !== sellerId){
-    res.status(400).json({ message: 'Product is owned by other seller' });
-  }else {
-    next();
+  const { id, role } = req.user;
+  if (role === 'seller' && id !== sellerId) {
+    return res.status(400).json({
+      message: "Product doesn't exists in your collection",
+    });
   }
-}
+  next();
+};
 export const receivedQueryFormat = async (req, res, next) => {
   const receivedQuery = req.query;
   if (Object.keys(receivedQuery).length === 2) {
     next();
   } else {
-  const formatedQuery = {};
-  if (receivedQuery.name) {
-    formatedQuery.name = { [Op.iLike]: `%${receivedQuery.name}%` };
-  }
-  if (receivedQuery.category) {
+    const formatedQuery = {};
+    if (receivedQuery.name) {
+      formatedQuery.name = { [Op.iLike]: `%${receivedQuery.name}%` };
+    }
+    if (receivedQuery.category) {
       formatedQuery.categoryId = receivedQuery.category;
     }
-  if (receivedQuery.minPrice && receivedQuery.maxPrice) {
-    formatedQuery.price = { [Op.between]: [receivedQuery.minPrice, receivedQuery.maxPrice] };
-  } else if (receivedQuery.minPrice) {
-    formatedQuery.price = { [Op.gte]: receivedQuery.minPrice };
-  } else if (receivedQuery.maxPrice) {
-    formatedQuery.price = { [Op.lte]: receivedQuery.maxPrice };
+    if (receivedQuery.minPrice && receivedQuery.maxPrice) {
+      formatedQuery.price = {
+        [Op.between]: [receivedQuery.minPrice, receivedQuery.maxPrice],
+      };
+    } else if (receivedQuery.minPrice) {
+      formatedQuery.price = { [Op.gte]: receivedQuery.minPrice };
+    } else if (receivedQuery.maxPrice) {
+      formatedQuery.price = { [Op.lte]: receivedQuery.maxPrice };
+    }
+    if (receivedQuery.expireDate) {
+      formatedQuery.expiryDate = receivedQuery.expireDate + 'T00:00:00.000Z';
+    }
+    formatedQuery.limit = req.query['limit'];
+    formatedQuery.page = req.query['page'];
+    req.query = formatedQuery;
+    next();
   }
-  if (receivedQuery.expireDate) {
-    formatedQuery.expiryDate = receivedQuery.expireDate+'T00:00:00.000Z';
-  }
-  formatedQuery.limit = req.query['limit'];
-  formatedQuery.page = req.query['page'];
-  req.query = formatedQuery;
-  next();
-}
 };

@@ -29,6 +29,7 @@ module.exports = {
       },
       isAvailable: {
         type: Sequelize.BOOLEAN,
+        defaultValue:true
       },
       categoryId: {
         type: Sequelize.UUID,

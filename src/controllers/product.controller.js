@@ -33,8 +33,15 @@ export const getAllProducts = async (req, res) => {
     const { role, id } = req.user;
     if (role === 'seller') {
       const rows = products.rows.filter((product) => product.userId === id);
-      products.totalItems=rows.length;
-      products.rows=rows;
+      products.totalItems = rows.length;
+      products.rows = rows;
+    }
+    if (role === 'buyer') {
+      const rows = products.rows.filter(
+        (product) => product.isAvailable === true
+      );
+      products.totalItems = rows.length;
+      products.rows = rows;
     }
     return res.status(200).json({ products: products });
   } catch (err) {
@@ -45,30 +52,38 @@ export const getAllProducts = async (req, res) => {
 };
 export const removeExpiredProducts = async (req, res) => {
   try {
-    const {isExpired} = req.body;
+    const { isExpired } = req.body;
     const productId = req.params.productId;
     const isAvailable = false;
 
-    await ProductService.updateProduct({isExpired,isAvailable },productId );
-    sendEmail(emailConfig({email:req.user.email,subject:'Product has expired', content:expiredProductMessage(req.product)}));
+    await ProductService.updateProduct({ isExpired, isAvailable }, productId);
+    sendEmail(
+      emailConfig({
+        email: req.user.email,
+        subject: 'Product has expired',
+        content: expiredProductMessage(req.product),
+      })
+    );
 
-    return res.status(200).json({message:'Expired product was removed successfully'});
-  } catch (error) {
     return res
-      .status(500)
-      .json({
-        error: error.message,
-        message: 'Failed to remove expired product from list',
-      });
+      .status(200)
+      .json({ message: 'Expired product was removed successfully' });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+      message: 'Failed to remove expired product from list',
+    });
   }
 };
 
-const repetitionDuration =process.env.CRON_PERIOD? durationToCronRepetition(process.env.CRON_PERIOD): knownSchedulingTime.everySecond;
-schedule(repetitionDuration,function () {
+const repetitionDuration = process.env.CRON_PERIOD
+  ? durationToCronRepetition(process.env.CRON_PERIOD)
+  : knownSchedulingTime.everySecond;
+schedule(repetitionDuration, function () {
   delistExpiredProducts();
 });
 
-export const searchProductController = async(req, res) => {
+export const searchProductController = async (req, res) => {
   if (Object.keys(req.query).length === 2) {
     return getAllProducts(req, res);
   }
@@ -76,14 +91,23 @@ export const searchProductController = async(req, res) => {
   delete req.query.limit;
   delete req.query.page;
   try {
-   const result = await ProductService.searchProduct(req.query, limit, page);
-   return res.status(200).json({ products: result });
+    const result = await ProductService.searchProduct(req.query, limit, page);
+    return res.status(200).json({ products: result });
   } catch (err) {
-    return res
-      .status(500)
-      .json({
-        error: err.message,
-        message: 'Error occured while searching for a product',
-      });
+    return res.status(500).json({
+      error: err.message,
+      message: 'Error occured while searching for a product',
+    });
+  }
+};
+export const getSpecificProduct = async (req, res) => {
+  try {
+    let product = req.product;
+    return res.status(200).json({ product: product });
+  } catch(err) {
+    return res.status(500).json({
+      error: err.message,
+      message: 'Error occured while retrieving a product',
+    });
   }
 };

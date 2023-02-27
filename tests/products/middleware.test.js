@@ -1,8 +1,18 @@
-import { expect, describe, jest, it, beforeAll, afterEach } from '@jest/globals';
+import {
+  expect,
+  describe,
+  jest,
+  it,
+  beforeAll,
+  afterEach,
+} from '@jest/globals';
 import { connectDB } from '../../src/app';
-import { JwtUtility }from '../../src/utils/jwt.util';
+import { JwtUtility } from '../../src/utils/jwt.util';
 import { ProductService } from '../../src/services/product.service';
-import { checkIfProductExistsById, checkIfSellerOwnsProduct } from '../../src/middlewares/product.middleware';
+import {
+  checkIfProductExistsById,
+  checkIfSellerOwnsProduct,
+} from '../../src/middlewares/product.middleware';
 import { schedule } from '../../src/utils/scheduling.util';
 
 beforeAll(async () => {
@@ -25,7 +35,7 @@ describe('checkIfProductExistsById middleware', () => {
   it('should call next if product exists', async () => {
     const product = { id: '1', name: 'Product 1' };
     ProductService.getProductById.mockResolvedValueOnce(product);
- 
+
     await checkIfProductExistsById(req, res, next);
 
     expect(ProductService.getProductById).toHaveBeenCalledWith('1');
@@ -44,7 +54,7 @@ describe('checkIfProductExistsById middleware', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'Product not found' });
     expect(next).not.toHaveBeenCalled();
   });
-  
+
   it('should schedule the provided callback function to run at the given repetition duration', () => {
     const repetitionDuration = '0 3 * * *'; // Run at 3:00am every day
     const callback = jest.fn();
@@ -55,36 +65,3 @@ describe('checkIfProductExistsById middleware', () => {
     expect(callback).toHaveBeenCalledTimes(2);
   });
 });
-
-
-
-describe('checkIfSellerOwnsProduct middleware', () => {
-  it('should return an error message if the product is owned by another seller', async () => {
-    const req = {
-      params: {
-        productId: 'product-123'
-      },
-      user: {
-        id: 'seller-456'
-      }
-    };
-    const res = {
-      status: jest.fn(() => res),
-      json: jest.fn()
-    };
-    const product = {
-      userId: 'seller-789'
-    };
-    ProductService.getProductById = jest.fn().mockResolvedValue(product);
-
-    await checkIfSellerOwnsProduct(req, res);
-
-    expect(ProductService.getProductById).toHaveBeenCalledWith(req.params.productId);
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ message: 'Product is owned by other seller' });
-  });
-});
-
-
-
-

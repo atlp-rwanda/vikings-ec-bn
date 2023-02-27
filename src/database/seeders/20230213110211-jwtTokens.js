@@ -17,7 +17,15 @@ module.exports = {
         {
           id: '78da159f-924d-426e-bd3d-61e63813b982',
           token:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhlNGM2NWQwLWFiZTktNDA1YS1hMmY0LTViNzFhMjMzOGNkZCIsImVtYWlsIjoidW52ZXJpZmllZEBnbWFpbC5jb20iLCJyb2xlIjpudWxsLCJmaXJzdG5hbWUiOiJKb2huIiwibGFzdG5hbWUiOiJEb2UiLCJnZW5kZXIiOm51bGwsInN0YXR1cyI6bnVsbCwiYXZhdGFyIjpudWxsLCJ2ZXJpZmllZCI6dHJ1ZSwiaWF0IjoxNjc2MzE3MzI0fQ.V-cSXeJe6GbSusqIff2ttiJSXi3-t7uFwrqtq2n5lyM',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc2NDMyZDg4LWE4OTEtNGM0Zi05YjhmLWFjYTk2NTEzZjRkZCIsImVtYWlsIjoidW52ZXJpZmllZEBnbWFpbC5jb20iLCJyb2xlIjoiYnV5ZXIiLCJtdXN0VXBkYXRlUGFzc3dvcmQiOm51bGwsImlhdCI6MTY3NzEzNDM5NCwiZXhwIjoxNjc3MjIwNzk0fQ.hBJoz5hVjUSyVTYth-F5Y2cTCyWVbesQa-2z_fVbxSI',
+          revoked: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: '2aa055fa-c1de-42ef-9952-f2a751d78aac',
+          token:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImIyYWI5NDE2LTgxMjktNDNkYi05ZGMxLTZmMmY3YTE3NjMwYiIsImVtYWlsIjoiaXJha296ZXl2ZXM5QGdtYWlsLmNvbSIsInJvbGUiOiJzZWxsZXIiLCJtdXN0VXBkYXRlUGFzc3dvcmQiOm51bGwsImlhdCI6MTY3NzEzMjYxNCwiZXhwIjoxNjc3MjE5MDE0fQ.0A0qNeE0C0IQif8iA5WBzL7dgYPSqo-v_-Idv3XUgDw',
           revoked: false,
           createdAt: new Date(),
           updatedAt: new Date(),

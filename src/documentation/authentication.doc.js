@@ -139,7 +139,7 @@ const verifyOTP = {
 		'Users with seller role can use the one time password for two factor authentication to be able to login',
 	parameters: [
 		{
-			name: 'id',
+			name: 'userId',
 			in: 'path',
 			description: 'User id',
 			schema: {
@@ -193,7 +193,7 @@ const authenticationRouteDocs = {
 		get: google,
 	},
 	'/api/v1/users/login/verify/{userId}': {
-		get: verifyOTP,
+		post: verifyOTP,
 	},
 };
 

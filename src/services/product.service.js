@@ -35,7 +35,7 @@ export class ProductService {
   }
 
   static async getProductById(id) {
-    return await Products.findByPk (id);
+    return await Products.findByPk(id);
   }
   static async searchProduct(searchQuery, limit, page){
     const offset = ( page - 1) * limit;

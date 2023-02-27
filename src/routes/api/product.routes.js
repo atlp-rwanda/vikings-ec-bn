@@ -3,7 +3,8 @@ import { protectRoute, restrictTo } from '../../middlewares/auth.middleware';
 import {
   createProduct,
   getAllProducts,
-  removeExpiredProducts
+  removeExpiredProducts,
+  getSpecificProduct,
 } from '../../controllers/product.controller.js';
 import productValidation from '../../validations/product/product.validation';
 import { checkIfCategoryExistById } from '../../middlewares/category.middleware';
@@ -11,8 +12,10 @@ import {
   checkExtensions,
   checkIfProductExists,
   checkIfProductExistsById,
+  checkIfProductIsAvailableById,
   checkIfSellerOwnsProduct,
   checkNumberOfImages,
+  checkProductAvailable,
   uploadImages,
   receivedQueryFormat,
 } from '../../middlewares/product.middleware';
@@ -35,7 +38,7 @@ productRoutes.post(
 productRoutes.patch(
   '/:productId/expired',
   protectRoute,
-  restrictTo('seller','admin'),
+  restrictTo('seller', 'admin'),
   checkIfProductExistsById,
   checkIfSellerOwnsProduct,
   removeExpiredProducts,
@@ -45,6 +48,15 @@ productRoutes.get('/',
   validateSearchCriteria, 
   receivedQueryFormat,
   searchProductController,
+  removeExpiredProducts
 );
 
+productRoutes.get(
+  '/:productId',
+  protectRoute,
+  checkIfProductExistsById,
+  checkIfProductIsAvailableById,
+  checkIfSellerOwnsProduct,
+  getSpecificProduct
+);
 export default productRoutes;
