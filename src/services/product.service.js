@@ -1,15 +1,14 @@
-import { Products } from '../database/models/index';
 import { User } from '../database/models/index';
-import { Categories } from '../database/models/index';
+import { Products, Categories } from '../database/models/index';
 
 export class ProductService {
   static async createProduct(product) {
     return await Products.create(product);
   }
-  static async getAllProducts(size, page) {
-    const offset = (page - 1) * size;
+  static async getAllProducts(limit, page) {
+    const offset = (page - 1) * limit;
     const { count, rows } = await Products.findAndCountAll({
-      limit: size,
+      limit: limit,
       offset: offset,
       include: [
         {
@@ -26,7 +25,7 @@ export class ProductService {
         { model: Categories },
       ],
     });
-    const totalPages = Math.ceil(count / size);
+    const totalPages = Math.ceil(count / limit);
     const currentPage = page;
     const totalItems = count;
     return { totalPages, currentPage, totalItems, rows };
@@ -38,4 +37,22 @@ export class ProductService {
   static async getProductById(id) {
     return await Products.findByPk (id);
   }
+  static async searchProduct(searchQuery, limit, page){
+    const offset = ( page - 1) * limit;
+    const { count, rows } = await Products.findAndCountAll({
+      limit: limit,
+      offset: offset,
+      where: searchQuery,
+      include: [{ model: Categories }]
+    });
+    const totalPages = Math.ceil(count / limit);
+    const currentPage = page;
+    const totalItems = count;
+    return { totalPages, currentPage, totalItems, rows };
+  }
+  static async searchCategoryByName(categoryName) {
+    return await Categories.findOne({
+      where: { name: categoryName.toLowerCase() },
+    });
+}
 }

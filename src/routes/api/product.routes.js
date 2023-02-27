@@ -14,7 +14,10 @@ import {
   checkIfSellerOwnsProduct,
   checkNumberOfImages,
   uploadImages,
+  receivedQueryFormat,
 } from '../../middlewares/product.middleware';
+import { validateSearchCriteria } from '../../validations/product/searchProduct.validate.js';
+import { searchProductController } from '../../controllers/product.controller.js';
 
 const productRoutes = express.Router();
 productRoutes.post(
@@ -29,8 +32,6 @@ productRoutes.post(
   uploadImages,
   createProduct
 );
-
-productRoutes.get('/', protectRoute, getAllProducts);
 productRoutes.patch(
   '/:productId/expired',
   protectRoute,
@@ -38,6 +39,12 @@ productRoutes.patch(
   checkIfProductExistsById,
   checkIfSellerOwnsProduct,
   removeExpiredProducts,
+)
+productRoutes.get('/', 
+  protectRoute,  
+  validateSearchCriteria, 
+  receivedQueryFormat,
+  searchProductController,
 );
 
 export default productRoutes;

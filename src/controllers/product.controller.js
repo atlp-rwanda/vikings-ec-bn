@@ -67,3 +67,23 @@ const repetitionDuration =process.env.CRON_PERIOD? durationToCronRepetition(proc
 schedule(repetitionDuration,function () {
   delistExpiredProducts();
 });
+
+export const searchProductController = async(req, res) => {
+  if (Object.keys(req.query).length === 2) {
+    return getAllProducts(req, res);
+  }
+  const { limit, page } = req.query;
+  delete req.query.limit;
+  delete req.query.page;
+  try {
+   const result = await ProductService.searchProduct(req.query, limit, page);
+   return res.status(200).json({ products: result });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({
+        error: err.message,
+        message: 'Error occured while searching for a product',
+      });
+  }
+};

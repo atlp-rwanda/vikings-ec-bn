@@ -2,6 +2,7 @@ import path from 'path';
 import { Products } from '../database/models/index';
 import { uploadPhoto } from '../utils/cloudinary.util';
 import { ProductService } from '../services/product.service';
+import { Op } from 'sequelize';
 
 export const checkIfProductExists = async (req, res, next) => {
   const { name } = req.body;
@@ -73,4 +74,32 @@ export const checkIfSellerOwnsProduct= async (req, res, next) => {
   }else {
     next();
   }
+}
+export const receivedQueryFormat = async (req, res, next) => {
+  const receivedQuery = req.query;
+  if (Object.keys(receivedQuery).length === 2) {
+    next();
+  } else {
+  const formatedQuery = {};
+  if (receivedQuery.name) {
+    formatedQuery.name = { [Op.iLike]: `%${receivedQuery.name}%` };
+  }
+  if (receivedQuery.category) {
+      formatedQuery.categoryId = receivedQuery.category;
+    }
+  if (receivedQuery.minPrice && receivedQuery.maxPrice) {
+    formatedQuery.price = { [Op.between]: [receivedQuery.minPrice, receivedQuery.maxPrice] };
+  } else if (receivedQuery.minPrice) {
+    formatedQuery.price = { [Op.gte]: receivedQuery.minPrice };
+  } else if (receivedQuery.maxPrice) {
+    formatedQuery.price = { [Op.lte]: receivedQuery.maxPrice };
+  }
+  if (receivedQuery.expireDate) {
+    formatedQuery.expiryDate = receivedQuery.expireDate+'T00:00:00.000Z';
+  }
+  formatedQuery.limit = req.query['limit'];
+  formatedQuery.page = req.query['page'];
+  req.query = formatedQuery;
+  next();
+}
 };

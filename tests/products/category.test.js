@@ -9,6 +9,7 @@ import {
 } from '../mocks/product.mock';
 import {afterEach, beforeAll, describe, test, expect} from '@jest/globals';
 import {closeAll} from '../../src/utils/scheduling.util';
+import { buyerToken } from '../mocks/user.mock'
 
 beforeAll(async () => {
   await connectDB();

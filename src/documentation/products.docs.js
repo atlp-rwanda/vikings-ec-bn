@@ -55,7 +55,43 @@ const getAllProducts = {
         type: 'string',
         minimum: 1
       }
-    }],
+    },
+    {
+      name: 'name',
+      in: 'query',
+      schema: {
+        type: 'string',
+      },
+    },
+    {
+      name: 'category',
+      in: 'query',
+      schema: {
+        type: 'string',
+      },
+    },
+    {
+      name: 'expireDate',
+      in: 'query',
+      schema: {
+        type: 'string',
+      },
+    },
+    {
+      name: 'minPrice',
+      in: 'query',
+      schema: {
+        type: 'string',
+      },
+    },
+    {
+      name: 'maxPrice',
+      in: 'query',
+      schema: {
+        type: 'string',
+      },
+    }
+  ],
   consumes: ['application/json'],
   responses,
   security: [

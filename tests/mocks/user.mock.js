@@ -21,6 +21,18 @@ export const successRegister = {
   verified: false
 };
 
+export const successBuyerRegister = {
+  firstname: 'NameOnebuyer',
+  lastname: 'NameTwobuyer',
+  email: 'buyer@gmail.com',
+  phone: '0987654321',
+  password: '@Test123',
+  role: 'buyer',
+  verified: true
+};
+
+export const buyerToken = {};
+
 export const passwordReg = {
   firstname: 'NameOne',
   lastname: 'NameTwo',
