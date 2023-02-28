@@ -5,6 +5,7 @@ import chatRoutes from './api/chat.routes.js';
 import userRoutes from './api/user.routes.js';
 import welcomeRoutes from './api/welcome.routes.js';
 import cartRoutes from './api/cart.routes.js';
+import wishlistrouter from './api/wishlist.routes.js';
 
 const routes = express.Router();
 
@@ -14,5 +15,6 @@ routes.use('/products', productRoutes);
 routes.use('/categories', categoryRoutes);
 routes.use('/chats', chatRoutes);
 routes.use('/carts', cartRoutes);
+routes.use('/wishlist',wishlistrouter)
 
 export default routes;

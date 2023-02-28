@@ -12,7 +12,7 @@ import {
 import productValidation from '../../validations/product/product.validation';
 import validateAvailable from '../../validations/product/isAvailable.validation';
 import { checkIfCategoryExistById } from '../../middlewares/category.middleware';
-
+import {WishlistController} from '../../controllers/wishlist.controller';
 import {
   checkExtensions,
   checkIfProductExists,
@@ -92,4 +92,5 @@ productRoutes.put(
     checkIfSellerOwnsProduct,
     deleteProduct
   );
+
 export default productRoutes;
