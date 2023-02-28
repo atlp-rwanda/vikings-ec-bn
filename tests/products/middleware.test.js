@@ -9,8 +9,9 @@ import {
 import { connectDB } from '../../src/app';
 import { closeAll } from '../../src/utils/scheduling.util';
 import { ProductService } from '../../src/services/product.service';
-import { checkIfProductExistsById } from '../../src/middlewares/product.middleware';
+import { checkIfProductExistsById, checkIfSellerOwnsProduct } from '../../src/middlewares/product.middleware';
 import { schedule } from '../../src/utils/scheduling.util';
+import { productId } from '../mocks/product.mock';
 
 beforeAll(async () => {
   await connectDB();
@@ -51,7 +52,7 @@ describe('checkIfProductExistsById middleware', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'Product not found' });
     expect(next).not.toHaveBeenCalled();
   });
-
+  
   it('should schedule the provided callback function to run at the given repetition duration', () => {
     const repetitionDuration = '0 3 * * *'; // Run at 3:00am every day
     const callback = jest.fn();

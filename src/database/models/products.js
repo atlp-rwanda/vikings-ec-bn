@@ -17,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       name: DataTypes.STRING,
       price: DataTypes.INTEGER,
-      expiryDate: DataTypes.DATE,
+      expiryDate: DataTypes.DATE, 
+         
       images: DataTypes.ARRAY(DataTypes.STRING),
       bonus: DataTypes.INTEGER,
       isExpired: {
@@ -26,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       isAvailable: {
         type:DataTypes.BOOLEAN,
-        defaultValue:true
+        defaultValue:true,
+        allowNull: false,
       },
       categoryId: {
         type: DataTypes.UUID,

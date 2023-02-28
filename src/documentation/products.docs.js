@@ -176,6 +176,24 @@ const createProduct = {
         },
       },
     },
+    get: {
+      tags: ['Products'],
+      security: [
+        {
+          bearerAuth: [],
+        },
+      ],
+      summary: 'List of all the products',
+      description: 'Get all of the products',
+      responses: {
+        200: {
+          description: 'OK',
+        },
+        500: {
+          description: 'Internal Server Error'
+        }
+      },
+    }
   },
   consumes: ['application/json'],
   responses,
@@ -230,6 +248,150 @@ const removeExpiredProducts = {
   ],
 };
 
+const markProduct ={
+tags: ['Products'],
+      security: [
+        {
+          bearerAuth: [],
+        },
+      ],
+      summary: 'Mark product',
+      description: 'Mark available endpoint',
+      parameters: [
+        {
+          name: 'productId',
+          in: 'path',
+          description: 'productId',
+          schema: {
+            type: 'string',
+          }
+        },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                role: {
+                  type: 'string',
+                  required: true,
+                },
+              },
+              example: {
+                isAvailable: 'true'
+              },
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: 'OK',
+        },
+        500: {
+          description: 'Internal Server Error',
+        },
+      },
+};
+const updateProduct = {
+ tags: ['Products'],
+      security: [
+        {
+          bearerAuth: [],
+        },
+      ],
+      summary: 'Update Product',
+      description: 'Update Product',
+      produces: ['application/json'],
+      parameters: [
+        {
+          name: 'productId',
+          in: 'path',
+          description: 'productId',
+          schema: {
+            type: 'string',
+          },
+
+        },
+      ],
+
+      requestBody: {
+        required: true,
+        content: {
+          'multipart/form-data': {
+            schema: {
+              type: 'object',
+              properties: {
+                name: {
+                  type: 'string',
+                  description: 'Product name',
+                  required: true,
+                },
+                price: {
+                  type: 'number',
+                  description: 'Price of product',
+                },
+                categoryId: {
+                  type: 'string',
+                  description: 'Product category',
+                },
+                expiryDate: {
+                  type: 'string',
+                  format: 'date',
+                  description: 'Expired date of product',
+                  default: '2023-04-29',
+                },
+                bonus: {
+                  type: 'number',
+                  description: 'Bonus for a product',
+                },
+                images: {
+                  type: 'array',
+                  items: {
+                    minItems: 4,
+                    type: 'file',
+                  },
+                },
+              },
+            },
+          },
+         }
+       },
+       consumes: ['application/json'],
+            responses,
+    };
+    const deleteProduct = {
+      tags: ['Products'],
+      security: [
+        {
+          bearerAuth: [],
+        },
+      ],
+      summary: 'Delete Product',
+      description: 'Delete Product',
+      produces: ['application/json'],
+      parameters: [
+        {
+          name: 'productId',
+          in: 'path',
+          description: 'productId',
+          schema: {
+            type: 'string',
+          },
+
+        },
+      ],
+
+      responses: {
+        200: {
+
+          description: 'Ok',
+        },
+
+      },
+    };
 const productDocs = {
   '/api/v1/categories': {
     post: category,
@@ -243,6 +405,10 @@ const productDocs = {
   },
     '/api/v1/products/{productId}': {
       get: getSingleProduct,
+      put: markProduct,
+      patch: updateProduct,
+      delete: deleteProduct 
     },
 };
-export default productDocs;
+
+  export default productDocs;

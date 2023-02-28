@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -17,6 +18,11 @@ module.exports = {
       },
       expiryDate: {
         type: Sequelize.DATE,
+      },
+      isMarked:{
+        type:Sequelize.BOOLEAN, 
+        defaultValue: true,
+        allowNull: false,
       },
       images: {
         type: Sequelize.ARRAY(Sequelize.STRING),
