@@ -132,3 +132,4 @@ package-lock.json
 .idea
 tmp
 .vscode
+.hound.yml

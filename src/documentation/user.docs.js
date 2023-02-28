@@ -1,4 +1,4 @@
-
+import responses from './responses';
 const getAllUsers = {
     tags:['Users'],
     summary:'List of all the users',
@@ -98,7 +98,7 @@ const resetPassword = {
       description: 'Updating role endpoint',
       parameters:[
           {
-              name:'id',
+              name:'userId',
               in:'path',
               description:'User Id',
               schema:{
@@ -138,13 +138,47 @@ const resetPassword = {
         }]
       };
 
+const updatePassword = {
+  tags: ['Users'],
+  summary: 'Update password',
+  description: 'Updating the password of a user',
+  requestBody: {
+    required: true,
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            old_password: {
+              type: 'string',
+              required: true,
+            },
+            new_password:{
+              type: 'string',
+              required: true,
+            }
+          },
+          example: {
+            old_password: 'Pass@123',
+            new_password: '@Test123'
+          },
+        },
+      },
+    },
+  },
+  responses,
+  security: [{
+      bearerAuth: []
+    }]
+};
+
 const disableAccount = {
   tags: ['Users'],
   summary: 'Disable account',
   description: 'Updating status of a user',
   parameters:[
       {
-          name:'id',
+          name:'userId',
           in:'path',
           description:'User Id',
           schema:{
@@ -201,6 +235,9 @@ const userRouteDocs = {
     patch: updateRole,
     put: disableAccount,
   },
+  '/api/v1/users/update-password':{
+    patch: updatePassword,
+  }
 };
 
 export default userRouteDocs;
