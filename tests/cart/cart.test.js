@@ -150,7 +150,6 @@ describe('/cart', () => {
   });
   test('Remove product when product not in cart: 400', async() =>{
     const response = await request(app).patch(`/api/v1/carts/${jordanId}`).set('Authorization', `Bearer ${buyerToken}`);
-
     expect(response.statusCode).toBe(404);
   });
   test('Remove product: 200', async ()=>{

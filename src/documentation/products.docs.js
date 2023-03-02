@@ -13,6 +13,7 @@ const getSingleProduct = {
       schema: {
         type: 'string',
         minimum: 1,
+        format:'uuid',
       },
     },
   ],
@@ -211,6 +212,7 @@ const removeExpiredProducts = {
       required: true,
       schema: {
         type: 'string',
+        format:'uuid',
       },
     },
   ],
@@ -264,6 +266,8 @@ tags: ['Products'],
           description: 'productId',
           schema: {
             type: 'string',
+            format:'uuid',
+
           }
         },
       ],
@@ -312,6 +316,7 @@ const updateProduct = {
           description: 'productId',
           schema: {
             type: 'string',
+            format:'uuid',
           },
 
         },
@@ -379,6 +384,7 @@ const updateProduct = {
           description: 'productId',
           schema: {
             type: 'string',
+            format:'uuid',
           },
 
         },

@@ -2,17 +2,15 @@ import express from 'express';
 import { protectRoute, restrictTo } from '../../middlewares/auth.middleware';
 import {
   createProduct,
-  getAllProducts,
   removeExpiredProducts,
   getSpecificProduct,
   markAvailableProduct,
   updateProduct,
   deleteProduct 
 } from '../../controllers/product.controller.js';
-import productValidation from '../../validations/product/product.validation';
+import { productValidation} from '../../validations/product/product.validation';
 import validateAvailable from '../../validations/product/isAvailable.validation';
 import { checkIfCategoryExistById } from '../../middlewares/category.middleware';
-import {WishlistController} from '../../controllers/wishlist.controller';
 import {
   checkExtensions,
   checkIfProductExists,
@@ -25,7 +23,7 @@ import {
 } from '../../middlewares/product.middleware';
 import { validateSearchCriteria } from '../../validations/product/searchProduct.validate.js';
 import { searchProductController } from '../../controllers/product.controller.js';
-
+import { uuidValidation } from '../../validations/user/userId.validation';
 const productRoutes = express.Router();
 productRoutes.post(
   '/',
@@ -46,7 +44,7 @@ productRoutes.patch(
   checkIfProductExistsById,
   checkIfSellerOwnsProduct,
   removeExpiredProducts,
-)
+);
 productRoutes.get('/', 
   protectRoute,  
   validateSearchCriteria, 
@@ -58,6 +56,7 @@ productRoutes.get('/',
 productRoutes.get(
   '/:productId',
   protectRoute,
+  uuidValidation('productId'),
   checkIfProductExistsById,
   checkIfProductIsAvailableById,
   checkIfSellerOwnsProduct,
@@ -67,16 +66,17 @@ productRoutes.patch('/:productId',
   protectRoute,
   restrictTo('seller', 'admin'),
   productValidation,
+  uuidValidation('productId'),
   checkIfProductExistsById,
   checkIfSellerOwnsProduct,
-  updateProduct,
-  
+  updateProduct
 );
 
 productRoutes.put(
   '/:productId',
   protectRoute,
   restrictTo('seller','admin'),
+  uuidValidation('productId'),
   validateAvailable,
   checkIfProductExistsById,
   checkIfProductIsAvailableById,
@@ -88,6 +88,7 @@ productRoutes.put(
     '/:productId',
     protectRoute,
     restrictTo('seller', 'admin'),
+  uuidValidation('productId'),
     checkIfProductExistsById,
     checkIfSellerOwnsProduct,
     deleteProduct
