@@ -11,39 +11,49 @@ import dotenv from 'dotenv';
 dotenv.config();
 import { uploadPhoto } from '../utils/cloudinary.util.js';
 import { knownSchedulingTime, schedule } from '../utils/scheduling.util';
-import { addDurationOnDate, durationToCronRepetition } from '../utils/date.util';
+import {
+  addDurationOnDate,
+  durationToCronRepetition,
+} from '../utils/date.util';
 import { eventEmit, knownEvents, subscribe } from '../utils/events.util';
-import {knownNotificationType} from '../services/notification.service';
+import { knownNotificationType } from '../services/notification.service';
 
-const repetitionDuration = process.env.CRON_PERIOD ? durationToCronRepetition(process.env.CRON_PERIOD) : knownSchedulingTime.everySecond;
+const repetitionDuration = process.env.CRON_PERIOD
+  ? durationToCronRepetition(process.env.CRON_PERIOD)
+  : knownSchedulingTime.everySecond;
 schedule(repetitionDuration, async () => {
   const now = new Date();
   const users = await UserService.findAll();
   users.forEach((eachUser) => {
     const lastTimePasswordUpdated = eachUser.lastTimePasswordUpdated;
-    let checkList = !!lastTimePasswordUpdated &&
-      eachUser.isActive && eachUser.verified;
+    let checkList =
+      !!lastTimePasswordUpdated && eachUser.isActive && eachUser.verified;
     if (!checkList) {
       return;
     }
-    if(
-        addDurationOnDate(process.env.PASSWORD_EXPIRATION_IN || '1s',
-            lastTimePasswordUpdated) < now ){
-        UserService.updateUser({mustUpdatePassword:true}, eachUser.id);
-        eventEmit(knownEvents.onNotification, {
-          type:knownNotificationType.changePassword,
-          message:'Please it is to change your password for security purpose',
-          receiverId: eachUser.id,
-        });
+    if (
+      addDurationOnDate(
+        process.env.PASSWORD_EXPIRATION_IN || '1s',
+        lastTimePasswordUpdated
+      ) < now
+    ) {
+      UserService.updateUser({ mustUpdatePassword: true }, eachUser.id);
+      eventEmit(knownEvents.onNotification, {
+        type: knownNotificationType.changePassword,
+        message: 'Please it is to change your password for security purpose',
+        receiverId: eachUser.id,
+      });
     }
   });
 });
 
 subscribe(knownEvents.changePassword, async (data) => {
-  await UserService.updateUser({
-    lastTimePasswordUpdated: new Date(),
-    mustUpdatePassword: false
-  }, data.userId
+  await UserService.updateUser(
+    {
+      lastTimePasswordUpdated: new Date(),
+      mustUpdatePassword: false,
+    },
+    data.userId
   );
 });
 
@@ -52,7 +62,8 @@ export class UserController {
     try {
       const user = { ...req.body, lastTimePasswordUpdated: new Date() };
       user.password = await BcryptUtility.hashPassword(req.body.password);
-      const { id, email, role, lastTimePasswordUpdated } = await UserService.register(user);
+      const { id, email, role, lastTimePasswordUpdated } =
+        await UserService.register(user);
       const userData = { id, email, role, lastTimePasswordUpdated };
       const userToken = JwtUtility.generateToken(userData, '1h');
       const data = {
@@ -148,7 +159,7 @@ export class UserController {
       const password = await BcryptUtility.hashPassword(req.body.new_password);
       await UserService.updateUser({ password }, req.user.id);
       eventEmit(knownEvents.changePassword, {
-        userId: req.user.id
+        userId: req.user.id,
       });
       return res.status(200).json({ message: 'success' });
     } catch (err) {
@@ -268,7 +279,7 @@ export class UserController {
       const user = req.user;
       const userData = {
         id: user.id,
-        email: user.email
+        email: user.email,
       };
       const resetLink = JwtUtility.generateToken(userData);
       const link = `${process.env.BASE_URL}/reset-password?token=${resetLink}`;
@@ -302,6 +313,5 @@ export class UserController {
         message: 'Error occured while resetting password',
       });
     }
-
   }
 }
