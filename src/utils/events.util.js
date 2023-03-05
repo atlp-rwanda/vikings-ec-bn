@@ -3,7 +3,8 @@ const myEmitter = new EventEmitter();
 
 export const knownEvents = {
     changePassword:'changePassword',
-    productExpired: 'productExpired'
+    productExpired: 'productExpired',
+    onNotification: 'notification',
 };
 
 export const subscribe = (eventName, callBack) => {

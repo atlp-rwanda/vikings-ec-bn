@@ -1,6 +1,9 @@
-import { CartService } from "../services/cart.service";
-import { ProductService } from "../services/product.service";
-import { WishService } from "../services/wishlist.service";
+import { CartService } from '../services/cart.service';
+import { ProductService } from '../services/product.service';
+import { WishService } from '../services/wishlist.service';
+import {eventEmit, knownEvents} from '../utils/events.util';
+import {knownNotificationType} from '../services/notification.service';
+import {UserService} from '../services/user.service';
 
 export class WishlistController {
   static async addToWishlist(req, res) {
@@ -22,22 +25,26 @@ export class WishlistController {
         { wished: wished_product },
         product.id
       );
+      eventEmit(knownEvents.onNotification, {
+        type:knownNotificationType.productWished,
+        message:`Product ${product.name} has been wished by ${req.user.email}.
+         know product has ${product.wished} `,
+        receiverId: product.userId,
+      });
       return res.status(201).json({
         wish: wish,
-        message: "Item added to wishlist successfully",
+        message: 'Item added to wishlist successfully',
       });
     } catch (error) {
       return res.status(500).json({
         error: error.message,
-        message: "Could not add product to wishlist, try again",
+        message: 'Could not add product to wishlist, try again',
       });
     }
   }
 
   static async getProductWishes(req, res) {
     try {
-      const { productId } = req.params;
-      let wish = req.wishlist;
       const product = req.product;
       const product_wished = product.wished;
       return res.status(200).json({
@@ -46,7 +53,7 @@ export class WishlistController {
     } catch (error) {
       return res.status(500).json({
         error: error.message,
-        message: "Error occured while getting product wishes, try again",
+        message: 'Error occured while getting product wishes, try again',
       });
     }
   }
@@ -62,13 +69,13 @@ export class WishlistController {
         images: products.images,
       }));
       return res.status(200).json({
-        message: "your wishlist",
+        message: 'your wishlist',
         wish: wishData,
       });
     } catch (error) {
       return res.status(500).json({
         error: error.message,
-        message: "Error occured while getting product wishes, try again",
+        message: 'Error occured while getting product wishes, try again',
       });
     }
   }
@@ -78,20 +85,18 @@ export class WishlistController {
       const wishes = req.wishlist;
       const productsId = wishes.productsId;
       const { product_id } = req.params;
-      const wishToRemove = productsId.findIndex((wish) => wish === product_id);
-      const deletedWish = productsId.splice(wishToRemove, 1);
-      const updated = await WishService.updateWishlist(
+      await WishService.updateWishlist(
         { productsId: productsId },
         wishes.id
       );
       return res.status(200).json({
         product_id: product_id,
-        message: "Item removed from wishlist successfully",
+        message: 'Item removed from wishlist successfully',
       });
     } catch (error) {
       return res.status(500).json({
         error: error.message,
-        message: "Error occured while deleting Items from wishes, try again",
+        message: 'Error occured while deleting Items from wishes, try again',
       });
     }
   }
