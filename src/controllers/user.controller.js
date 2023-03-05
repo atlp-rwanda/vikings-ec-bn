@@ -12,8 +12,8 @@ dotenv.config();
 import { uploadPhoto } from '../utils/cloudinary.util.js';
 import { knownSchedulingTime, schedule } from '../utils/scheduling.util';
 import { addDurationOnDate, durationToCronRepetition } from '../utils/date.util';
-import { SocketUtil } from '../utils/socket.util';
 import { eventEmit, knownEvents, subscribe } from '../utils/events.util';
+import {knownNotificationType} from '../services/notification.service';
 
 const repetitionDuration = process.env.CRON_PERIOD ? durationToCronRepetition(process.env.CRON_PERIOD) : knownSchedulingTime.everySecond;
 schedule(repetitionDuration, async () => {
@@ -26,15 +26,15 @@ schedule(repetitionDuration, async () => {
     if (!checkList) {
       return;
     }
-    if (
-      addDurationOnDate(process.env.PASSWORD_EXPIRATION_IN || '1s',
-        lastTimePasswordUpdated) < now) {
-      UserService.updateUser({ mustUpdatePassword: true }, eachUser.id);
-      SocketUtil.socketEmit('notification', {
-        notificationType: 'changePassword',
-        message: 'Please it is to change your password for security purpose',
-        userId: eachUser.id,
-      });
+    if(
+        addDurationOnDate(process.env.PASSWORD_EXPIRATION_IN || '1s',
+            lastTimePasswordUpdated) < now ){
+        UserService.updateUser({mustUpdatePassword:true}, eachUser.id);
+        eventEmit(knownEvents.onNotification, {
+          type:knownNotificationType.changePassword,
+          message:'Please it is to change your password for security purpose',
+          receiverId: eachUser.id,
+        });
     }
   });
 });
@@ -69,14 +69,14 @@ export class UserController {
         })
       );
       return res.status(201).json({
-        message: "Check your email to verify your account",
+        message: 'Check your email to verify your account',
         user: userData,
         token: userToken,
       });
     } catch (err) {
       return res.status(500).json({
         error: err.message,
-        message: "Failed to register a new user",
+        message: 'Failed to register a new user',
       });
     }
   }
@@ -86,12 +86,12 @@ export class UserController {
       const user = req.user;
       await UserService.updateUser({ verified: true }, user.id);
       return res.status(200).json({
-        message: "Your account has verified successfully!",
+        message: 'Your account has verified successfully!',
       });
     } catch (err) {
       return res.status(500).json({
         error: err.message,
-        message: "Failed to confirm user verification",
+        message: 'Failed to confirm user verification',
       });
     }
   }
@@ -115,12 +115,12 @@ export class UserController {
         })
       );
       return res.status(200).json({
-        message: "Email has been sent successfully",
+        message: 'Email has been sent successfully',
       });
     } catch (err) {
       return res.status(500).json({
         error: err.message,
-        message: "Failed to send email",
+        message: 'Failed to send email',
       });
     }
   }
@@ -150,11 +150,11 @@ export class UserController {
       eventEmit(knownEvents.changePassword, {
         userId: req.user.id
       });
-      return res.status(200).json({ message: "success" });
+      return res.status(200).json({ message: 'success' });
     } catch (err) {
       return res.status(500).json({
         error: err.message,
-        message: "Failed to update the password",
+        message: 'Failed to update the password',
       });
     }
   }
@@ -168,7 +168,7 @@ export class UserController {
         role,
         mustUpdatePassword,
       };
-      const token = JwtUtility.generateToken(userData, "365d");
+      const token = JwtUtility.generateToken(userData, '365d');
       const data = {
         token: token,
         revoked: false,
@@ -176,13 +176,13 @@ export class UserController {
       await saveTokens.saveToken(data);
       return res.status(200).json({
         token: token,
-        message: "Login successful",
+        message: 'Login successful',
         user: userData,
       });
     } catch (err) {
       return res.status(500).json({
         error: err.message,
-        message: "Error occurred while signing in, try again",
+        message: 'Error occurred while signing in, try again',
       });
     }
   }
@@ -192,13 +192,13 @@ export class UserController {
       const users = await models.User.findAll();
       res.status(200).json({
         status: 200,
-        message: "All Users retrieved successfully",
+        message: 'All Users retrieved successfully',
         data: users,
       });
     } catch (err) {
       return res
         .status(500)
-        .json({ error: err.message, message: "Failed to get all users" });
+        .json({ error: err.message, message: 'Failed to get all users' });
     }
   }
 
@@ -206,11 +206,11 @@ export class UserController {
     try {
       const role = req.body.role;
       await UserService.updateUser({ role }, req.user.id);
-      return res.status(200).json({ message: "Updated successfully" });
+      return res.status(200).json({ message: 'Updated successfully' });
     } catch (error) {
       return res.status(500).json({
         error: error.message,
-        message: "Failed to update role",
+        message: 'Failed to update role',
       });
     }
   }
@@ -222,7 +222,7 @@ export class UserController {
     } catch (err) {
       return res.status(500).json({
         error: err.message,
-        message: "Failed to get user profile",
+        message: 'Failed to get user profile',
       });
     }
   }
@@ -231,18 +231,18 @@ export class UserController {
       let payload = {
         ...req.body,
         billingAddress: JSON.parse(req.body.billingAddress) || {},
-        birthdate: new Date(req.body.birthdate || ""),
+        birthdate: new Date(req.body.birthdate || ''),
       };
       if (req.files?.avatar) {
         const { url } = await uploadPhoto(req, res, req.files.avatar);
-        payload["avatar"] = url;
+        payload['avatar'] = url;
       }
       await UserService.updateUser(payload, req.user.id);
-      return res.status(200).json({ message: "updated successful" });
+      return res.status(200).json({ message: 'updated successful' });
     } catch (err) {
       return res.status(500).json({
         error: err.message,
-        message: "Failed to update user profile",
+        message: 'Failed to update user profile',
       });
     }
   }
@@ -251,14 +251,14 @@ export class UserController {
       const isActive = req.body.isActive;
       await UserService.updateUser({ isActive }, req.user.id);
       if (!isActive) {
-        return res.status(200).json({ message: "Account is disabled" });
+        return res.status(200).json({ message: 'Account is disabled' });
       } else {
-        return res.status(200).json({ message: "Account is enabled" });
+        return res.status(200).json({ message: 'Account is enabled' });
       }
     } catch (error) {
       return res.status(500).json({
         error: error.message,
-        message: "Failed to update",
+        message: 'Failed to update',
       });
     }
   }

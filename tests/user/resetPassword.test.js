@@ -5,7 +5,8 @@ import { resetEmail, successResetRegister } from '../mocks/user.mock';
 import { closeAll } from '../../src/utils/scheduling.util';
 import { resetPassword, token } from '../mocks/user.mock';
 import dotenv from 'dotenv';
-import { describe, expect, test, afterEach, beforeAll } from '@jest/globals';
+import {describe, expect, test, afterEach, beforeAll, jest} from '@jest/globals';
+import {UserService} from '../../src/services/user.service';
 
 dotenv.config();
 
@@ -52,7 +53,7 @@ describe('Test Password reset', () => {
 		expect(response.statusCode).toBe(200);
 	});
 
-	test("check user doesn't exists", async () => {
+	test('check user doesn\'t exists', async () => {
 		const response = await request(app)
 			.patch(`/api/v1/users/reset-password/${token}`)
 			.send(resetPassword);
@@ -65,6 +66,16 @@ describe('Test Password reset', () => {
 				.patch(`/api/v1/users/reset-password/${resetToken}`)
 				.send(resetPassword);
 			expect(response.statusCode).toBe(200);
+		});
+		test('returns a 500 error on reset password', async () => {
+			const requestSpy = jest.spyOn(UserService, 'updateUser');
+			requestSpy.mockRejectedValue(new Error('Failed')); //
+			const response = await request(app)
+				.patch(`/api/v1/users/reset-password/${resetToken}`)
+				.send(resetPassword);
+			console.log(response.body);
+			expect(response.statusCode).toBe(500);
+			requestSpy.mockRestore();
 		});
 
 		describe('resetValidation file test', () => {

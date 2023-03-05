@@ -15,5 +15,5 @@ export const sendEmail = (mailConfigurations) => {
 			},
 		});
 		process.env.NODE_ENV !== 'test' && transporter.sendMail(mailConfigurations);
-return true;
+		return true;
 };
