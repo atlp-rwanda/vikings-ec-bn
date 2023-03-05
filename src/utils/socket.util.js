@@ -8,8 +8,10 @@ export class SocketUtil {
   static config(server) {
     SocketUtil.io = new Server(server, { cors: { origin: '*' } });
 
-    SocketUtil.io.on('connection', (socket) => {
-      socket.on('disconnect', () => {});
-    });
+    SocketUtil.io.on('connection', () => {});
+    SocketUtil.io.on('disconnect', () => {});
   }
 }
+export const knownSockets = {
+  notification: 'notification',
+};

@@ -4,6 +4,7 @@ import { PaymentService } from '../services/payment.service';
 import { SalesService } from '../services/sales.service';
 import { calculateCartTotal } from '../utils/cart.util';
 import { createStripeSession } from '../utils/payment.util';
+import {NotificationController as notify} from './notification.controller';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const stripeCheckoutSession = async (req, res) => {
@@ -62,6 +63,7 @@ export const webHook = async (req, res) => {
           return await SalesService.createSales(sale);
         })
       );
+		await notify.notifySellersOnBuyProduct(sales, customer.metadata.userId);
 
       return res.status(200).json({
         message: 'Order created successfully',
