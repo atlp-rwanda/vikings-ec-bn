@@ -6,6 +6,8 @@ import { delistExpiredProducts } from '../services/delistExpiredProduct.service'
 import { sendEmail } from '../utils/sendEmail.util';
 import { emailConfig } from '../utils/mail.util';
 import { expiredProductMessage } from '../utils/mailTemplates.util';
+import {eventEmit, knownEvents} from '../utils/events.util';
+import {knownNotificationType} from '../services/notification.service';
 
 
 export const createProduct = async (req, res) => {
@@ -66,6 +68,11 @@ export const removeExpiredProducts = async (req, res) => {
         content: expiredProductMessage(req.product),
       })
     );
+    eventEmit(knownEvents.onNotification, {
+      receiverId:req.user.id,
+      type:knownNotificationType.productExpired,
+      message: `${req.product.name} has been expired`,
+    });
 
     return res
       .status(200)

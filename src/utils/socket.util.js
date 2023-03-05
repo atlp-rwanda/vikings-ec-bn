@@ -13,3 +13,6 @@ export class SocketUtil {
     });
   }
 }
+export const knownSockets = {
+  notification: 'notification',
+};
