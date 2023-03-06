@@ -1,49 +1,38 @@
-import { UserService } from "../services/user.service.js";
-import { saveTokens } from "../services/token.service.js";
-import { BcryptUtility } from "../utils/bcrypt.util.js";
-import { JwtUtility } from "../utils/jwt.util.js";
-import models from "../database/models";
-import { sendEmail } from "../utils/sendEmail.util";
-import JWT from "jsonwebtoken";
-import { resetPasswordTemplate } from "../utils/mailTemplates.util.js";
-import { User } from "../database/models/index";
-import { emailConfig } from "../utils/mail.util";
-import { verifyEmailTemplate } from "../utils/mailTemplates.util.js";
-import dotenv from "dotenv";
+import { UserService } from '../services/user.service.js';
+import { saveTokens } from '../services/token.service.js';
+import { BcryptUtility } from '../utils/bcrypt.util.js';
+import { JwtUtility } from '../utils/jwt.util.js';
+import models from '../database/models';
+import { sendEmail } from '../utils/sendEmail.util';
+import { resetPasswordTemplate } from '../utils/mailTemplates.util.js';
+import { emailConfig } from '../utils/mail.util';
+import { verifyEmailTemplate } from '../utils/mailTemplates.util.js';
+import dotenv from 'dotenv';
 dotenv.config();
-import { Mail } from "../utils/mail.util.js";
-import { uploadPhoto } from "../utils/cloudinary.util.js";
-import { knownSchedulingTime, schedule } from "../utils/scheduling.util";
-import {
-  addDurationOnDate,
-  durationToCronRepetition,
-} from "../utils/date.util";
-import { SocketUtil } from "../utils/socket.util";
-import { eventEmit, knownEvents, subscribe } from "../utils/events.util";
+import { uploadPhoto } from '../utils/cloudinary.util.js';
+import { knownSchedulingTime, schedule } from '../utils/scheduling.util';
+import { addDurationOnDate, durationToCronRepetition } from '../utils/date.util';
+import { SocketUtil } from '../utils/socket.util';
+import { eventEmit, knownEvents, subscribe } from '../utils/events.util';
 
-const repetitionDuration = process.env.CRON_PERIOD
-  ? durationToCronRepetition(process.env.CRON_PERIOD)
-  : knownSchedulingTime.everySecond;
+const repetitionDuration = process.env.CRON_PERIOD ? durationToCronRepetition(process.env.CRON_PERIOD) : knownSchedulingTime.everySecond;
 schedule(repetitionDuration, async () => {
   const now = new Date();
   const users = await UserService.findAll();
   users.forEach((eachUser) => {
     const lastTimePasswordUpdated = eachUser.lastTimePasswordUpdated;
-    let checkList =
-      !!lastTimePasswordUpdated && eachUser.isActive && eachUser.verified;
+    let checkList = !!lastTimePasswordUpdated &&
+      eachUser.isActive && eachUser.verified;
     if (!checkList) {
       return;
     }
     if (
-      addDurationOnDate(
-        process.env.PASSWORD_EXPIRATION_IN || "1s",
-        lastTimePasswordUpdated
-      ) < now
-    ) {
+      addDurationOnDate(process.env.PASSWORD_EXPIRATION_IN || '1s',
+        lastTimePasswordUpdated) < now) {
       UserService.updateUser({ mustUpdatePassword: true }, eachUser.id);
-      SocketUtil.socketEmit("notification", {
-        notificationType: "changePassword",
-        message: "Please it is to change your password for security purpose",
+      SocketUtil.socketEmit('notification', {
+        notificationType: 'changePassword',
+        message: 'Please it is to change your password for security purpose',
         userId: eachUser.id,
       });
     }
@@ -51,12 +40,10 @@ schedule(repetitionDuration, async () => {
 });
 
 subscribe(knownEvents.changePassword, async (data) => {
-  await UserService.updateUser(
-    {
-      lastTimePasswordUpdated: new Date(),
-      mustUpdatePassword: false,
-    },
-    data.userId
+  await UserService.updateUser({
+    lastTimePasswordUpdated: new Date(),
+    mustUpdatePassword: false
+  }, data.userId
   );
 });
 
@@ -65,10 +52,9 @@ export class UserController {
     try {
       const user = { ...req.body, lastTimePasswordUpdated: new Date() };
       user.password = await BcryptUtility.hashPassword(req.body.password);
-      const { id, email, role, lastTimePasswordUpdated } =
-        await UserService.register(user);
+      const { id, email, role, lastTimePasswordUpdated } = await UserService.register(user);
       const userData = { id, email, role, lastTimePasswordUpdated };
-      const userToken = JwtUtility.generateToken(userData, "1h");
+      const userToken = JwtUtility.generateToken(userData, '1h');
       const data = {
         token: userToken,
         revoked: false,
@@ -78,7 +64,7 @@ export class UserController {
       sendEmail(
         emailConfig({
           email: email,
-          subject: "Vikings email verification",
+          subject: 'Vikings email verification',
           content: verificationEmail,
         })
       );
@@ -124,7 +110,7 @@ export class UserController {
       sendEmail(
         emailConfig({
           email: email,
-          subject: "Vikings email verification",
+          subject: 'Vikings email verification',
           content: verificationEmail,
         })
       );
@@ -162,7 +148,7 @@ export class UserController {
       const password = await BcryptUtility.hashPassword(req.body.new_password);
       await UserService.updateUser({ password }, req.user.id);
       eventEmit(knownEvents.changePassword, {
-        userId: req.user.id,
+        userId: req.user.id
       });
       return res.status(200).json({ message: "success" });
     } catch (err) {
@@ -282,7 +268,7 @@ export class UserController {
       const user = req.user;
       const userData = {
         id: user.id,
-        email: user.email,
+        email: user.email
       };
       const resetLink = JwtUtility.generateToken(userData);
       const link = `${process.env.BASE_URL}/reset-password?token=${resetLink}`;
@@ -290,7 +276,7 @@ export class UserController {
       sendEmail(
         emailConfig({
           email: user.email,
-          subject: "reset password",
+          subject: 'reset password',
           content: resetMessage,
         })
       );
@@ -298,7 +284,7 @@ export class UserController {
     } catch (error) {
       return res.status(500).json({
         error: error.message,
-        message: "Error occured when sending email",
+        message: 'Error occured when sending email',
       });
     }
   }
@@ -309,12 +295,13 @@ export class UserController {
       const { newPassword } = req.body;
       const password = await BcryptUtility.hashPassword(newPassword);
       await UserService.updateUser({ password }, id);
-      return res.status(200).json({ message: " Password reset successfully " });
+      return res.status(200).json({ message: ' Password reset successfully ' });
     } catch (error) {
       return res.status(500).json({
         error: error.message,
-        message: "Error occured while resetting password",
+        message: 'Error occured while resetting password',
       });
     }
+
   }
 }

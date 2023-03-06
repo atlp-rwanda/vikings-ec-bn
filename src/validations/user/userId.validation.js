@@ -7,7 +7,7 @@ import {validateuuid} from '../../utils/validateuuid.util';
     const uuid =  req.body[field] || req.params[field];
         const isValid = validateuuid(uuid); 
          if(!isValid){
-          return res.status(400).json({message:'invalid userId'});
+          return res.status(400).json({message:`invalid ${field}`});
          }
          next();
       };

@@ -1,0 +1,1 @@
+export const saleId = 'b2aa6e5b-c31f-40f9-ae1e-a1e20f952fe8';
