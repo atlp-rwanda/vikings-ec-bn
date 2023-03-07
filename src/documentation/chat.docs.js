@@ -37,6 +37,26 @@ const chat = {
       tags: ['Chats'],
       summary: 'Public Chat',
       description: 'Users can chat on the platform',
+      parameters: [
+        {
+          name: 'limit',
+          in: 'query',
+          description: 'limit for chat messages',
+          required: true,
+          schema: {
+            type: 'integer',
+          },
+        },
+        {
+          name: 'offset',
+          in: 'query',
+          description: 'Offset for chat messages',
+          required: true,
+          schema: {
+            type: 'integer',
+          },
+        },
+      ],
       responses,
       security: [
         {

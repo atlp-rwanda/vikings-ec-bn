@@ -1,7 +1,7 @@
 import { ChatController } from '../../src/controllers/chat.controller';
 import { ChatService } from '../../src/services/chat.service';
 import { SocketUtil } from '../../src/utils/socket.util';
-import { chatMessage } from '../mocks/chat.mock';
+import { chatMessage, chatMessageId } from '../mocks/chat.mock';
 import { id, verifiedLogin } from '../mocks/user.mock';
 import { closeAll } from '../../src/utils/scheduling.util';
 import {
@@ -23,6 +23,8 @@ beforeEach(async () => {
 });
 
 let token;
+const limit = 1;
+const offset = 0;
 
 describe('Chat routes tests', () => {
   it('Should Login a verified user', async () => {
@@ -56,15 +58,24 @@ describe('Chat routes tests', () => {
 
   test('Getting messages', async () => {
     const response = await request(app)
-      .get('/api/v1/chats')
+      .get(`/api/v1/chats?limit=${limit}&offset=${offset}`)
       .set('Authorization', `Bearer ${token}`);
 
-    expect(response.body.message).toEqual('Fetched all old messages');
+    expect(response.body.message).toEqual('Fetched old messages');
+    expect(response.statusCode).toEqual(200);
+  });
+
+  test('Getting messages', async () => {
+    const response = await request(app)
+      .get(`/api/v1/chats?offset=${offset}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.body.message).toEqual('Fetched old messages');
     expect(response.statusCode).toEqual(200);
   });
 
   it('should return a 500 status code and an error message when ChatService.getMessages throws an error', async () => {
-    const req = {};
+    const req = { query: { limit, offset } };
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -102,6 +113,35 @@ describe('Chat routes tests', () => {
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({
       error: 'Some error',
+      message: 'Failed to send a new message',
+    });
+  });
+
+  it('should return 500 status with error message when ChatService.getOneMessage throws an error', async () => {
+    const req = {
+      user: { id: id },
+      body: { message: 'Hello, world!' },
+    };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    const error = new Error('Database error');
+    ChatService.saveMessage = jest.fn().mockResolvedValue({
+      id: chatMessageId,
+    });
+    ChatService.getOneMessage = jest.fn().mockRejectedValue(error);
+
+    await ChatController.saveMessage(req, res);
+
+    expect(ChatService.saveMessage).toHaveBeenCalledWith({
+      senderId: req.user.id,
+      message: req.body.message,
+    });
+    expect(ChatService.getOneMessage).toHaveBeenCalledWith(chatMessageId);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({
+      error: error.message,
       message: 'Failed to send a new message',
     });
   });

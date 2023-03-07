@@ -6,8 +6,11 @@ export class ChatService {
     return message;
   }
 
-  static async getMessages() {
-    const messages = await Message.findAll({
+  static async getOneMessage(id) {
+    const newMessage = await Message.findOne({
+      where: {
+        id: id,
+      },
       include: {
         model: User,
         as: 'sender',
@@ -21,6 +24,28 @@ export class ChatService {
         },
       },
     });
-    return messages;
+    return newMessage;
+  }
+
+  static async getMessages(limit, offset) {
+    const { count, rows } = await Message.findAndCountAll({
+      limit: limit,
+      offset: offset,
+      order: [['createdAt', 'DESC']],
+      include: {
+        model: User,
+        as: 'sender',
+        attributes: {
+          exclude: [
+            'password',
+            'authCode',
+            'mustUpdatePassword',
+            'lastTimePasswordUpdated',
+          ],
+        },
+      },
+    });
+    const totalMessages = count;
+    return { totalMessages, rows };
   }
 }
