@@ -5,13 +5,13 @@ export class OrderService {
 		const { userId: buyerId, paymentId } = customer.metadata;
 		const { products } = cart;
 		const { amount_total: fullPrice } = data;
-    const newOrder = {
-      buyerId,
-      products,
-      fullPrice,
-      paymentId
-    };
-    return await Order.create(newOrder);
+		const newOrder = {
+			buyerId,
+			products,
+			fullPrice,
+			paymentId
+		};
+		return await Order.create(newOrder);
 	}
 	static async getSingleOrder(orderId) {
 		return Order.findByPk(orderId);
@@ -40,5 +40,16 @@ export class OrderService {
 	}
 	static async updateOrderStatusById(orderStatus, id) {
 		return await Order.update({ status: orderStatus }, { where: { id: id } });
-	  }
+	}
+
+
+	static async getOrderByBuyerIdAndProductId(buyerId, productId) {
+		const orders = await Order.findAll({
+			where: {
+				buyerId: buyerId,
+				status: 'delivered'
+			}
+		});
+		return orders?.filter(each => each.products?.find(eachProduct => eachProduct.productId === productId));
+	}
 }

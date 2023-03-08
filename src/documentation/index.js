@@ -11,6 +11,7 @@ import sales from './sales.docs';
 import orders from './order.docs';
 import wishlist from '../documentation/wishlist.docs';
 import payments from './payment.docs';
+import ratings from './ratings.doc';
 
 export default {
   ...basicInfo,
@@ -26,6 +27,7 @@ export default {
     ...wishlist,
     ...sales,
     ...orders,
-    ...payments
+    ...payments,
+    ...ratings,
   },
 };

@@ -10,12 +10,10 @@ export const sendEmail = (mailConfigurations) => {
 			service: 'gmail',
 			secure: false,
 			auth: {
-				user: process.env.YVES_EMAIL,
-				pass: process.env.YVES_PASSWORD
+				user: process.env.EMAIL_USERNAME,
+				pass: process.env.EMAIL_PASSWORD
 			},
 		});
-		transporter.sendMail(mailConfigurations);
-		if (transporter) {
-			return true;
-		}
+		process.env.NODE_ENV !== 'test' && transporter.sendMail(mailConfigurations);
+return true;
 };
