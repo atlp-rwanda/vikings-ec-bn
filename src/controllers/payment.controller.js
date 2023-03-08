@@ -1,10 +1,10 @@
 import Stripe from 'stripe';
+import { CartService } from '../services/cart.service';
 import { OrderService } from '../services/order.service';
 import { PaymentService } from '../services/payment.service';
 import { SalesService } from '../services/sales.service';
-import { calculateCartTotal } from '../utils/cart.util';
 import { createStripeSession } from '../utils/payment.util';
-import {NotificationController as notify} from './notification.controller';
+import { NotificationController as notify } from './notification.controller';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const stripeCheckoutSession = async (req, res) => {
@@ -12,8 +12,6 @@ export const stripeCheckoutSession = async (req, res) => {
 		const cart = req.cart;
 		const user = req.user;
 		const lineItems = req.lineItems;
-		const productsDetails = req.productsDetails;
-		const cartTotal = calculateCartTotal(productsDetails);
 		const payment = await PaymentService.createPayment({ status: 'pending' });
 
 		const customer = await stripe.customers.create({
@@ -25,60 +23,56 @@ export const stripeCheckoutSession = async (req, res) => {
 		});
 		const session = await createStripeSession(lineItems, customer);
 		return res.status(200).json({
-			cartTotal: cartTotal,
 			message: 'Creating checkout session successful',
 			url: session.url,
+			sessionId: session.id
 		});
 	} catch (error) {
-		return res
-			.status(500)
-			.json({
-				error: error.message,
-				message: 'Could not create checkout session',
-			});
+		return res.status(500).json({
+			error: error.message,
+			message: 'Could not create checkout session',
+		});
 	}
 };
 
-export const webHook = async (req, res) => {
-	const event = req.event;
-	const data = event.data.object;
-	const eventType = event.type;
+export const stripeSuccess = async (req, res) => {
+	try {
+		const { paymentId } = req.query;
+		let data = await stripe.checkout.sessions.retrieve(paymentId);
+		if (process.env.NODE_ENV === 'test')
+			data.payment_status = 'paid';
+		let order;
+		if (data.payment_status === 'paid') {
+			const customer = await stripe.customers.retrieve(data.customer);
+			order = await OrderService.createNewOrder(customer, data);
+			await PaymentService.updatePayment({ status: 'Paid' }, order.paymentId);
+			const cart = JSON.parse(customer.metadata.cart);
+			const { products } = cart;
+			const orderId = order.id;
+			const sales = await Promise.all(
+				products.map(async (product, index) => {
+					const sale = {
+						orderId,
+						productId: product.productId,
+						quantitySold: products[index].quantity,
+					};
+					return await SalesService.createSales(sale);
+				})
+			);
+			await notify.notifySellersOnBuyProduct(sales, customer.metadata.userId);
 
-  let order;
-  if (eventType === 'checkout.session.completed') {
-    try {
-      const customer = await stripe.customers.retrieve(data.customer);
-      order = await OrderService.createNewOrder(customer, data);
-      await PaymentService.updatePayment({ status: 'Paid' }, order.paymentId);
-      const cart = JSON.parse(customer.metadata.cart);
-      const { products } = cart;
-      const orderId = order.id;
-      const sales = await Promise.all(
-        products.map(async (product, index) => {
-          const sale = {
-            orderId,
-            productId: product.productId,
-            quantitySold: products[index].quantity,
-          };
-          return await SalesService.createSales(sale);
-        })
-      );
-		await notify.notifySellersOnBuyProduct(sales, customer.metadata.userId);
-
-      return res.status(200).json({
-        message: 'Order created successfully',
-      });
-    } catch (error) {
-      return res.status(500).json({
-        error: error.message,
-        message: 'Could not retrieve customer data',
-      });
-    }
-  }
-};
-
-export const stripeSuccess = (req, res) => {
-	return res.status(200).json({ message: 'Payment completed successfully' });
+			await CartService.deleteCart(cart.id);
+		}
+		return res.status(200).json({
+			message: 'Order created successfully',
+			order: { id: order.id, amount: order.fullPrice },
+		});
+	} catch (error) {
+		return res.status(500).json({
+			error: error.message,
+			message: 'Order not created',
+		});
+	}
 };
 
 export const stripeCancel = (req, res) => {

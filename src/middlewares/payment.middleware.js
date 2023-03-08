@@ -1,6 +1,3 @@
-import Stripe from 'stripe';
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const endpointSecret = process.env.STRIPE_WEBHOOK_ENDPOINT_SECRET;
 import { CartService } from '../services/cart.service';
 export const getProductsDetails = async (req, res, next)=>{
   const cart = req.cart;
@@ -39,21 +36,4 @@ export const createLineItems = async (req, res, next)=>{
 
     req.lineItems = lineItems;
     next();
-};
-
-export const createEvent = async (req, res, next)=>{
-  const sig = req.headers['stripe-signature'];
-  let event;
-
-  try{
-    event = stripe.webhooks.constructEvent(req.rawBody, sig, endpointSecret);
-  }
-  catch(error){
-    return res.status(400).json({
-      error: error.message,
-      message: 'Could not validate signature'
-    });
-  }
-  req.event = event;
-  next();
 };

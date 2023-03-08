@@ -21,6 +21,7 @@ cartRoutes
 		protectRoute,
 		restrictTo('buyer', 'admin'),
 		cartValidation,
+		uuidValidation('productId'),
 		checkProductAvailable,
 		getUserCart,
 		addProductToCart,

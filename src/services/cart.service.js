@@ -20,4 +20,8 @@ export class CartService {
 			})
 		);
 	}
+
+	static async deleteCart(id){
+		return Cart.destroy({where: {id: id}});
+	}
 }
