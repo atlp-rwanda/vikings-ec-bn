@@ -44,7 +44,7 @@ describe('Users Endpoints', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({ role: 'seller' })
       .expect(200);
-    expect(res.body).toHaveProperty('message', 'Updated successfully');
+    expect(res.body).toHaveProperty('message', 'Role updated successfully');
   });
 
   it('should return 500', async () => {

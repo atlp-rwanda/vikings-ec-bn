@@ -24,9 +24,8 @@ export const delistExpiredProducts = async () => {
 
         }
     }
-
-    subscribe(knownEvents.productExpired,({product, isExpired}) =>{
-        const isAvailable=false;
-        ProductService.updateProduct({isAvailable, isExpired}, product.id);
-    });
 };
+subscribe(knownEvents.productExpired,({product, isExpired}) =>{
+    const isAvailable=false;
+    ProductService.updateProduct({isAvailable, isExpired}, product.id);
+});

@@ -1,4 +1,4 @@
-import express, { Router } from 'express';
+import express from 'express';
 import passport from 'passport';
 import validatePassword from '../../validations/user/updatePassword.validation.js';
 import validateNewPassword from '../../validations/resetPassword.validation';
@@ -19,6 +19,8 @@ import {
   verifyAuthCode,
   removeAuthCode,
   VerifyResetPasswordToken,
+  checkDate,
+  checkPhone
 } from '../../middlewares/user.middleware';
 import {
   getUserWishes,
@@ -34,6 +36,7 @@ import validateAuthCode from '../../validations/user/2facode.validation.js';
 import validateEmail from '../../validations/email.validation.js';
 import { WishlistController } from '../../controllers/wishlist.controller';
 import { uuidValidation } from '../../validations/user/userId.validation.js';
+import { checkImageExtensions } from '../../middlewares/user.middleware';
 
 googlePass();
 
@@ -105,7 +108,13 @@ router.get(
   UserController.googleAuthHandler
 );
 router.get('/profile', protectRoute, UserController.getProfile);
-router.put('/profile', protectRoute, UserController.updateProfile);
+router.put(
+  '/profile',
+  protectRoute,
+  checkImageExtensions('avatar',['.jpg', '.png', '.webp', '.jpeg', '.gif']),
+  checkDate('birthdate'),
+  checkPhone('phone'),
+  UserController.updateProfile);
 
 router.patch(
   '/update-password',
@@ -126,6 +135,7 @@ router.patch(
   uuidValidation('userId'),
   validateRole,
   checkIfUserExistById,
+  validateRole,
   UserController.updateRole
 );
 router.put(

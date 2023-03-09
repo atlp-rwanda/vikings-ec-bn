@@ -175,7 +175,7 @@ const updatePassword = {
 
 const disableAccount = {
   tags: ['Users'],
-  summary: 'Disable account',
+  summary: 'Change account status',
   description: 'Updating status of a user',
   parameters:[
       {
@@ -196,12 +196,12 @@ const disableAccount = {
           type: 'object',
           properties: {
             isActive: {
-              type: 'string',
+              type: 'boolean',
               required: true,
             },
           },
           example: {
-            isActive: 'disactive',
+            isActive: false,
           },
         },
       },

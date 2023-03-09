@@ -26,7 +26,7 @@ export class SalesController {
             for (const sale of sales) {
                 const productId = sale.productId;
                 const product = await ProductService.getProductById(productId);
-                if (sellerId === product.userId) {
+                if (sellerId === product.userId && sale.status === 'pending') {
                     sellerSales.push(sale);
                 }
             }

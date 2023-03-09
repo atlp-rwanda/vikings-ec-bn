@@ -206,11 +206,11 @@ export class UserController {
     try {
       const role = req.body.role;
       await UserService.updateUser({ role }, req.user.id);
-      return res.status(200).json({ message: "Updated successfully" });
+      return res.status(200).json({ message: 'Role updated successfully' });
     } catch (error) {
       return res.status(500).json({
         error: error.message,
-        message: "Failed to update role",
+        message: 'Failed to update role',
       });
     }
   }
