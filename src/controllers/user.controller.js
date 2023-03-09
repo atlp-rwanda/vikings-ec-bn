@@ -4,19 +4,16 @@ import { BcryptUtility } from '../utils/bcrypt.util.js';
 import { JwtUtility } from '../utils/jwt.util.js';
 import models from '../database/models';
 import { sendEmail } from '../utils/sendEmail.util';
-import JWT from 'jsonwebtoken';
 import { resetPasswordTemplate } from '../utils/mailTemplates.util.js';
-import { User } from '../database/models/index';
 import { emailConfig } from '../utils/mail.util';
 import { verifyEmailTemplate } from '../utils/mailTemplates.util.js';
 import dotenv from 'dotenv';
 dotenv.config();
-import { Mail } from '../utils/mail.util.js';
 import { uploadPhoto } from '../utils/cloudinary.util.js';
 import {knownSchedulingTime, schedule} from '../utils/scheduling.util';
 import {addDurationOnDate, durationToCronRepetition} from '../utils/date.util';
-import {SocketUtil} from '../utils/socket.util';
 import {eventEmit, knownEvents, subscribe} from '../utils/events.util';
+import {knownNotificationType} from '../services/notification.service';
 
 const repetitionDuration =process.env.CRON_PERIOD? durationToCronRepetition(process.env.CRON_PERIOD): knownSchedulingTime.everySecond;
 schedule(repetitionDuration, async () => {
@@ -33,11 +30,11 @@ schedule(repetitionDuration, async () => {
         addDurationOnDate(process.env.PASSWORD_EXPIRATION_IN || '1s',
             lastTimePasswordUpdated) < now ){
         UserService.updateUser({mustUpdatePassword:true}, eachUser.id);
-      SocketUtil.socketEmit('notification', {
-        notificationType:'changePassword',
-        message:'Please it is to change your password for security purpose',
-        userId: eachUser.id,
-      });
+        eventEmit(knownEvents.onNotification, {
+          type:knownNotificationType.changePassword,
+          message:'Please it is to change your password for security purpose',
+          receiverId: eachUser.id,
+        });
     }
   });
 });
@@ -275,18 +272,18 @@ export class UserController {
 
   static async forgotPassword(req, res) {
     try {
-    const user = req.user
+    const user = req.user;
     const userData = {
       id: user.id,
       email: user.email
     };
         const resetLink = JwtUtility.generateToken(userData);
-          const link = `${process.env.BASE_URL}/reset-password?token=${resetLink}`
-          const resetMessage = resetPasswordTemplate(user.email,link)
+          const link = `${process.env.BASE_URL}/reset-password?token=${resetLink}`;
+          const resetMessage = resetPasswordTemplate(user.email,link);
           sendEmail(
             emailConfig({
             email: user.email,
-            subject: "reset password",
+            subject: 'reset password',
             content: resetMessage,
           })
           );
@@ -301,11 +298,11 @@ export class UserController {
 
     static async resetPassword(req, res) {
       try {
-      const id = req.id
-      const { newPassword } = req.body
-        const password = await BcryptUtility.hashPassword(newPassword)
-        await UserService.updateUser({ password },id)
-        return res.status(200).json({ message:" Password reset successfully "})
+      const id = req.id;
+      const { newPassword } = req.body;
+        const password = await BcryptUtility.hashPassword(newPassword);
+        await UserService.updateUser({ password },id);
+        return res.status(200).json({ message:' Password reset successfully '});
       } catch (error) {
         return res.status(500).json({
           error: error.message,
