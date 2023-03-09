@@ -20,6 +20,7 @@ export const checkProductAvailable = async (req, res, next) => {
   });
   if (!getProduct)
     return res.status(404).json({ message: 'Product not found' });
+    req.product = getProduct;
   next();
 };
 

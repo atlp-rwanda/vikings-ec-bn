@@ -1,0 +1,9 @@
+export const jordanId = 'b5e75a01-5e67-44ad-91bd-f36ab3564a48';
+export const beansId = '6717e8c7-c058-4670-90c3-5c8953cc844a';
+export const beans = {productId: '6717e8c7-c058-4670-90c3-5c8953cc844a'}
+export const jordan = {productId: 'b5e75a01-5e67-44ad-91bd-f36ab3564a48'}
+export const userId = '872526ad-76be-4f44-b5d9-8032f0925c2d';
+export const wishlistId = 'cfe7c072-9ad7-4d98-92cc-e1e1a1c0774f'
+export const buyerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3MjUyNmFkLTc2YmUtNGY0NC1iNWQ5LTgwMzJmMDkyNWMyZCIsImVtYWlsIjoidmVyaWZpZWRAZ21haWwuY29tIiwicm9sZSI6ImJ1eWVyIiwibXVzdFVwZGF0ZVBhc3N3b3JkIjpudWxsLCJpYXQiOjE2NzgxODQxNTUsImV4cCI6MTcwOTcyMDE1NX0.56B8Bpj_OHRLCc4kuTBEN_NOvFNPa-ZT6PzlkkTbQXw';
+export const sellerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI1MzI3OGE3LWRhZjMtNGM2YS05OWVmLTc1NzlkOWI0M2MzMiIsImVtYWlsIjoia3dpenNhbUBnbWFpbC5jb20iLCJyb2xlIjoic2VsbGVyIiwibXVzdFVwZGF0ZVBhc3N3b3JkIjpudWxsLCJpYXQiOjE2NzgyMTg2ODEsImV4cCI6MTcwOTc1NDY4MX0.DEc1a-ioBjFXMubnBt2l8Zl4ZZNkb3ol0c50hK_xmIk';
+export const randomId = 'c93357b7-cfff-44a1-bcc5-835d4ae72f23';
