@@ -6,6 +6,8 @@ import userRoutes from './api/user.routes.js';
 import welcomeRoutes from './api/welcome.routes.js';
 import cartRoutes from './api/cart.routes.js';
 import wishlistrouter from './api/wishlist.routes.js';
+import orderRoutes from './api/order.routes.js';
+import salesRoutes from './api/sales.routes.js';
 
 const routes = express.Router();
 
@@ -15,6 +17,8 @@ routes.use('/products', productRoutes);
 routes.use('/categories', categoryRoutes);
 routes.use('/chats', chatRoutes);
 routes.use('/carts', cartRoutes);
-routes.use('/wishlist',wishlistrouter)
+routes.use('/wishlist',wishlistrouter);
+routes.use('/orders',orderRoutes);
+routes.use('/sales',salesRoutes);
 
 export default routes;

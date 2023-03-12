@@ -6,9 +6,9 @@ import {
   getSpecificProduct,
   markAvailableProduct,
   updateProduct,
-  deleteProduct 
+  deleteProduct
 } from '../../controllers/product.controller.js';
-import { productValidation} from '../../validations/product/product.validation';
+import { productValidation } from '../../validations/product/product.validation';
 import validateAvailable from '../../validations/product/isAvailable.validation';
 import { checkIfCategoryExistById } from '../../middlewares/category.middleware';
 import {
@@ -45,9 +45,9 @@ productRoutes.patch(
   checkIfSellerOwnsProduct,
   removeExpiredProducts,
 );
-productRoutes.get('/', 
-  protectRoute,  
-  validateSearchCriteria, 
+productRoutes.get('/',
+  protectRoute,
+  validateSearchCriteria,
   receivedQueryFormat,
   searchProductController,
   removeExpiredProducts
@@ -75,7 +75,7 @@ productRoutes.patch('/:productId',
 productRoutes.put(
   '/:productId',
   protectRoute,
-  restrictTo('seller','admin'),
+  restrictTo('seller', 'admin'),
   uuidValidation('productId'),
   validateAvailable,
   checkIfProductExistsById,
@@ -84,14 +84,14 @@ productRoutes.put(
   markAvailableProduct,
 );
 
-   productRoutes.delete(
-    '/:productId',
-    protectRoute,
-    restrictTo('seller', 'admin'),
+productRoutes.delete(
+  '/:productId',
+  protectRoute,
+  restrictTo('seller', 'admin'),
   uuidValidation('productId'),
-    checkIfProductExistsById,
-    checkIfSellerOwnsProduct,
-    deleteProduct
-  );
+  checkIfProductExistsById,
+  checkIfSellerOwnsProduct,
+  deleteProduct
+);
 
 export default productRoutes;

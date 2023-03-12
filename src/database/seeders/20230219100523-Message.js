@@ -16,7 +16,7 @@ module.exports = {
         {
           id: 'cf775e9e-0a7e-44b1-bded-2db74adf9e6d',
           senderId: 'b53278a7-daf3-4c6a-99ef-7579d9b43c32',
-          message: "It's a bit of conundrum.",
+          message: 'It\'s a bit of conundrum.',
           createdAt: new Date(),
           updatedAt: new Date(),
         },

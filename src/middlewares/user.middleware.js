@@ -124,39 +124,39 @@ export const checkDisabledAccount = async (req, res, next) => {
 
 export const checkSeller = async (req, res, next) => {
 	if (req.user.role === 'seller') {
-    const { firstname, email, id} = req.user;
-    sendAuthCode(firstname, email, id);
-    return res.status(403).json({message: 'Check your email for verification code'});
+		const { firstname, email, id } = req.user;
+		sendAuthCode(firstname, email, id);
+		return res.status(403).json({ message: 'Check your email for verification code' });
 	}
-  next();
+	next();
 };
 
-export const verifyAuthCode = async (req, res, next)=>{
-  const authCode = req.body.authCode;
+export const verifyAuthCode = async (req, res, next) => {
+	const authCode = req.body.authCode;
 
-  if (authCode !== req.user.authCode){
-    return res.status(403).json({message: 'Code does not match. Try again'});
-  }
+	if (authCode !== req.user.authCode) {
+		return res.status(403).json({ message: 'Code does not match. Try again' });
+	}
 
-  next();
+	next();
 };
 
-export const removeAuthCode = async(req, res, next)=>{
-  const authCode = null;
-  await UserService.updateUser({authCode}, req.user.id);
-  next();
+export const removeAuthCode = async (req, res, next) => {
+	const authCode = null;
+	await UserService.updateUser({ authCode }, req.user.id);
+	next();
 };
 
-export const VerifyResetPasswordToken = async(req,res,next) =>{
-	const {token} = req.params
-      const verify = JwtUtility.verifyToken(token)
-      const id = verify.id
-	  req.id = id
-	  const user = await User.findByPk(id);
-      if (!user) {
-      return res.status(404).json({ message: `User does not exist` });
-      }
-	  next();
-	  
-      
-}
+export const VerifyResetPasswordToken = async (req, res, next) => {
+	const { token } = req.params;
+	const verify = JwtUtility.verifyToken(token);
+	const id = verify.id;
+	req.id = id;
+	const user = await User.findByPk(id);
+	if (!user) {
+		return res.status(404).json({ message: 'User does not exist' });
+	}
+	next();
+
+
+};
