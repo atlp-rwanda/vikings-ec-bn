@@ -33,7 +33,7 @@ import { removeExpiredProducts } from '../../src/controllers/product.controller'
 import { validCategory } from '../mocks/product.mock';
 import { successBuyerRegister, buyerToken } from '../mocks/user.mock';
 import { response } from 'express';
-
+import productIdValidation from '../../src/validations/product/product.validation'
 beforeAll(async () => {
   await connectDB();
 });
@@ -411,7 +411,7 @@ describe('UPDATE/product',() => {
       .set('Authorization', `Bearer ${validToken}`)
       .send({isAvailable: false});
       expect(response.statusCode).toBe(200);
-      expect(response.body).toHaveProperty('message', 'product is available now');
+      expect(response.body).toHaveProperty('message', 'Product availability changed successfully');
       
   });
   
@@ -439,7 +439,16 @@ describe('UPDATE/product',() => {
     requestSpy.mockRestore();
 
   });
-
+  test('should  validate uuid', async () => {
+    const invalidId = '234565434543456';
+    const response = await request(app)
+    
+      .patch(`/api/v1/products/${invalidId}`)
+      .set('Authorization', `Bearer ${validToken}`)
+      .send(validProduct);
+      
+      expect(response.statusCode).toBe(400);
+  });
   it('should return 500', async () => {
     const requestSpy = jest.spyOn(ProductService, 'deleteProduct');
     requestSpy.mockRejectedValue(new Error('Error occured while deleting product'));
@@ -451,6 +460,7 @@ describe('UPDATE/product',() => {
     requestSpy.mockRestore();
 
   }); 
+
   test('should delete product', async () => {
     const response = await request(app)
     
@@ -459,4 +469,9 @@ describe('UPDATE/product',() => {
      
       expect(response.statusCode).toBe(200);
   });
+  
+  
 });
+
+
+

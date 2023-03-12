@@ -7,7 +7,7 @@ const productValidationSchema = Joi.object({
   bonus: Joi.number().integer(),
 });
 
-const productValidation = async (req, res, next) => {
+export const productValidation = async (req, res, next) => {
   const { error } = productValidationSchema.validate(req.body, {
     abortEarly: false,
   });
@@ -18,4 +18,3 @@ const productValidation = async (req, res, next) => {
   }
   next();
 };
-export default productValidation;

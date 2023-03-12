@@ -12,6 +12,7 @@ import {
 	checkProductAvailable,
 	checkIfProductExistsById,
 } from '../../middlewares/product.middleware';
+import { uuidValidation } from '../../validations/user/userId.validation';
 
 const cartRoutes = express.Router();
 cartRoutes
@@ -44,6 +45,7 @@ cartRoutes
 	.patch(
 		protectRoute,
 		restrictTo('buyer', 'admin'),
+		uuidValidation('productId'),
 		checkIfProductExistsById,
 		getUserCart,
 		checkProductInCart,

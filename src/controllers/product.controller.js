@@ -119,7 +119,7 @@ export const markAvailableProduct = async (req, res) => {
     const {isAvailable} = req.body;
     const productId = req.product.id;
     await ProductService.updateProduct( {isAvailable}, productId);
-   return res.status(200).json({ message: 'product is available now' });
+   return res.status(200).json({ message: 'Product availability changed successfully' });
    
   } catch (error) {
     return res.status(500).json({

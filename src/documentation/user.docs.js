@@ -103,6 +103,7 @@ const resetPassword = {
               description:'User Id',
               schema:{
                   type: 'string',
+                  format:'uuid',
               }
           },
       ],
@@ -183,6 +184,7 @@ const disableAccount = {
           description:'User Id',
           schema:{
               type: 'string',
+              format:'uuid',
           }
       },
   ],
