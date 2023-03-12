@@ -15,10 +15,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         primaryKey: true,
       },
-    status: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Payment',
-  });
+      status: {
+        type: DataTypes.STRING,
+        defaultValue: 'Pending',
+      },
+    },
+    {
+      sequelize,
+      modelName: 'Payment',
+    }
+  );
   return Payment;
 };

@@ -1,5 +1,6 @@
 import { SalesService } from '../services/sales.service';
 import { ProductService } from '../services/product.service';
+import { OrderService } from '../services/order.service';
 export class SalesController {
     static async getOrderSales(req, res) {
         try {
@@ -50,4 +51,34 @@ export class SalesController {
             });
         }
     }
+  static async updateSaleStatus(req, res) {
+    try {
+      const { status } = req.body;
+      const { saleId } = req.params;
+      const updateOrderStatus = await SalesService.updateSaleStatusById(
+        status,
+        saleId
+      );
+
+      const { orderId } = req.sale;
+      const sales = await SalesService.getOrderSales(orderId);
+      const checkSameStatus = sales.every((sale) => sale.status === status);
+      if (checkSameStatus) {
+        OrderService.updateOrderStatusById(status, orderId); 
+      }
+      sales.map((sale) => {
+        if (sale.status === 'declined')
+          OrderService.updateOrderStatusById('declined', orderId);
+      });
+      if (updateOrderStatus)
+        return res.status(200).json({
+          message: 'Product order status has been changed successfully',
+        });
+    } catch (err) {
+      return res.status(500).json({
+        error: err.message,
+        message: 'Failed to update product order status, try again',
+      });
+    }
+  }
 }

@@ -25,6 +25,16 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          id: 'de17c74a-2d71-4c01-9ab8-0f213d23038a',
+          status: 'pending',
+          buyerId: '76432d88-a891-4c4f-9b8f-aca96513f4dd',
+          products: null,
+          fullPrice: 30000,
+          paymentId: '1357affd-beb6-438d-b6e9-9e48d68bad24',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
 
       ],
       {}

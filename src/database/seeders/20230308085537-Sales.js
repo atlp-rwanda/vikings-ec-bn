@@ -36,6 +36,26 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          id: '535d1305-f65e-44e5-8b0f-31be187577d5',
+          orderId: 'de17c74a-2d71-4c01-9ab8-0f213d23038a',
+          productId: 'b5e75a01-5e67-44ad-91bd-f36ab3564a48',
+          status: 'pending',
+          quantitySold: 3,
+          expectedDeliveryDate: '2023-03-18',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: '27a40bf6-99df-4fa9-8a18-33f40e75ad7f',
+          orderId: 'de17c74a-2d71-4c01-9ab8-0f213d23038a',
+          productId: '6717e8c7-c058-4670-90c3-5c8953cc844a',
+          status: 'pending',
+          quantitySold: 3,
+          expectedDeliveryDate: '2023-03-18',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

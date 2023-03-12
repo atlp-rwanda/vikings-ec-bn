@@ -55,6 +55,47 @@ const getSale = {
     ],
 };
 
+const changeSaleStatus = {
+    tags: ['Sales'],
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+    summary: 'Change product order status',
+    description: 'Changing product order status',
+    parameters: [
+      {
+        name: 'saleId',
+        in: 'path',
+        description: 'salesId',
+        schema: {
+          type: 'string',
+        },
+      },
+    ],
+    requestBody: {
+      required: true,
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              status: {
+                type: 'string',
+                required: true,
+              },
+            },
+            example: {
+              status: 'accepted',
+            },
+          },
+        },
+      },
+    },
+    responses,
+  };
+
 const sales = {
 	'/api/v1/sales/': {
 		get: getSales,
@@ -65,6 +106,9 @@ const sales = {
     '/api/v1/sales/{saleId}': {
 		get: getSale
 	},
+    '/api/v1/sales/{saleId}/status': {
+        patch: changeSaleStatus,
+      },
 };
 
 export default sales;

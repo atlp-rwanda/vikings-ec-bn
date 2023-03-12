@@ -38,4 +38,7 @@ export class OrderService {
 			},
 		};
 	}
+	static async updateOrderStatusById(orderStatus, id) {
+		return await Order.update({ status: orderStatus }, { where: { id: id } });
+	  }
 }

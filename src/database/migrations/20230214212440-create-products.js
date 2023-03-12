@@ -19,6 +19,10 @@ module.exports = {
       expiryDate: {
         type: Sequelize.DATE,
       },
+      quantity: {
+        type: Sequelize.INTEGER,
+        defaultValue: 1,
+      },
       images: {
         type: Sequelize.ARRAY(Sequelize.STRING),
       },
@@ -30,7 +34,7 @@ module.exports = {
       },
       isAvailable: {
         type: Sequelize.BOOLEAN,
-        defaultValue:true
+        defaultValue: false,
       },
       categoryId: {
         type: Sequelize.UUID,

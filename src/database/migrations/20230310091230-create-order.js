@@ -10,7 +10,8 @@ module.exports = {
         primaryKey: true,
       },
       status: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        defaultValue:'pending'
       },
       products: {
         type: Sequelize.ARRAY(Sequelize.JSONB),
