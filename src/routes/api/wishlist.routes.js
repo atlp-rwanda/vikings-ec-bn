@@ -12,6 +12,7 @@ import {
   checkProductAvailable,
 } from "../../middlewares/product.middleware";
 import wishlistValidation from "../../validations/wishlist/wishlist.validation";
+import { uuidValidation } from "../../validations/user/userId.validation";
 
 const wishlistrouter = express.Router();
 
@@ -31,6 +32,7 @@ wishlistrouter.get(
   "/:productId/product-wishes",
   protectRoute,
   restrictTo("seller", "admin"),
+  uuidValidation('productId'),
   checkIfProductExistsById,
   WishlistController.getProductWishes
 );
@@ -39,6 +41,7 @@ wishlistrouter.delete(
   "/:productId/product-wishes",
   protectRoute,
   restrictTo("admin", "buyer"),
+  uuidValidation('productId'),
   getUserWishes,
   checkIfProductExistsById,
   checkProductNotInWishlist,

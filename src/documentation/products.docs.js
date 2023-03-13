@@ -152,6 +152,10 @@ const createProduct = {
               type: 'number',
               description: 'Price of product',
             },
+            quantity: {
+              type: 'number',
+              description: 'quantity of product',
+            },
             categoryId: {
               type: 'string',
               description: 'Product category',
@@ -337,6 +341,10 @@ const updateProduct = {
                 price: {
                   type: 'number',
                   description: 'Price of product',
+                },
+                quantity: {
+                  type: 'number',
+                  description: 'quantity of product',
                 },
                 categoryId: {
                   type: 'string',

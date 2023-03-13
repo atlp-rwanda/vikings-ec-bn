@@ -24,7 +24,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       references: { model: 'Products', key: 'id' },
     },
-    status: DataTypes.STRING,
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: 'pending',
+    },
     quantitySold: DataTypes.STRING,
     expectedDeliveryDate: DataTypes.DATE
   }, {

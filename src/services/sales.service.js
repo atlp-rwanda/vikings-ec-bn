@@ -12,4 +12,7 @@ export class SalesService {
 	static async getAllSales() {
 		return Sales.findAll();
 	}
+	static async updateSaleStatusById(orderStatus, id) {
+		return await Sales.update({ status: orderStatus }, { where: { id: id } });
+	  }
 }

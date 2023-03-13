@@ -250,7 +250,7 @@ describe('POST /Product', () => {
 
 	test('Searching for a product with empty values', async () => {
 		const response = await request(app)
-			.get('/api/v1/products')
+			.get('/api/v1/products?page=0')
 			.set('Authorization', `Bearer ${buyerToken.token}`);
 		expect(response.statusCode).toBe(500);
 	});
@@ -340,7 +340,7 @@ describe('GET /Products:productId', () => {
 
 	test('Check failed to retrieve', async () => {
 		const response = await request(app)
-			.get('/api/v1/products/')
+			.get('/api/v1/products?page=0')
 			.set('Authorization', `Bearer ${notSeller}`);
 		expect(response.body.message).toBe('Failed to retrieve products');
 		expect(response.statusCode).toEqual(500);
@@ -467,6 +467,5 @@ describe('UPDATE/product', () => {
 		);
 	});
 });
-
 
 

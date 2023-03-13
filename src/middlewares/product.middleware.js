@@ -73,12 +73,13 @@ export const checkIfProductExistsById = async (req, res, next) => {
 };
 
 export const checkIfSellerOwnsProduct = async (req, res, next) => {
-  const product = req.product;
+  const product =
+    req.product || (await ProductService.getProductById(req.sale.productId));
   const sellerId = product.userId;
   const { id, role } = req.user;
   if (role === 'seller' && id !== sellerId) {
     return res.status(400).json({
-      message: 'Product doesn\'t exists in your collection',
+      message: "Product doesn't exists in your collection",
     });
   }
   next();

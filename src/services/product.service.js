@@ -5,7 +5,7 @@ export class ProductService {
   static async createProduct(product) {
     return await Products.create(product);
   }
-  static async getAllProducts(limit, page) {
+  static async getAllProducts(limit=10, page=1) {
     const offset = (page - 1) * limit;
     const { count, rows } = await Products.findAndCountAll({
       limit: limit,
@@ -37,7 +37,7 @@ export class ProductService {
   static async getProductById(id) {
     return await Products.findByPk(id);
   }
-  static async searchProduct(searchQuery, limit, page){
+  static async searchProduct(searchQuery, limit=10, page=1){
     const offset = ( page - 1) * limit;
     const { count, rows } = await Products.findAndCountAll({
       limit: limit,
