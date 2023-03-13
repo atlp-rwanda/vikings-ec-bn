@@ -1,10 +1,11 @@
 import Joi from 'joi';
 const productValidationSchema = Joi.object({
   name: Joi.string().min(3).required(),
-  price: Joi.number().integer(),
+  price: Joi.number().integer().required(),
   categoryId: Joi.string().uuid(),
   expiryDate: Joi.string().required(),
   bonus: Joi.number().integer(),
+  quantity:Joi.number().integer(),
 });
 
 export const productValidation = async (req, res, next) => {

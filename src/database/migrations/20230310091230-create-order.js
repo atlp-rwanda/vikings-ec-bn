@@ -10,7 +10,8 @@ module.exports = {
         primaryKey: true,
       },
       status: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        defaultValue:'pending'
       },
       products: {
         type: Sequelize.ARRAY(Sequelize.JSONB),
@@ -19,6 +20,13 @@ module.exports = {
         type: Sequelize.UUID,
         references: {
           model: 'Users',
+          key: 'id',
+        },
+      },
+      paymentId: {
+        type: Sequelize.UUID,
+        references: {
+          model: 'Payments',
           key: 'id',
         },
       },

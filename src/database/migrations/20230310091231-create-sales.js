@@ -23,9 +23,10 @@ module.exports = {
 					key: 'id',
 				},
       },
-      status: {
-        type: Sequelize.STRING
-      },
+			status: {
+				type: Sequelize.STRING,
+				defaultValue:'pending'
+			},
       quantitySold: {
         type: Sequelize.STRING
       },

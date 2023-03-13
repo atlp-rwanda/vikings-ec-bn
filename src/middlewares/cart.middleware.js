@@ -37,6 +37,14 @@ export const checkCartNotEmpty = async (req, res, next) => {
 	next();
 };
 
+export const checkNoCartForPayment = async (req, res, next)=>{
+	const cart = req.cart;
+	if(!cart){
+		return res.status(400).json({message: 'You have no cart'});
+	}
+	return next();
+};
+
 export const checkProductInCart = async (req, res, next) => {
 	const cart = req.cart;
 	let { productId } = req.params;

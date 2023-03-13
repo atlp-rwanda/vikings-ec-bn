@@ -1,1 +1,10 @@
 export const saleId = 'b2aa6e5b-c31f-40f9-ae1e-a1e20f952fe8';
+export const acceptedStatus = { status: 'accepted' };
+export const declinedStatus = { status: 'declined' };
+export const deliveredStatus = { status: 'delivered' };
+export const shippingStatus = { status: 'shipping' };
+export const invalidStatus = { status: 'invalid' };
+export const invalidSalesId1 = '0672ef92-3d7b-4302-ac8e-a61d05a5af75';
+export const validSalesId = '27a40bf6-99df-4fa9-8a18-33f40e75ad7f';
+export const invalidSalesId = '123';
+export const validSalesId1 = '535d1305-f65e-44e5-8b0f-31be187577d5';

@@ -1,31 +1,31 @@
 import app from '../../src/app';
 import {
-  expect,
-  describe,
-  test,
-  jest,
-  it,
-  beforeAll,
-  afterEach,
+	expect,
+	describe,
+	test,
+	jest,
+	it,
+	beforeAll,
+	afterEach,
 } from '@jest/globals';
 import { connectDB } from '../../src/app';
 import request from 'supertest';
 import {
-  invaliCategoryProduct,
-  invalidProductId,
-  notSeller,
-  sellerToken,
-  unavailableProduct,
-  validProductId,
-  validProductId1,
-  validToken,
-  validProduct,
-  validProduct2,
-  invalidProduct,
-  id,
-  productId,
-  productId1,
-  admin,
+	invaliCategoryProduct,
+	invalidProductId,
+	notSeller,
+	sellerToken,
+	unavailableProduct,
+	validProductId,
+	validProductId1,
+	validToken,
+	validProduct,
+	validProduct2,
+	invalidProduct,
+	id,
+	productId,
+	productId1,
+	admin,
 } from '../mocks/product.mock';
 import { closeAll } from '../../src/utils/scheduling.util';
 import { ProductService } from '../../src/services/product.service';
@@ -33,9 +33,8 @@ import { removeExpiredProducts } from '../../src/controllers/product.controller'
 import { validCategory } from '../mocks/product.mock';
 import { successBuyerRegister, buyerToken } from '../mocks/user.mock';
 import { response } from 'express';
-import productIdValidation from '../../src/validations/product/product.validation'
 beforeAll(async () => {
-  await connectDB();
+	await connectDB();
 });
 describe('POST /Product', () => {
   test('Check authorization', async () => {
@@ -73,7 +72,7 @@ describe('POST /Product', () => {
       .set('Authorization', `Bearer ${validToken}`)
       .field(invaliCategoryProduct);
 
-    expect(response.body.message).toEqual("Category doesn't exist");
+    expect(response.body.message).toEqual('Category doesn\'t exist');
     expect(response.statusCode).toEqual(404);
   });
 
@@ -87,7 +86,7 @@ describe('POST /Product', () => {
       .attach('images', `${__dirname}/sample.pdf`)
       .field(validProduct);
     expect(response.body.message).toEqual(
-      "Invalid extension for file 'sample.pdf'"
+      'Invalid extension for file \'sample.pdf\''
     );
     expect(response.statusCode).toEqual(400);
   });
@@ -240,6 +239,18 @@ describe('POST /Product', () => {
     expect(response.statusCode).toBe(200);
   });
 
+  test('Searching for a product with category', async () => {
+    validCategory.name = 'cars';
+   const a = await request(app)
+      .post('/api/v1/categories')
+      .set('Authorization', `Bearer ${sellerToken}`)
+      .send(validCategory);
+    const response = await request(app)
+      .get('/api/v1/products')
+      .query({ category: validCategory.name, limit: 1, page: 1 })
+      .set('Authorization', `Bearer ${sellerToken}`);
+    expect(response.statusCode).toBe(403);
+  });
   test('Searching for a product with invalid category', async () => {
     const response = await request(app)
       .get('/api/v1/products')
@@ -248,12 +259,12 @@ describe('POST /Product', () => {
     expect(response.statusCode).toBe(500);
   });
 
-  test('Searching for a product with empty values', async () => {
-    const response = await request(app)
-      .get('/api/v1/products')
-      .set('Authorization', `Bearer ${buyerToken.token}`);
-    expect(response.statusCode).toBe(500);
-  });
+	test('Searching for a product with empty values', async () => {
+		const response = await request(app)
+			.get('/api/v1/products?page=0')
+			.set('Authorization', `Bearer ${buyerToken.token}`);
+		expect(response.statusCode).toBe(500);
+	});
 
   test('Searching for a product with invalid product name', async () => {
     const response = await request(app)
@@ -296,12 +307,12 @@ describe('POST /Product', () => {
   });
 });
 describe('GET /Products:productId', () => {
-  test("Check seller doesn't own the product", async () => {
+  test('Check seller doesn\'t own the product', async () => {
     const response = await request(app)
       .get(`/api/v1/products/${validProductId}`)
       .set('Authorization', `Bearer ${sellerToken}`);
     expect(response.body.message).toEqual(
-      "Product doesn't exists in your collection"
+      'Product doesn\'t exists in your collection'
     );
     expect(response.statusCode).toEqual(400);
   });
@@ -314,7 +325,7 @@ describe('GET /Products:productId', () => {
     expect(response.statusCode).toEqual(200);
   });
 
-  test("Check product doesn't exist", async () => {
+  test('Check product doesn\'t exist', async () => {
     const response = await request(app)
       .get(`/api/v1/products/${invalidProductId}`)
       .set('Authorization', `Bearer ${validToken}`);
@@ -338,115 +349,106 @@ describe('GET /Products:productId', () => {
     expect(response.statusCode).toEqual(200);
   });
 
-  test('Check failed to retrieve', async () => {
-    const response = await request(app)
-      .get('/api/v1/products/')
-      .set('Authorization', `Bearer ${notSeller}`);
-    expect(response.body.message).toBe('Failed to retrieve products');
-    expect(response.statusCode).toEqual(500);
-  });
+	test('Check failed to retrieve', async () => {
+		const response = await request(app)
+			.get('/api/v1/products?page=0')
+			.set('Authorization', `Bearer ${notSeller}`);
+		expect(response.body.message).toBe('Failed to retrieve products');
+		expect(response.statusCode).toEqual(500);
+	});
 });
 
 afterEach(async () => {
-  await closeAll();
+	await closeAll();
 });
-
 
 describe('GET /Product', () => {
-  test('List all products for role seller', async () => {
-    const response = await request(app)
-      .get('/api/v1/products?limit=1&&page=1')
-      .set('Authorization', `Bearer ${validToken}`);
+	test('List all products for role seller', async () => {
+		const response = await request(app)
+			.get('/api/v1/products?limit=1&&page=1')
+			.set('Authorization', `Bearer ${validToken}`);
 
-    expect(response.body).toHaveProperty('products');
-    expect(response.statusCode).toEqual(200);
-  });
+		expect(response.body).toHaveProperty('products');
+		expect(response.statusCode).toEqual(200);
+	});
 
-  test('List all products for role buyer', async () => {
-    const response = await request(app)
-      .get('/api/v1/products?limit=1&&page=1')
-      .set('Authorization', `Bearer ${notSeller}`);
+	test('List all products for role buyer', async () => {
+		const response = await request(app)
+			.get('/api/v1/products?limit=1&&page=1')
+			.set('Authorization', `Bearer ${notSeller}`);
 
-    expect(response.body).toHaveProperty('products');
-    expect(response.statusCode).toEqual(200);
-  });
+		expect(response.body).toHaveProperty('products');
+		expect(response.statusCode).toEqual(200);
+	});
 
-  test('Expired product was removed successfully', async () => {
-    const response = await request(app)
-      .patch(`/api/v1/products/${productId1}/expired`)
-      .set('Authorization', `Bearer ${admin}`)
-      .send({
-        isExpired: true,
-        isAvailable: false,
-      });
+	test('Expired product was removed successfully', async () => {
+		const response = await request(app)
+			.patch(`/api/v1/products/${productId1}/expired`)
+			.set('Authorization', `Bearer ${admin}`)
+			.send({
+				isExpired: true,
+				isAvailable: false,
+			});
 
-    expect(response.body.message).toEqual(
-      'Expired product was removed successfully'
-    );
-  });
-  test('Check fail to create product', async () => {
-    const requestSpy = jest.spyOn(ProductService, 'getAllProducts');
-    requestSpy.mockRejectedValue(new Error('Failed to retrieve product'));
-    const response = await request(app)
-      .get('/api/v1/products')
-      .set('Authorization', `Bearer ${validToken}`);
-    expect(response.statusCode).toBe(500);
-    requestSpy.mockRestore();
-  });
+		expect(response.body.message).toEqual(
+			'Expired product was removed successfully'
+		);
+	});
+	test('Check fail to create product', async () => {
+		const requestSpy = jest.spyOn(ProductService, 'getAllProducts');
+		requestSpy.mockRejectedValue(new Error('Failed to retrieve product'));
+		const response = await request(app)
+			.get('/api/v1/products')
+			.set('Authorization', `Bearer ${validToken}`);
+		expect(response.statusCode).toBe(500);
+		requestSpy.mockRestore();
+	});
 });
-describe('UPDATE/product',() => {
- test('should  update product', async () => {
-    const response = await request(app)
-    
-      .patch(`/api/v1/products/${id}`)
-      .set('Authorization', `Bearer ${validToken}`)
-      .send(validProduct);
-      
-      expect(response.statusCode).toBe(200);
-  });
-  test('should mark product ', async () => {
-    const response = await request(app)
-    
-      .put(`/api/v1/products/${id}`)
-      .set('Authorization', `Bearer ${validToken}`)
-      .send({isAvailable: false});
-      expect(response.statusCode).toBe(200);
-      expect(response.body).toHaveProperty('message', 'Product availability changed successfully');
-      
-  });
-  
-  it('should return 500', async () => {
-    const requestSpy = jest.spyOn(ProductService, 'updateProduct');
-    requestSpy.mockRejectedValue(new Error('Error occured while updating for a product'));
+describe('UPDATE/product', () => {
+	test('should  update product', async () => {
+		const response = await request(app)
+			.patch(`/api/v1/products/${id}`)
+			.set('Authorization', `Bearer ${validToken}`)
+			.send(validProduct);
 
-    const res = await request(app)
-      .patch(`/api/v1/products/${id}`)
-      .set('Authorization', `Bearer ${validToken}`)
-      .send(validProduct);
-    expect(res.statusCode).toBe(500);
-    requestSpy.mockRestore();
+		expect(response.statusCode).toBe(200);
+	});
+	test('should mark product ', async () => {
+		const response = await request(app)
+			.put(`/api/v1/products/${id}`)
+			.set('Authorization', `Bearer ${validToken}`)
+			.send({ isAvailable: false });
+		expect(response.statusCode).toBe(200);
+		expect(response.body).toHaveProperty('message', 'Product availability changed successfully');
+	});
 
-  }); 
-  it('should return 500', async () => {
-    const requestSpy = jest.spyOn(ProductService, 'updateProduct');
-    requestSpy.mockRejectedValue(new Error('Error occured while marking product'));
+	it('should return 500', async () => {
+		const requestSpy = jest.spyOn(ProductService, 'updateProduct');
+		requestSpy.mockRejectedValue(
+			new Error('Error occured while updating for a product')
+		);
 
-    const res = await request(app)
-      .put(`/api/v1/products/${id}`)
-      .set('Authorization', `Bearer ${validToken}`)
-      .send({isAvailable: true});
-    expect(res.statusCode).toBe(500);
-    requestSpy.mockRestore();
-
+		const res = await request(app)
+			.patch(`/api/v1/products/${id}`)
+			.set('Authorization', `Bearer ${validToken}`)
+			.send(validProduct);
+		expect(res.statusCode).toBe(500);
+		requestSpy.mockRestore();
+	});
+	it('should return 500', async () => {
+		const requestSpy = jest.spyOn(ProductService, 'updateProduct');
+		requestSpy.mockRejectedValue(
+			new Error('Error occured while marking product')
+		);
   });
   test('should  validate uuid', async () => {
     const invalidId = '234565434543456';
     const response = await request(app)
-    
+
       .patch(`/api/v1/products/${invalidId}`)
       .set('Authorization', `Bearer ${validToken}`)
       .send(validProduct);
-      
+
       expect(response.statusCode).toBe(400);
   });
   it('should return 500', async () => {
@@ -455,7 +457,7 @@ describe('UPDATE/product',() => {
 
     const res = await request(app)
       .delete(`/api/v1/products/${id}`)
-      .set('Authorization', `Bearer ${validToken}`)
+      .set('Authorization', `Bearer ${validToken}`);
     expect(res.statusCode).toBe(500);
     requestSpy.mockRestore();
 
@@ -472,6 +474,5 @@ describe('UPDATE/product',() => {
   
   
 });
-
 
 

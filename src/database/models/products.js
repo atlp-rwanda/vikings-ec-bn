@@ -17,17 +17,17 @@ module.exports = (sequelize, DataTypes) => {
       },
       name: DataTypes.STRING,
       price: DataTypes.INTEGER,
-      expiryDate: DataTypes.DATE, 
-         
+      expiryDate: DataTypes.DATE,
+      quantity: DataTypes.INTEGER,
       images: DataTypes.ARRAY(DataTypes.STRING),
       bonus: DataTypes.INTEGER,
       isExpired: {
-        type:DataTypes.BOOLEAN,
-        defaultValue:false
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
       isAvailable: {
-        type:DataTypes.BOOLEAN,
-        defaultValue:true,
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
       },
       categoryId: {

@@ -12,6 +12,7 @@ module.exports = {
           price: 1500,
           categoryId: '1a2ef741-1488-4435-b2e2-4075a6a169eb',
           bonus: 200,
+          quantity:3,
           expiryDate:'2023-04-29T00:00:00.000Z',
           images: [
             'http://res.cloudinary.com/djg7yg23y/image/upload/v1676800915/projects/ecommerce/f258e7aa-b540-469d-b866-fd13747c81ce_1676800912.287.webp',
@@ -32,6 +33,7 @@ module.exports = {
             categoryId: '1a2ef741-1488-4435-b2e2-4075a6a169eb',
             expiryDate:'2023-04-29T00:00:00.000Z',
             bonus: 2000,
+            quantity:3,
             images: [
               'http://res.cloudinary.com/djg7yg23y/image/upload/v1676800915/projects/ecommerce/f258e7aa-b540-469d-b866-fd13747c81ce_1676800912.287.webp',
               'http://res.cloudinary.com/djg7yg23y/image/upload/v1676800917/projects/ecommerce/e2f9d092-324d-42e1-9afe-97eda06c62c6_1676800915.589.jpg',
@@ -51,6 +53,7 @@ module.exports = {
             categoryId: '1a2ef741-1488-4435-b2e2-4075a6a169eb',
             expiryDate:'2023-04-29T00:00:00.000Z',
             bonus: 2000,
+            quantity:3,
             images: [
               'http://res.cloudinary.com/djg7yg23y/image/upload/v1676800915/projects/ecommerce/f258e7aa-b540-469d-b866-fd13747c81ce_1676800912.287.webp',
               'http://res.cloudinary.com/djg7yg23y/image/upload/v1676800917/projects/ecommerce/e2f9d092-324d-42e1-9afe-97eda06c62c6_1676800915.589.jpg',
@@ -68,6 +71,7 @@ module.exports = {
             categoryId: '1a2ef741-1488-4435-b2e2-4075a6a169eb',
             expiryDate:'2023-04-29T00:00:00.000Z',
             bonus: 2000,
+            quantity:3,
             images: [
               'http://res.cloudinary.com/djg7yg23y/image/upload/v1676800915/projects/ecommerce/f258e7aa-b540-469d-b866-fd13747c81ce_1676800912.287.webp',
               'http://res.cloudinary.com/djg7yg23y/image/upload/v1676800917/projects/ecommerce/e2f9d092-324d-42e1-9afe-97eda06c62c6_1676800915.589.jpg',

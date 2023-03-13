@@ -93,5 +93,4 @@ productRoutes.delete(
   checkIfSellerOwnsProduct,
   deleteProduct
 );
-
 export default productRoutes;

@@ -1,5 +1,7 @@
 import { SalesService } from '../services/sales.service';
 import { ProductService } from '../services/product.service';
+import { OrderService } from '../services/order.service';
+import {NotificationController as notify} from './notification.controller';
 export class SalesController {
     static async getOrderSales(req, res) {
         try {
@@ -26,7 +28,7 @@ export class SalesController {
             for (const sale of sales) {
                 const productId = sale.productId;
                 const product = await ProductService.getProductById(productId);
-                if (sellerId === product.userId) {
+                if (sellerId === product.userId && sale.status === 'pending') {
                     sellerSales.push(sale);
                 }
             }
@@ -50,4 +52,38 @@ export class SalesController {
             });
         }
     }
+  static async updateSaleStatus(req, res) {
+    try {
+      const { status } = req.body;
+      const { saleId } = req.params;
+      const updateOrderStatus = await SalesService.updateSaleStatusById(
+        status,
+        saleId
+      );
+
+      const { orderId } = req.sale;
+      const sales = await SalesService.getOrderSales(orderId);
+      const checkSameStatus = sales.every((sale) => sale.status === status);
+      if (checkSameStatus) {
+          {
+              await OrderService.updateOrderStatusById(status, orderId);
+              await notify.notifySellersAboutOrder(sales, status);
+              await notify.notifyBuyerAboutOrder(orderId,status);
+          }
+      }
+      sales.map((sale) => {
+        if (sale.status === 'declined')
+          OrderService.updateOrderStatusById('declined', orderId);
+      });
+      if (updateOrderStatus)
+        return res.status(200).json({
+          message: 'Product order status has been changed successfully',
+        });
+    } catch (err) {
+      return res.status(500).json({
+        error: err.message,
+        message: 'Failed to update product order status, try again',
+      });
+    }
+  }
 }

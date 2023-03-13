@@ -30,7 +30,6 @@ describe('/cart', () => {
     const response = await request(app)
       .get('/api/v1/carts/')
       .set('Authorization', `Bearer ${buyerToken}`);
-
     expect(response.statusCode).toBe(500);
   });
   test('No product: 400 and required message', async () => {
@@ -43,12 +42,10 @@ describe('/cart', () => {
   });
   test('Clear non existent cart: 500', async () =>{
     const response = await request(app).put('/api/v1/carts').set('Authorization', `Bearer ${buyerToken}`);
-
     expect(response.statusCode).toBe(500);
   });
   test('Remove product when there is no cart: 500', async() =>{
     const response = await request(app).patch(`/api/v1/carts/${jordanId}`).set('Authorization', `Bearer ${buyerToken}`);
-
     expect(response.statusCode).toBe(500);
   });
   test('Product: 200', async () => {

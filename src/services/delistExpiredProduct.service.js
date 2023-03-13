@@ -5,6 +5,7 @@ import { expiredProductMessage } from '../utils/mailTemplates.util';
 import { sendEmail } from '../utils/sendEmail.util';
 import { ProductService } from './product.service';
 import { UserService } from './user.service';
+import {knownNotificationType} from './notification.service';
 
 
 export const delistExpiredProducts = async () => {
@@ -25,8 +26,14 @@ export const delistExpiredProducts = async () => {
         }
     }
 
-    subscribe(knownEvents.productExpired,({product, isExpired}) =>{
-        const isAvailable=false;
-        ProductService.updateProduct({isAvailable, isExpired}, product.id);
-    });
+
 };
+subscribe(knownEvents.productExpired,async ({product, isExpired}) =>{
+    const isAvailable=false;
+    await ProductService.updateProduct({isAvailable, isExpired}, product.id);
+    eventEmit(knownEvents.onNotification, {
+        receiverId:product.userId,
+        type:knownNotificationType.productExpired,
+        message: `${product.name} has been expired`,
+    });
+});
