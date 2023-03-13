@@ -6,7 +6,9 @@ import { delistExpiredProducts } from '../services/delistExpiredProduct.service'
 import { sendEmail } from '../utils/sendEmail.util';
 import { emailConfig } from '../utils/mail.util';
 import { expiredProductMessage } from '../utils/mailTemplates.util';
-
+import {eventEmit, knownEvents} from '../utils/events.util';
+import {knownNotificationType} from '../services/notification.service';
+import {notifyProductLovers} from './notification.controller';
 
 export const createProduct = async (req, res) => {
   try {
@@ -66,6 +68,11 @@ export const removeExpiredProducts = async (req, res) => {
         content: expiredProductMessage(req.product),
       })
     );
+    eventEmit(knownEvents.onNotification, {
+      receiverId:req.user.id,
+      type:knownNotificationType.productExpired,
+      message: `${req.product.name} has been expired`,
+    });
 
     return res
       .status(200)
@@ -119,6 +126,13 @@ export const markAvailableProduct = async (req, res) => {
     const {isAvailable} = req.body;
     const productId = req.product.id;
     await ProductService.updateProduct( {isAvailable}, productId);
+    if(isAvailable){
+      await notifyProductLovers(
+          productId,
+          knownNotificationType.productAvailable,
+          `Product ${req.product.name} is available know `,
+      );
+    }
    return res.status(200).json({ message: 'Product availability changed successfully' });
    
   } catch (error) {
@@ -144,6 +158,16 @@ export const deleteProduct = async (req, res) => {
   try {
     const productId = req.product.id;
      await ProductService.deleteProduct(productId);
+     eventEmit(knownEvents.onNotification, {
+      receiverId:req.product.userId,
+      type:knownNotificationType.productDeleted,
+      message: `${req.product.name} has been Delete by ${req.user.email}`,
+    });
+    await notifyProductLovers(
+         productId,
+         knownNotificationType.productDeleted,
+         `Product ${req.product.name} has been delete `,
+         );
    return res.status(200)
     .json({message:'Product deleted successfully' });
   } catch (err) {

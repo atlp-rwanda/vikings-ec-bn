@@ -1,6 +1,7 @@
 import { SalesService } from '../services/sales.service';
 import { ProductService } from '../services/product.service';
 import { OrderService } from '../services/order.service';
+import {notifyBuyerAboutOrder, notifySellersAboutOrder} from './notification.controller';
 export class SalesController {
     static async getOrderSales(req, res) {
         try {
@@ -64,7 +65,11 @@ export class SalesController {
       const sales = await SalesService.getOrderSales(orderId);
       const checkSameStatus = sales.every((sale) => sale.status === status);
       if (checkSameStatus) {
-        OrderService.updateOrderStatusById(status, orderId); 
+          {
+              OrderService.updateOrderStatusById(status, orderId);
+              notifySellersAboutOrder(sales, status);
+              notifyBuyerAboutOrder(orderId,status);
+          }
       }
       sales.map((sale) => {
         if (sale.status === 'declined')
