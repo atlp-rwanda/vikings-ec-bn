@@ -1,14 +1,27 @@
-import { Orders } from '../database/models/index';
+import { Order } from '../database/models/index';
 export class OrderService {
+	static async createNewOrder(customer, data) {
+		const cart = JSON.parse(customer.metadata.cart);
+		const { userId: buyerId, paymentId } = customer.metadata;
+		const { products } = cart;
+		const { amount_total: fullPrice } = data;
+    const newOrder = {
+      buyerId,
+      products,
+      fullPrice,
+      paymentId
+    };
+    return await Order.create(newOrder);
+	}
 	static async getSingleOrder(orderId) {
-		return Orders.findByPk(orderId);
+		return Order.findByPk(orderId);
 	}
 
 	static async getAllOrders(limit, page, user) {
 		const { role, id } = user;
 		const where = role === 'buyer' ? { buyerId: id } : undefined;
 		const offset = (page - 1) * limit;
-		const { count, rows } = await Orders.findAndCountAll({
+		const { count, rows } = await Order.findAndCountAll({
 			where,
 			limit: limit,
 			offset: offset,

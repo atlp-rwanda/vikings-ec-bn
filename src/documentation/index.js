@@ -10,6 +10,7 @@ import chat from './chat.docs';
 import sales from './sales.docs';
 import orders from './order.docs';
 import wishlist from '../documentation/wishlist.docs';
+import payments from './payment.docs';
 
 export default {
   ...basicInfo,
@@ -24,6 +25,7 @@ export default {
     ...chat,
     ...wishlist,
     ...sales,
-    ...orders
+    ...orders,
+    ...payments
   },
 };
