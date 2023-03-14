@@ -1,25 +1,25 @@
-import { WishlistController } from "../../controllers/wishlist.controller";
-import express from "express";
+import { WishlistController } from '../../controllers/wishlist.controller';
+import express from 'express';
 import {
   checkIfProductIsInWishlist,
   addProductToWishlist,
   getUserWishes,
   checkProductNotInWishlist,
-} from "../../middlewares/wishlist.middleware";
-import { protectRoute, restrictTo } from "../../middlewares/auth.middleware";
+} from '../../middlewares/wishlist.middleware';
+import { protectRoute, restrictTo } from '../../middlewares/auth.middleware';
 import {
   checkIfProductExistsById,
   checkProductAvailable,
-} from "../../middlewares/product.middleware";
-import wishlistValidation from "../../validations/wishlist/wishlist.validation";
-import { uuidValidation } from "../../validations/user/userId.validation";
+} from '../../middlewares/product.middleware';
+import wishlistValidation from '../../validations/wishlist/wishlist.validation';
+import { uuidValidation } from '../../validations/user/userId.validation';
 
 const wishlistrouter = express.Router();
 
 wishlistrouter.post(
-  "/product-wishes",
+  '/product-wishes',
   protectRoute,
-  restrictTo("admin", "buyer"),
+  restrictTo('admin', 'buyer'),
   wishlistValidation,
   checkProductAvailable,
   getUserWishes,
@@ -29,18 +29,18 @@ wishlistrouter.post(
 );
 
 wishlistrouter.get(
-  "/:productId/product-wishes",
+  '/:productId/product-wishes',
   protectRoute,
-  restrictTo("seller", "admin"),
+  restrictTo('seller', 'admin'),
   uuidValidation('productId'),
   checkIfProductExistsById,
   WishlistController.getProductWishes
 );
 
 wishlistrouter.delete(
-  "/:productId/product-wishes",
+  '/:productId/product-wishes',
   protectRoute,
-  restrictTo("admin", "buyer"),
+  restrictTo('admin', 'buyer'),
   uuidValidation('productId'),
   getUserWishes,
   checkIfProductExistsById,

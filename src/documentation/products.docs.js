@@ -1,61 +1,76 @@
 import responses from './responses.js';
 
 const getSingleProduct = {
-  tags: ['Products'],
-  summary: 'Get specific product',
-  description: 'List a specific product',
-  parameters: [
-    {
-      name: 'productId',
-      in: 'path',
-      description: 'Id of product specified',
-      required: true,
-      schema: {
-        type: 'string',
-        minimum: 1,
-        format:'uuid',
-      },
-    },
-  ],
-  consumes: ['application/json'],
-  responses,
-  security: [
-    {
-      bearerAuth: [],
-    },
-  ],
+	tags: ['Products'],
+	summary: 'Get specific product',
+	description: 'List a specific product',
+	parameters: [
+		{
+			name: 'productId',
+			in: 'path',
+			description: 'Id of product specified',
+			required: true,
+			schema: {
+				type: 'string',
+				minimum: 1,
+				format: 'uuid',
+			},
+		},
+	],
+	consumes: ['application/json'],
+	responses,
+	security: [
+		{
+			bearerAuth: [],
+		},
+	],
 };
 
-const category = {
-  tags: ['Categories'],
-  summary: 'Create category',
-  description: 'Creating a product category',
-  requestBody: {
-    required: true,
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            name: {
-              type: 'string',
-              required: true,
-            },
-          },
-          example: {
-            name: 'clothing',
-          },
-        },
-      },
-    },
-  },
-  consumes: ['application/json'],
-  responses,
-  security: [
-    {
-      bearerAuth: [],
-    },
-  ],
+export const category = {
+	'/api/v1/categories': {
+		post: {
+			tags: ['Categories'],
+			summary: 'Create category',
+			description: 'Creating a product category',
+			requestBody: {
+				required: true,
+				content: {
+					'application/json': {
+						schema: {
+							type: 'object',
+							properties: {
+								name: {
+									type: 'string',
+									required: true,
+								},
+							},
+							example: {
+								name: 'clothing',
+							},
+						},
+					},
+				},
+			},
+			consumes: ['application/json'],
+			responses,
+			security: [
+				{
+					bearerAuth: [],
+				},
+			],
+		},
+    get: {
+			tags: ['Categories'],
+			summary: 'Get categories',
+			description: 'Listing categories',
+			responses,
+			security: [
+				{
+					bearerAuth: [],
+				},
+			],
+		},
+	},
 };
 
 const getAllProducts = {
@@ -79,7 +94,7 @@ const getAllProducts = {
       description: 'The page number to retrieve',
       required: false,
       schema: {
-        type: 'string',
+        type: 'integer',
         minimum: 1
       }
     },
@@ -95,6 +110,7 @@ const getAllProducts = {
       in: 'query',
       schema: {
         type: 'string',
+        format:'uuid',
       },
     },
     {
@@ -108,14 +124,16 @@ const getAllProducts = {
       name: 'minPrice',
       in: 'query',
       schema: {
-        type: 'string',
+        type: 'number',
+        minimum:1
       },
     },
     {
       name: 'maxPrice',
       in: 'query',
       schema: {
-        type: 'string',
+        type: 'number',
+        minimum:1
       },
     }
   ],
@@ -151,14 +169,20 @@ const createProduct = {
             price: {
               type: 'number',
               description: 'Price of product',
+              required: true,
+                minimum: 1
             },
             quantity: {
               type: 'number',
               description: 'quantity of product',
+              required: true,
+              minimum: 1
             },
             categoryId: {
               type: 'string',
               description: 'Product category',
+              required: true,
+              format:'uuid'
             },
             expiryDate: {
               type: 'string',
@@ -205,224 +229,214 @@ const createProduct = {
 };
 
 const removeExpiredProducts = {
-  tags: ['Products'],
-  summary: 'Removing expired product',
-  description: 'Mark Product as expired and unavailable',
-  parameters: [
-    {
-      name: 'productId',
-      in: 'path',
-      description: 'Product Id',
-      required: true,
-      schema: {
-        type: 'string',
-        format:'uuid',
-      },
-    },
-  ],
-  requestBody: {
-    required: true,
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            isExpired: {
-              type: 'Boolean',
-              required: true,
-            },
-            isAvailable: {
-              type: 'Boolean',
-              required: true,
-            },
-          },
-          example: {
-            isExpired: 'true',
-            isAvailable: 'False',
-          },
-        },
-      },
-    },
-  },
+	tags: ['Products'],
+	summary: 'Removing expired product',
+	description: 'Mark Product as expired and unavailable',
+	parameters: [
+		{
+			name: 'productId',
+			in: 'path',
+			description: 'Product Id',
+			required: true,
+			schema: {
+				type: 'string',
+				format: 'uuid',
+			},
+		},
+	],
+	requestBody: {
+		required: true,
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						isExpired: {
+							type: 'Boolean',
+							required: true,
+						},
+						isAvailable: {
+							type: 'Boolean',
+							required: true,
+						},
+					},
+					example: {
+						isExpired: 'true',
+						isAvailable: 'False',
+					},
+				},
+			},
+		},
+	},
 
-  consumes: ['application/json'],
-  responses,
-  security: [
-    {
-      bearerAuth: [],
-    },
-  ],
+	consumes: ['application/json'],
+	responses,
+	security: [
+		{
+			bearerAuth: [],
+		},
+	],
 };
 
-const markProduct ={
-tags: ['Products'],
-      security: [
-        {
-          bearerAuth: [],
-        },
-      ],
-      summary: 'Mark product',
-      description: 'Mark available endpoint',
-      parameters: [
-        {
-          name: 'productId',
-          in: 'path',
-          description: 'productId',
-          schema: {
-            type: 'string',
-            format:'uuid',
-
-          }
-        },
-      ],
-      requestBody: {
-        required: true,
-        content: {
-          'application/json': {
-            schema: {
-              type: 'object',
-              properties: {
-                role: {
-                  type: 'string',
-                  required: true,
-                },
-              },
-              example: {
-                isAvailable: 'true'
-              },
-            },
-          },
-        },
-      },
-      responses: {
-        200: {
-          description: 'OK',
-        },
-        500: {
-          description: 'Internal Server Error',
-        },
-      },
+const markProduct = {
+	tags: ['Products'],
+	security: [
+		{
+			bearerAuth: [],
+		},
+	],
+	summary: 'Mark product',
+	description: 'Mark available endpoint',
+	parameters: [
+		{
+			name: 'productId',
+			in: 'path',
+			description: 'productId',
+			schema: {
+				type: 'string',
+				format: 'uuid',
+			},
+		},
+	],
+	requestBody: {
+		required: true,
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						role: {
+							type: 'string',
+							required: true,
+						},
+					},
+					example: {
+						isAvailable: 'true',
+					},
+				},
+			},
+		},
+	},
+	responses: {
+		200: {
+			description: 'OK',
+		},
+		500: {
+			description: 'Internal Server Error',
+		},
+	},
 };
 const updateProduct = {
- tags: ['Products'],
-      security: [
-        {
-          bearerAuth: [],
-        },
-      ],
-      summary: 'Update Product',
-      description: 'Update Product',
-      produces: ['application/json'],
-      parameters: [
-        {
-          name: 'productId',
-          in: 'path',
-          description: 'productId',
-          schema: {
-            type: 'string',
-            format:'uuid',
-          },
+	tags: ['Products'],
+	security: [
+		{
+			bearerAuth: [],
+		},
+	],
+	summary: 'Update Product',
+	description: 'Update Product',
+	produces: ['application/json'],
+	parameters: [
+		{
+			name: 'productId',
+			in: 'path',
+			description: 'productId',
+			schema: {
+				type: 'string',
+				format: 'uuid',
+			},
+		},
+	],
 
-        },
-      ],
-
-      requestBody: {
-        required: true,
-        content: {
-          'multipart/form-data': {
-            schema: {
-              type: 'object',
-              properties: {
-                name: {
-                  type: 'string',
-                  description: 'Product name',
-                  required: true,
-                },
-                price: {
-                  type: 'number',
-                  description: 'Price of product',
-                },
-                quantity: {
-                  type: 'number',
-                  description: 'quantity of product',
-                },
-                categoryId: {
-                  type: 'string',
-                  description: 'Product category',
-                },
-                expiryDate: {
-                  type: 'string',
-                  format: 'date',
-                  description: 'Expired date of product',
-                  default: '2023-04-29',
-                },
-                bonus: {
-                  type: 'number',
-                  description: 'Bonus for a product',
-                },
-                images: {
-                  type: 'array',
-                  items: {
-                    minItems: 4,
-                    type: 'file',
-                  },
-                },
-              },
-            },
-          },
-         }
-       },
-       consumes: ['application/json'],
-            responses,
-    };
-    const deleteProduct = {
-      tags: ['Products'],
-      security: [
-        {
-          bearerAuth: [],
-        },
-      ],
-      summary: 'Delete Product',
-      description: 'Delete Product',
-      produces: ['application/json'],
-      parameters: [
-        {
-          name: 'productId',
-          in: 'path',
-          description: 'productId',
-          schema: {
-            type: 'string',
-            format:'uuid',
-          },
-
-        },
-      ],
-
-      responses: {
-        200: {
-
-          description: 'Ok',
-        },
-
-      },
-    };
-const productDocs = {
-  '/api/v1/categories': {
-    post: category,
-  },
-  '/api/v1/products': {
-    post: createProduct,
-    get: getAllProducts,
-  },
-  '/api/v1/products/{productId}/expired': {
-    patch: removeExpiredProducts,
-  },
-    '/api/v1/products/{productId}': {
-      get: getSingleProduct,
-      put: markProduct,
-      patch: updateProduct,
-      delete: deleteProduct 
-    },
+	requestBody: {
+		required: true,
+		content: {
+			'multipart/form-data': {
+				schema: {
+					type: 'object',
+					properties: {
+						name: {
+							type: 'string',
+							description: 'Product name',
+							required: true,
+						},
+						price: {
+							type: 'number',
+							description: 'Price of product',
+						},
+						quantity: {
+							type: 'number',
+							description: 'quantity of product',
+						},
+						categoryId: {
+							type: 'string',
+							description: 'Product category',
+						},
+						expiryDate: {
+							type: 'string',
+							format: 'date',
+							description: 'Expired date of product',
+							default: '2023-04-29',
+						},
+						bonus: {
+							type: 'number',
+							description: 'Bonus for a product',
+						},
+						images: {
+							type: 'array',
+							items: {
+								minItems: 4,
+								type: 'file',
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+	consumes: ['application/json'],
+	responses,
 };
+const deleteProduct = {
+	tags: ['Products'],
+	security: [
+		{
+			bearerAuth: [],
+		},
+	],
+	summary: 'Delete Product',
+	description: 'Delete Product',
+	produces: ['application/json'],
+	parameters: [
+		{
+			name: 'productId',
+			in: 'path',
+			description: 'productId',
+			schema: {
+				type: 'string',
+				format: 'uuid',
+			},
+		},
+	],
 
-  export default productDocs;
+	responses: {
+		200: {
+			description: 'Ok',
+		},
+	},
+};
+export const productDocs = {
+	'/api/v1/products': {
+		post: createProduct,
+		get: getAllProducts,
+	},
+	'/api/v1/products/{productId}/expired': {
+		patch: removeExpiredProducts,
+	},
+	'/api/v1/products/{productId}': {
+		get: getSingleProduct,
+		put: markProduct,
+		patch: updateProduct,
+		delete: deleteProduct,
+	},
+};

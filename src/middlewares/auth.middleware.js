@@ -14,16 +14,16 @@ export const protectRoute = async (req, res, next) => {
           .status(400)
           .json({ message: 'Unauthorized request, try again' });
       }
-      if (await isAuthRevoked(token)) {
+      const revokedToken = await isAuthRevoked(token);
+      if (!revokedToken || revokedToken.revoked) {
         return res
           .status(401)
           .json({ message: 'You are not authorized to access' });
       } else {
-        if(user.mustUpdatePassword && !req.path.includes('update-password')){
+        if (user.mustUpdatePassword && !req.path.includes('update-password')) {
           return res
-              .status(401)
-              .json({ message: 'You have to update the password first' });
-
+            .status(401)
+            .json({ message: 'You have to update the password first' });
         }
         req.user = user;
         req.token = token;

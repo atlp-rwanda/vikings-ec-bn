@@ -17,7 +17,6 @@ import {
   jordanId,
   userId,
   randomId,
-  wishlistId,
   jordan,
 } from '../mocks/wishlist.mock';
 import { closeAll } from '../../src/utils/scheduling.util';

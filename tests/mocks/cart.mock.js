@@ -1,7 +1,11 @@
 export const randomProductId = {productId: 'c93357b7-cfff-44a1-bcc5-835d4ae72f23', productQuantity: 1};
 export const buyerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3MjUyNmFkLTc2YmUtNGY0NC1iNWQ5LTgwMzJmMDkyNWMyZCIsImVtYWlsIjoidmVyaWZpZWRAZ21haWwuY29tIiwicm9sZSI6ImJ1eWVyIiwibXVzdFVwZGF0ZVBhc3N3b3JkIjpudWxsLCJpYXQiOjE2NzcxNDQxNzIsImV4cCI6MTcwODY4MDE3Mn0.tgs7nBut8C2QmtgRTxD1s4I3FFQaq_4NRMED0L7Nfjc';
-export const beans = {productId: '6717e8c7-c058-4670-90c3-5c8953cc844a', productQuantity: 1};
+export const beans = {productId: 'bc645027-5544-4f6a-af8c-c6aa2b1a02b5', productQuantity: 1};
+export const invalidQuantity = {productId: 'bc645027-5544-4f6a-af8c-c6aa2b1a02b5', productQuantity: 5};
+export const expiredProduct = {productId: 'c80086e9-e9d6-425d-9192-08e9b1d923d6', productQuantity: 2};
 export const jordan = {productId: 'b5e75a01-5e67-44ad-91bd-f36ab3564a48'};
 export const jordanId = 'b5e75a01-5e67-44ad-91bd-f36ab3564a48';
-export const beansId = '6717e8c7-c058-4670-90c3-5c8953cc844a';
-export const randomId = 'c93357b7-cfff-44a1-bcc5-835d4ae72f23'; 
+export const beansId = 'bc645027-5544-4f6a-af8c-c6aa2b1a02b5';
+export const randomId = 'c93357b7-cfff-44a1-bcc5-835d4ae72f23';
+export const updateBeans = {productId: 'bc645027-5544-4f6a-af8c-c6aa2b1a02b5', productQuantity: 5};
+export const airMax = {productId: 'ff8a355f-1bee-4ac0-beae-f80c80f228a4', productQuantity: 1};

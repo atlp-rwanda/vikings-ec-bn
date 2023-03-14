@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 const validateChatMessage = async (req, res, next) => {
   const messageSchema = Joi.object().keys({
-    message: Joi.string().required(),
+    message: Joi.string().min(3).required(),
   });
 
   const { error } = messageSchema.validate(req.body);

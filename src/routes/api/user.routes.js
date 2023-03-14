@@ -21,7 +21,9 @@ import {
   VerifyResetPasswordToken,
   checkImageExtensions,
   checkBirthDate,
-  checkPhone
+  checkPhone,
+  checkUserByEmail,
+  checkIfUsesPassword,
 } from '../../middlewares/user.middleware';
 import {
   getUserWishes,
@@ -49,7 +51,7 @@ router.get('/redirect', (req, res) => {
     const user = JwtUtility.verifyToken(req.query.key);
     return res
       .status(200)
-      .json({ message: 'Thanks for logging in', user: user });
+      .json({ message: 'Thanks for logging in', user: user,token:req.query.key });
   } else {
     return res.status(401).json({ error: 'Unauthorized' });
   }
@@ -107,6 +109,7 @@ router.get(
     session: false,
     failureRedirect: '/',
   }),
+  checkUserByEmail,
   UserController.googleAuthHandler
 );
 router.get('/profile', protectRoute, UserController.getProfile);
@@ -122,6 +125,7 @@ router.patch(
   '/update-password',
   validatePassword,
   protectRoute,
+  checkIfUsesPassword,
   checkValidOldPassword,
   UserController.updatePassword
 );
@@ -157,6 +161,7 @@ router.put(
 router.post(
   '/forgot-password',
   validateEmail,
+  checkIfUsesPassword,
   checkEmailExists,
   UserController.forgotPassword
 );

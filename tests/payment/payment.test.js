@@ -8,7 +8,7 @@ import {
 	beforeAll,
 	afterEach,
 } from '@jest/globals';
-import { buyerToken, beans } from '../mocks/cart.mock';
+import { buyerToken, airMax } from '../mocks/cart.mock';
 import { closeAll } from '../../src/utils/scheduling.util';
 
 beforeAll(async () => {
@@ -20,7 +20,7 @@ describe('/payments', () => {
 		const response = await request(app)
 			.post('/api/v1/carts')
 			.set('Authorization', `Bearer ${buyerToken}`)
-			.send(beans);
+			.send(airMax);
 
 		expect(response.statusCode).toBe(201);
 	});
@@ -37,6 +37,7 @@ describe('/payments', () => {
 		expect(session.statusCode).toBe(200);
 
 		const response = await request(app).get(`/api/v1/payments/success?paymentId=${session.body.sessionId}`);
+
 		expect(response.statusCode).toBe(200);
 		expect(response.body).toHaveProperty('order');
 	});

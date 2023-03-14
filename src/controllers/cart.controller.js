@@ -1,5 +1,6 @@
 import { CartService } from '../services/cart.service';
 import { calculateCartTotal } from '../utils/cart.util';
+import { ProductService } from '../services/product.service';
 
 export class CartController {
 	static async addToCart(req, res) {
@@ -8,6 +9,12 @@ export class CartController {
 			let cart = req.cart;
 			let { productId } = req.body;
 			let productQuantity = req.body.productQuantity || 1;
+			const product = await ProductService.getProductById(productId);
+			if (product.quantity < productQuantity) {
+				return res.status(400).json({
+					message: 'Not enough products in stock',
+				});
+			}
 			if (!cart) {
 				const products = [{ quantity: productQuantity, productId: productId }];
 				const newCart = {

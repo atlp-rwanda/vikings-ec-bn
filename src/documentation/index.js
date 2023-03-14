@@ -4,7 +4,7 @@ import userRouteDocs from './user.docs';
 import welcomeRouteDocs from './welcome.docs';
 import profileDocs from './profile.docs.js';
 import confirmEmailRoute from './emailVerification.js';
-import productDocs from './products.docs';
+import { productDocs, category } from './products.docs';
 import cartRouteDocs from './cart.docs';
 import chat from './chat.docs';
 import sales from './sales.docs';
@@ -33,5 +33,6 @@ export default {
     ...ratings,
     ...notifications,
     ...stats,
+    ...category
   },
 };

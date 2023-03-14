@@ -7,7 +7,8 @@ import {
   beforeAll,
   afterEach,
   it,
-  jest
+  jest,
+  test
 } from '@jest/globals';
 import { closeAll } from '../../src/utils/scheduling.util';
 import { buyerToken } from '../mocks/cart.mock';
@@ -58,14 +59,14 @@ describe('PATCH /sales', () => {
     );
     expect(response.statusCode).toEqual(403);
   });
-  test("Check seller doesn't own the product", async () => {
+  test('Check seller doesn\'t own the product', async () => {
     const response = await request(app)
       .patch(`/api/v1/sales/${validSalesId}/status`)
       .set('Authorization', `Bearer ${validToken}`)
       .send(acceptedStatus);
 
     expect(response.body.message).toEqual(
-      "Product doesn't exists in your collection"
+      'Product doesn\'t exists in your collection'
     );
     expect(response.statusCode).toEqual(400);
   });
@@ -174,13 +175,13 @@ describe('PATCH /sales', () => {
     expect(response.statusCode).toEqual(400);
   });
 
-  test("Check  product order doesn't exist", async () => {
+  test('Check  product order doesn\'t exist', async () => {
     const response = await request(app)
       .patch(`/api/v1/sales/${invalidSalesId1}/status`)
       .set('Authorization', `Bearer ${sellerToken}`)
       .send(declinedStatus);
 
-    expect(response.body.message).toEqual("Sale is not found");
+    expect(response.body.message).toEqual('Sale is not found');
     expect(response.statusCode).toEqual(404);
   });
   test('Check product order status updated', async () => {
