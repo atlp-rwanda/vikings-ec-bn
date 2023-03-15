@@ -73,8 +73,9 @@ export const checkIfProductExistsById = async (req, res, next) => {
 };
 
 export const checkIfSellerOwnsProduct = async (req, res, next) => {
+  const productId =req.sale?.productId || req.params.productId;
   const product =
-    req.product || (await ProductService.getProductById(req.sale.productId));
+    req.product || (await ProductService.getProductById(productId));
   const sellerId = product.userId;
   const { id, role } = req.user;
   if (role === 'seller' && id !== sellerId) {
@@ -114,3 +115,5 @@ export const receivedQueryFormat = async (req, res, next) => {
     next();
   }
 };
+
+
