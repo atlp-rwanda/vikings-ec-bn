@@ -27,4 +27,5 @@ routes.use('/sales', salesRoutes);
 routes.use('/payments', paymentRoutes);
 routes.use('/ratings', ratingRoutes);
 routes.use('/products', ratingRoutes);
+routes.use('/payments', paymentRoutes);
 export default routes;
