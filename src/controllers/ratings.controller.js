@@ -1,6 +1,6 @@
 
 import { RatingService } from '../services/rating.service';
-
+import {NotificationController as notify} from './notification.controller';
 
 
 export const productRating = async (req, res) => {
@@ -22,6 +22,7 @@ export const productRating = async (req, res) => {
     else {
       rate = await RatingService.createRatings(ratings);
     }
+    await notify.notifySellerAboutProductRating(rate);
     return res
       .status(200)
       .json({ message: 'Product rated successfully', rate: rate });

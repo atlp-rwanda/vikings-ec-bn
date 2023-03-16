@@ -16,14 +16,6 @@ export class OrderController {
     }
 
     static async getOrder(req, res) {
-        try {
-            const order = req.order;
-            return res.status(200).json({ message: 'Order status retrieved successfully', order: order });
-        } catch (error) {
-            return res.status(500).json({
-                error: error.message,
-                message: 'Could not retrieve order status, try again',
-            });
-        }
+        return res.status(200).json({ message: 'Order status retrieved successfully', order: req.order });
     }
 }
