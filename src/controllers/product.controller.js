@@ -6,9 +6,9 @@ import { delistExpiredProducts } from '../services/delistExpiredProduct.service'
 import { sendEmail } from '../utils/sendEmail.util';
 import { emailConfig } from '../utils/mail.util';
 import { expiredProductMessage } from '../utils/mailTemplates.util';
-import {eventEmit, knownEvents} from '../utils/events.util';
-import {knownNotificationType} from '../services/notification.service';
-import {NotificationController as notify} from './notification.controller';
+import { eventEmit, knownEvents } from '../utils/events.util';
+import { knownNotificationType } from '../services/notification.service';
+import { NotificationController as notify } from './notification.controller';
 
 export const createProduct = async (req, res) => {
   try {
@@ -69,8 +69,8 @@ export const removeExpiredProducts = async (req, res) => {
       })
     );
     eventEmit(knownEvents.onNotification, {
-      receiverId:req.user.id,
-      type:knownNotificationType.productExpired,
+      receiverId: req.user.id,
+      type: knownNotificationType.productExpired,
       message: `${req.product.name} has been expired`,
     });
 
@@ -113,28 +113,28 @@ export const getSpecificProduct = async (req, res) => {
   try {
     let product = req.product;
     return res.status(200).json({ product: product });
-  } catch(err) {
+  } catch (err) {
     return res.status(500).json({
       error: err.message,
       message: 'Error occured while retrieving a product',
-
     });
   }
 };
 export const markAvailableProduct = async (req, res) => {
   try {
-    const {isAvailable} = req.body;
+    const { isAvailable } = req.body;
     const productId = req.product.id;
-    await ProductService.updateProduct( {isAvailable}, productId);
-    if(isAvailable){
+    await ProductService.updateProduct({ isAvailable }, productId);
+    if (isAvailable) {
       await notify.notifyProductLovers(
-          productId,
-          knownNotificationType.productAvailable,
-          `Product ${req.product.name} is available know `,
+        productId,
+        knownNotificationType.productAvailable,
+        `Product ${req.product.name} is available know `
       );
     }
-   return res.status(200).json({ message: 'Product availability changed successfully' });
-
+    return res
+      .status(200)
+      .json({ message: 'Product availability changed successfully' });
   } catch (error) {
     return res.status(500).json({
       error: error.message,
@@ -143,35 +143,41 @@ export const markAvailableProduct = async (req, res) => {
   }
 };
 export const updateProduct = async (req, res) => {
-  try{
+  try {
     const productId = req.product.id;
-     await ProductService.updateProduct(req.body, productId);
-    return res.status(200)
-    .json({ message: 'Product updated successfuly' });
+    await ProductService.updateProduct(req.body, productId);
+    return res.status(200).json({ message: 'Product updated successfuly' });
   } catch (err) {
-    res.status(500).json({ error: err.message,
-       message: 'Error occured while updating for a product'});
+    res
+      .status(500)
+      .json({
+        error: err.message,
+        message: 'Error occured while updating for a product',
+      });
   }
 };
 
 export const deleteProduct = async (req, res) => {
   try {
     const productId = req.product.id;
-     await ProductService.deleteProduct(productId);
-     eventEmit(knownEvents.onNotification, {
-      receiverId:req.product.userId,
-      type:knownNotificationType.productDeleted,
+    await ProductService.deleteProduct(productId);
+    eventEmit(knownEvents.onNotification, {
+      receiverId: req.product.userId,
+      type: knownNotificationType.productDeleted,
       message: `${req.product.name} has been Delete by ${req.user.email}`,
     });
     await notify.notifyProductLovers(
-         productId,
-         knownNotificationType.productDeleted,
-         `Product ${req.product.name} has been delete `,
-         );
-   return res.status(200)
-    .json({message:'Product deleted successfully' });
+      productId,
+      knownNotificationType.productDeleted,
+      `Product ${req.product.name} has been delete `
+    );
+    return res.status(200).json({ message: 'Product deleted successfully' });
   } catch (err) {
-    res.status(500).json({ error: err.message,
-      message: 'Error occured while deleting product' });
+    res
+      .status(500)
+      .json({
+        error: err.message,
+        message: 'Error occured while deleting product',
+      });
   }
 };
