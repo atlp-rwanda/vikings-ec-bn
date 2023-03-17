@@ -14,5 +14,5 @@ export class SalesService {
 	}
 	static async updateSaleStatusById(orderStatus, id) {
 		return await Sales.update({ status: orderStatus }, { where: { id: id } });
-	  }
+	}
 }

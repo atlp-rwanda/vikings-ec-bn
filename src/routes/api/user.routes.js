@@ -19,6 +19,9 @@ import {
   verifyAuthCode,
   removeAuthCode,
   VerifyResetPasswordToken,
+  checkImageExtensions,
+  checkBirthDate,
+  checkPhone
 } from '../../middlewares/user.middleware';
 import {
   getUserWishes,
@@ -34,6 +37,8 @@ import validateAuthCode from '../../validations/user/2facode.validation.js';
 import validateEmail from '../../validations/email.validation.js';
 import { WishlistController } from '../../controllers/wishlist.controller';
 import { uuidValidation } from '../../validations/user/userId.validation.js';
+import validatePagenation from '../../validations/order/order.validation.js';
+import { receivedPaginationFormat } from '../../middlewares/order.middleware.js';
 
 googlePass();
 
@@ -105,7 +110,13 @@ router.get(
   UserController.googleAuthHandler
 );
 router.get('/profile', protectRoute, UserController.getProfile);
-router.put('/profile', protectRoute, UserController.updateProfile);
+router.put(
+  '/profile',
+  protectRoute,
+  checkImageExtensions('avatar', ['.jpg', '.png', '.webp', '.jpeg', '.gif']),
+  checkBirthDate('birthdate'),
+  checkPhone('phone'),
+  UserController.updateProfile);
 
 router.patch(
   '/update-password',
@@ -117,7 +128,12 @@ router.patch(
 
 router.post('/logout', protectRoute, logout);
 
-router.get('/', protectRoute, restrictTo('admin'), UserController.getAllUsers);
+router.get('/',
+  protectRoute,
+  restrictTo('admin'),
+  validatePagenation,
+  receivedPaginationFormat,
+  UserController.getAllUsers);
 
 router.patch(
   '/:userId',

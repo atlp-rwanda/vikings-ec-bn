@@ -200,8 +200,8 @@ export class UserController {
 
   static async getAllUsers(req, res) {
     try {
-      const users = await models.User.findAll();
-      res.status(200).json({
+      const { page, limit } = req.query;
+      const users = await UserService.getAllUsers(page, limit); res.status(200).json({
         status: 200,
         message: 'All Users retrieved successfully',
         data: users,
