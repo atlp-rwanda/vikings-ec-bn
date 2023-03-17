@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import { User } from '../database/models/index';
 import { Products, Categories } from '../database/models/index';
 
@@ -58,4 +59,28 @@ export class ProductService {
 static async deleteProduct(id){
   return await Products.destroy({ where: { id: id }});
 }
+
+static async getProductsStatsbySeller(start, end, sellerId) {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+const products = await Products.findAll({
+  where: {
+    userId: sellerId,
+    createdAt: {
+    [Op.between]: [startDate, endDate]
+    }
+  }
+  });
+  return products;
+}
+
+static async getExpiredProductStats() {
+const expiredProducts = await Products.findAll({
+  where: {
+    isExpired: true,
+  }
+  });
+  return expiredProducts;
+}
+
 }

@@ -10,6 +10,7 @@ import orderRoutes from './api/order.routes.js';
 import salesRoutes from './api/sales.routes.js';
 import notificationRoutes from './api/notification.routes.js';
 import paymentRoutes from './api/payment.routes';
+import statsRouter from './api/stats.routes.js';
 
 import ratingRoutes from './api/rating.route';
 const routes = express.Router();
@@ -27,5 +28,6 @@ routes.use('/sales', salesRoutes);
 routes.use('/payments', paymentRoutes);
 routes.use('/ratings', ratingRoutes);
 routes.use('/products', ratingRoutes);
-routes.use('/payments', paymentRoutes);
+routes.use('/stats', statsRouter);
+
 export default routes;

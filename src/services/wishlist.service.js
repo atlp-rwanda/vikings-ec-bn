@@ -14,6 +14,20 @@ export class WishService {
       },
     });
   }
+  static async getAllWishes(start, end){
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+	const wishlist = await Wishlist.findAll({
+		where: {
+		  createdAt: {
+			[Op.between]: [startDate, endDate]
+		  }
+		}
+	  });
+
+    return wishlist;
+
+  }
 
   static async createWish(wish) {
     const createWish = await Wishlist.create(wish);

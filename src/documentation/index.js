@@ -13,6 +13,7 @@ import wishlist from '../documentation/wishlist.docs';
 import notifications from './notifications.doc';
 import payments from './payment.docs';
 import ratings from './ratings.doc';
+import stats from './stats.docs';
 
 export default {
   ...basicInfo,
@@ -31,5 +32,6 @@ export default {
     ...payments,
     ...ratings,
     ...notifications,
+    ...stats,
   },
 };
