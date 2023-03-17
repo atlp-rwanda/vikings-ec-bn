@@ -4,6 +4,8 @@ import { JwtUtility } from '../utils/jwt.util.js';
 import { jwtTokens } from '../database/models/index';
 import { sendAuthCode } from '../services/twoFactorAuth.service';
 import { UserService } from '../services/user.service';
+import path from 'path';
+import { isPatternValid } from '../utils/date.util';
 
 export const checkUserExists = async (req, res, next) => {
 	const { email } = req.body;
@@ -157,6 +159,45 @@ export const VerifyResetPasswordToken = async (req, res, next) => {
 		return res.status(404).json({ message: 'User does not exist' });
 	}
 	next();
+};
 
 
+export const checkImageExtensions = (field, extensions) => {
+	return (req, res, next) => {
+		if (req.files[field]) {
+			const ext = path.extname(req.files[field].name);
+			if (!extensions.includes(ext)) {
+				return res.status(400).json({
+					message: `Invalid extension for file '${req.files[field].name}'`,
+				});
+			}
+		}
+		next();
+	};
+};
+
+export const checkBirthDate = (field) => {
+	return (req, res, next) => {
+		if (req.body[field]) {
+			const birthDate = new Date(req.body[field]);
+			if (birthDate > new Date()) {
+				return res.status(400).json({
+					message: 'Invalid date ',
+				});
+			}
+		}
+		next();
+	};
+};
+
+export const checkPhone = (field) => {
+	return (req, res, next) => {
+		const pattern = '^(\\+\\d{1,3}[\\s.-]?)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{3,4}$';
+		if (req.body[field] && !isPatternValid(req.body[field], pattern)) {
+			return res.status(400).json({
+				message: 'Invalid phone number ',
+			});
+		}
+		next();
+	};
 };

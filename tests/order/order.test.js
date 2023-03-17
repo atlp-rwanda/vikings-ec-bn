@@ -7,11 +7,13 @@ import {
   beforeAll,
   afterEach,
   it,
+  jest
 } from '@jest/globals';
 import { closeAll } from '../../src/utils/scheduling.util';
 import { buyerToken } from '../mocks/cart.mock';
 import { id } from '../mocks/user.mock';
 import { adminToken, orderId } from '../mocks/order.mock';
+import { OrderService } from '../../src/services/order.service';
 
 beforeAll(async () => {
   await connectDB();
@@ -25,6 +27,14 @@ describe('Order endpoints', () => {
     expect(response.body.message).toEqual('All Orders retrieved successfully');
 
   });
+
+  it('should not List all orders', async () => {
+    const response = await request(app)
+      .get('/api/v1/orders?limit=0&&page=0')
+      .set('Authorization', `Bearer ${adminToken}`);
+    expect(response.statusCode).toEqual(400);
+  });
+
   it('List all orders for Buyer', async () => {
     const response = await request(app)
       .get('/api/v1/orders?limit=1&&page=1')
@@ -51,13 +61,15 @@ describe('Order endpoints', () => {
     expect(response.body.message).toEqual('Order not found');
 
   });
-  it('should return 500 status code', async () => {
-    const response = await request(app)
-      .get('/api/v1/orders/')
-      .set('Authorization', `Bearer ${buyerToken}`)
-      .send();
-    expect(response.statusCode).toEqual(500);
-    expect(response.body.message).toEqual('Could not retrieve order, try again');
+  it('should return  an error retrieving the orders', async () => {
+    const mockError = new Error('Unable to retrieve orders');
+    jest.spyOn(OrderService, 'getAllOrders').mockRejectedValue(mockError);
+
+    const res = await request(app)
+      .get('/api/v1/orders?limit=10&page=1')
+      .set('Authorization', `Bearer ${buyerToken}`);
+    expect(res.status).toBe(500);
+    expect(res.body).toEqual({ error: mockError.message, message: 'Could not retrieve order, try again' });
   });
 
 });

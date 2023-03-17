@@ -43,3 +43,7 @@ export function durationToCronRepetition(duration) {
             throw new Error(`Invalid duration: ${duration}`);
     }
 }
+
+export function isPatternValid(variable, pattern) {
+    return new RegExp(pattern).test(variable);
+}

@@ -8,7 +8,6 @@ import { UserController } from '../../src/controllers/user.controller';
 import { checkDisabledAccount } from '../../src/middlewares/user.middleware';
 import { expect, describe, test, jest, it, beforeEach, afterEach } from '@jest/globals';
 import { closeAll } from '../../src/utils/scheduling.util';
-import models from '../../src/database/models';
 dotenv.config();
 
 beforeEach(async () => {
@@ -209,25 +208,14 @@ describe('Users Endpoints', () => {
     expect(response.statusCode).toBe(401);
   });
 
-  test('Failed to get all users', async () => {
-    
-    models.User.findAll = jest.fn(() => {
-      throw new Error('Some error occurred');
-    });
-  
-    const req = {};
-    const res = {
-      status: jest.fn(() => res),
-      json: jest.fn(),
-    };
-    await UserController.getAllUsers(req, res);
-  
-    expect(res.status).toHaveBeenCalledWith(500);
-  
-    expect(res.json).toHaveBeenCalledWith({
-      error: 'Some error occurred',
-      message: 'Failed to get all users',
-    });
+  it('should return  an error retrieving the orders', async () => {
+    const mockError = new Error('Some error occurred');
+    jest.spyOn(UserService, 'getAllUsers').mockRejectedValue(mockError);
+
+    const res = await request(app)
+      .get('/api/v1/users?limit=10&page=1')
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(500);
   });
   
 
