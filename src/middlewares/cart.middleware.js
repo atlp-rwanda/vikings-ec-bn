@@ -1,10 +1,20 @@
 import { CartService } from '../services/cart.service';
-
+import { ProductService } from '../services/product.service';
 export const getUserCart = async (req, res, next) => {
 	const { id: userId } = req.user;
 	const userCart = await CartService.getCart(userId);
 	req.cart = userCart;
 	next();
+};
+
+export const checkProductNotExpired = async (req, res, next) => {
+	const { productId } = req.body;
+	const product = await ProductService.getProductById(productId);
+	if(product.isExpired)
+		return res.status(400).json({
+				message: 'Product has expired',
+			});
+	return next();
 };
 
 export const addProductToCart = async (req, res, next) => {
@@ -17,11 +27,21 @@ export const addProductToCart = async (req, res, next) => {
 	const products = cart.products;
 	const existingProduct = products.find((p) => p.productId === productId);
 	if (existingProduct) {
-		existingProduct.quantity += productQuantity;
+		const newQuantity = existingProduct.quantity + productQuantity;
+		const product = await ProductService.getProductById(productId);
+		if (product.quantity >= newQuantity) {
+			existingProduct.quantity = newQuantity;
+			await CartService.updateCart({ products: cart.products }, cart.id);
+		} else {
+			return res.status(400).json({
+				message: 'Not enough products in stock',
+			});
+		}
 	} else {
-		products.push({ quantity: productQuantity, productId: productId });
+		const newProduct = { quantity: productQuantity, productId: productId };
+		cart.products.push(newProduct);
+		await CartService.updateCart({ products: cart.products }, cart.id);
 	}
-	await CartService.updateCart({ products }, cart.id);
 	req.cart = cart;
 	next();
 };

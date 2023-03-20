@@ -76,7 +76,7 @@ describe('Test Password reset', () => {
     });
     test('returns a 500 error on reset password', async () => {
       const requestSpy = jest.spyOn(UserService, 'updateUser');
-      requestSpy.mockRejectedValue(new Error('Failed')); //
+      requestSpy.mockRejectedValue(new Error('Failed'));
       const response = await request(app)
         .patch(`/api/v1/users/reset-password/${resetToken}`)
         .send(resetPassword);

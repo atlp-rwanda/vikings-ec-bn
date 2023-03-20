@@ -7,7 +7,7 @@ const validateRegister = async (req, res, next) => {
     firstname: Joi.string().min(3).trim().required(),
     lastname: Joi.string().min(3).trim().required(),
     email: Joi.string().email().lowercase().trim().required(),
-    phone: Joi.string().min(10).trim(),
+    phone: Joi.string().regex(/^\+?[1-9][0-9]{7,14}$/),
     password: joiPassword
       .string()
       .min(8)
@@ -15,8 +15,6 @@ const validateRegister = async (req, res, next) => {
       .minOfNumeric(1)
       .required()
       .trim(),
-    verified: Joi.boolean(), 
-    role: Joi.string(),
   });
 
   const { error } = registerSchema.validate(req.body);

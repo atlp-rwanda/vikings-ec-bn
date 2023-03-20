@@ -105,7 +105,6 @@ describe('Users Endpoints', () => {
       .expect(200);
   });
 
-  //Update isActive
   it('should return 200 on successful disabling of account', async () => {
     const res = await request(app)
       .put(`/api/v1/users/${id}`)
@@ -217,7 +216,7 @@ describe('Users Endpoints', () => {
       .set('Authorization', `Bearer ${token}`);
     expect(res.status).toBe(500);
   });
-  
+
 
 });
 afterEach(async () => {

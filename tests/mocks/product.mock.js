@@ -2,43 +2,57 @@ export const validProduct = {
   name: 'coffee',
   price: 1000,
   categoryId: '1a2ef741-1488-4435-b2e2-4075a6a169eb',
-  expiryDate: '2023-02-21',
+  expiryDate: '2024-02-21',
+  quantity:5,
+  bonus: 300,
+};
+export const validDateProduct = {
+  name: 'coffee',
+  price: 1000,
+  categoryId: '1a2ef741-1488-4435-b2e2-4075a6a169eb',
+  expiryDate: '2020-02-21',
+  quantity:5,
   bonus: 300,
 };
 export const invalidProduct = {
   name: '',
   price: 1000,
   categoryId: '1a2ef741-1488-4435-b2e2-4075a6a169eb',
-  expiryDate: '2023-02-21',
+  expiryDate: '2024-02-21',
   bonus: 300,
+  quantity:5,
   userId: '872526ad-76be-4f44-b5d9-8032f0925c2d',
 };
 export const validProduct2 = {
   name: 'jordan',
   price: 1000,
   categoryId: '1a2ef741-1488-4435-b2e2-4075a6a169eb',
-  expiryDate: '2023-02-21',
+  expiryDate: '2024-02-21',
+  quantity:5,
   bonus: 300,
 };
 export const validProduct3 = {
   name: 'beer',
   price: 1000,
   categoryId: '1a2ef741-1488-4435-b2e2-4075a6a169eb',
-  expiryDate: '2023-02-21',
+  expiryDate: '2024-02-21',
+  quantity:5,
   bonus: 300,
 };
 export const invalidProduct1 = {
   name: 'beer',
   price: 1000,
   categoryId: '1a2ef741-1488-4435-b2e2-4075a6a169eb',
-  expiryDate: '2023-02-21',
+  expiryDate: '2024-02-21',
+  quantity:5,
   bonus: 300,
 };
 export const invaliCategoryProduct = {
   name: 'coffee',
   price: 1000,
   categoryId: 'c93357b7-cfff-44a1-bcc5-835d4ae72f23',
-  expiryDate: '2023-02-21',
+  expiryDate: '2024-02-21',
+  quantity:5,
   bonus: 300,
 };
 export const validCategory = {
@@ -89,3 +103,51 @@ export const validProductId = '6717e8c7-c058-4670-90c3-5c8953cc844a';
 export const validProductId1 = 'b5e75a01-5e67-44ad-91bd-f36ab3564a48';
 export const unavailableProduct = 'b5e75a01-5e67-44ad-91bd-f36ab3564a48';
 export const admin='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhlNGM2NWQwLWFiZTktNDA1YS1hMmY0LTViNzFhMjMzOGNkZCIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwibXVzdFVwZGF0ZVBhc3N3b3JkIjpudWxsLCJpYXQiOjE2NzcyNzQwODIsImV4cCI6MTcwODgxMDA4Mn0.8kMCpB7JHqLrsggJlT2mlu5ZCOrEfJn1k-ImUYWWZ4M';
+
+export const updateProductWithChangedAllImages = {
+  name: 'coat',
+  price: 1000,
+  categoryId: '1a2ef741-1488-4435-b2e2-4075a6a169eb',
+  expiryDate: '2030-02-21',
+  bonus: 300,
+  quantity: 21,
+  oldImages: [],
+};
+export const updateProductWithNochangedImages = {
+  name: 'coat',
+  price: 1000,
+  categoryId: '1a2ef741-1488-4435-b2e2-4075a6a169eb',
+  expiryDate: '2030-02-21',
+  quantity: 21,
+  bonus: 300,
+  oldImages: ['http://res.cloudinary.com/djg7yg23y/image/upload/v1679297197/projects/ecommerce/06ee9c32-b93e-405e-bb33-48a6953f391d_1679297194.166.jpg',
+  'http://res.cloudinary.com/djg7yg23y/image/upload/v1679297199/projects/ecommerce/6ff703df-55de-4ac0-bb92-a9b0c1736f89_1679297197.501.jpg',
+  'http://res.cloudinary.com/djg7yg23y/image/upload/v1679297205/projects/ecommerce/dc53abf2-b7ab-4eca-a4c8-8b7c3ea223de_1679297202.304.jpg',
+  'http://res.cloudinary.com/djg7yg23y/image/upload/v1679297765/projects/ecommerce/1f40c869-3c53-41d3-a0ba-5054f563f70f_1679297756.834.jpg'
+],
+};
+export const  updateProductWithLessImages ={
+  name: 'coat',
+  price: 1000,
+  categoryId: '1a2ef741-1488-4435-b2e2-4075a6a169eb',
+  expiryDate: '2030-02-21',
+  quantity: 21,
+  bonus: 300,
+  oldImages: [
+    'http://res.cloudinary.com/djg7yg23y/image/upload/v1679297765/projects/ecommerce/1f40c869-3c53-41d3-a0ba-5054f563f70f_1679297756.834.jpg',
+    'http://res.cloudinary.com/djg7yg23y/image/upload/v1679297765/projects/ecommerce/1f40c869-3c53-41d3-a0ba-5054f563f70f_1679297756.834.jpg'
+]
+};
+export const  updateWithOneImage ={
+  name: 'coat',
+  price: 1000,
+  categoryId: '1a2ef741-1488-4435-b2e2-4075a6a169eb',
+  expiryDate: '2030-02-21',
+  quantity: 21,
+  bonus: 300,
+  oldImages: [
+    'http://res.cloudinary.com/djg7yg23y/image/upload/v1679297765/projects/ecommerce/1f40c869-3c53-41d3-a0ba-5054f563f70f_1679297756.834.jpg',
+    'http://res.cloudinary.com/djg7yg23y/image/upload/v1679297765/projects/ecommerce/1f40c869-3c53-41d3-a0ba-5054f563f70f_1679297756.834.jpg',
+    'http://res.cloudinary.com/djg7yg23y/image/upload/v1679297765/projects/ecommerce/1f40c869-3c53-41d3-a0ba-5054f563f70f_1679297756.834.jpg'
+]
+};

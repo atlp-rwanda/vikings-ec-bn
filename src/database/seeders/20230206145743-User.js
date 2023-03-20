@@ -44,6 +44,7 @@ module.exports = {
             '$2b$10$loTArhq8vmd0bvzCP73VXut779UA1eltYXCsbPBL5Xddi7Y92oDka',
           role: 'buyer',
           isActive: true,
+          usesPassword:true,
           createdAt: new Date(),
           updatedAt: new Date(),
           verified: true,

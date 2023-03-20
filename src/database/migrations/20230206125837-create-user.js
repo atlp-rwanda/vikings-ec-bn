@@ -18,6 +18,7 @@ module.exports = {
       },
       email: {
         type: Sequelize.STRING,
+        unique: true,
       },
       phone: {
         type: Sequelize.STRING,
@@ -36,6 +37,10 @@ module.exports = {
       },
       avatar: {
         type: Sequelize.STRING,
+      },
+      usesPassword:{
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       billingAddress: {
         type: Sequelize.JSON,

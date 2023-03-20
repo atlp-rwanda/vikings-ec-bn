@@ -5,6 +5,7 @@ import {
 	addProductToCart,
 	checkCartNotEmpty,
 	checkProductInCart,
+	checkProductNotExpired,
 	getUserCart,
 } from '../../middlewares/cart.middleware';
 import cartValidation from '../../validations/cart/cart.validation';
@@ -23,6 +24,7 @@ cartRoutes
 		cartValidation,
 		uuidValidation('productId'),
 		checkProductAvailable,
+		checkProductNotExpired,
 		getUserCart,
 		addProductToCart,
 		CartController.addToCart

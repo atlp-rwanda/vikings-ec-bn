@@ -60,6 +60,16 @@ describe('Testing profile', () => {
 		expect(res.body).toEqual({ message: 'Invalid date ' });
 	});
 
+	test('Unsuccessful update without date', async () => {
+		const res = await request(app)
+			.put('/api/v1/users/profile')
+			.set('Authorization', 'Bearer ' + buyerToken)
+			.attach('avatar', `${process.cwd()}/assets/images/clean_the_room.png`)
+			.field('firstname', profileSeeds.firstname);
+
+		expect(res.statusCode).toEqual(500);
+	});
+
 	test('Unsuccessful update with invalid date', async () => {
 		const phone = '2030-03-25';
 		const res = await request(app)
@@ -106,9 +116,7 @@ describe('Testing profile', () => {
 
 
 		const requestSpy = jest.spyOn(UserService, 'getUserById');
-		requestSpy.mockRejectedValue(new Error('Failed to retrieve posts')); // mock it throws an Error object
-
-
+		requestSpy.mockRejectedValue(new Error('Failed to retrieve posts'));
 
 		const res = await request(app).get('/api/v1/users/profile').set('Authorization', 'Bearer ' + token);
 
@@ -122,7 +130,7 @@ describe('Testing profile', () => {
 			.send({ ...userToRegister, email: 'emai88l@gmail.com' });
 		const { token } = response.body;
 		const requestSpy = jest.spyOn(UserService, 'updateUser');
-		requestSpy.mockRejectedValue(new Error('Failed to retrieve')); // mock it throws an Error object
+		requestSpy.mockRejectedValue(new Error('Failed to retrieve'));
 
 		const res = await request(app).put('/api/v1/users/profile').set('Authorization', 'Bearer ' + token)
 			.field('firstname', profileSeeds.firstname)
@@ -133,7 +141,7 @@ describe('Testing profile', () => {
 	});
 	it('should return status 500 when failed to Register', async () => {
 		const requestSpy = jest.spyOn(UserService, 'register');
-		requestSpy.mockRejectedValue(new Error('Failed to retrieve')); // mock it throws an Error object
+		requestSpy.mockRejectedValue(new Error('Failed to retrieve'));
 
 		const response = await request(app)
 			.post('/api/v1/users/register')

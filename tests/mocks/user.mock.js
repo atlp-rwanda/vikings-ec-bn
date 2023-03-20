@@ -11,24 +11,32 @@ export const googleProfile = {
   ],
 };
 
+export const existentGoogleProfile = {
+  id: '098765432109876543210',
+  displayName: 'Test Name',
+  name: { familyName: 'Test', givenName: 'Name' },
+  emails: [{ value: 'googlemail@gmail.com' }],
+  photos: [
+    {
+      value:
+        'https://lh3.googleusercontent.com/a/AGJbkhbxHkbHJuF_bANkH0980_l4NJkhhyGofB',
+    },
+  ],
+};
 export const successRegister = {
   firstname: 'NameOne',
   lastname: 'NameTwo',
   email: 'register@gmail.com',
-  phone: '0987654321',
+  phone: '+250780403244',
   password: '@Test123',
-  role: 'seller',
-  verified: false
 };
 
 export const successBuyerRegister = {
   firstname: 'NameOnebuyer',
   lastname: 'NameTwobuyer',
   email: 'buyer@gmail.com',
-  phone: '0987654321',
+  phone: '+250780403244',
   password: '@Test123',
-  role: 'buyer',
-  verified: true
 };
 
 export const buyerToken = {};
@@ -37,7 +45,7 @@ export const passwordReg = {
   firstname: 'NameOne',
   lastname: 'NameTwo',
   email: 'password@gmail.com',
-  phone: '0987654321',
+  phone: '+250780403244',
   password: '@Test123',
 };
 
@@ -45,10 +53,8 @@ export const successReg = {
   firstname: 'NameOne',
   lastname: 'NameTwo',
   email: 'success@gmail.com',
-  phone: '0987654321',
+  phone: '+250780403244',
   password: '@Test123',
-  role: 'seller',
-  verified: false
 };
 
 export const verifiedLogin = {
@@ -104,7 +110,7 @@ export const userToRegister = {
 	firstname: 'NameOne',
 	lastname: 'NameTwo',
 	email: 'uKnow@gmail.com',
-	phone: '0987654321',
+	phone: '+250780403244',
 	password: '@Test123',
 };
 
@@ -125,13 +131,15 @@ export const successResetRegister = {
   firstname: 'NameOne',
   lastname: 'NameTwo',
   email: 'reseter@gmail.com',
-  phone: '0987654321',
+  phone: '+250780403244',
   password: '@Test123',
 };
 export const resetEmail = {
   email: 'reseter@gmail.com'
-}
+};
 
 export const resetPassword = {
   newPassword: 'Sracerimo@123'
-}
+};
+
+

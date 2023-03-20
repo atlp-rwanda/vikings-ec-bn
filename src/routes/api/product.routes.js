@@ -20,10 +20,14 @@ import {
   checkNumberOfImages,
   uploadImages,
   receivedQueryFormat,
+  checkExpirationDate,
+  checkIfImageChanged,
+  uploadChangedImages
 } from '../../middlewares/product.middleware';
 import { validateSearchCriteria } from '../../validations/product/searchProduct.validate.js';
 import { searchProductController } from '../../controllers/product.controller.js';
 import { uuidValidation } from '../../validations/user/userId.validation';
+import { validatePagination } from '../../validations/notification/notification.validation';
 const productRoutes = express.Router();
 productRoutes.post(
   '/',
@@ -31,6 +35,7 @@ productRoutes.post(
   restrictTo('seller', 'admin'),
   productValidation,
   checkIfCategoryExistById,
+  checkExpirationDate,
   checkIfProductExists,
   checkNumberOfImages,
   checkExtensions('.jpg', '.png', '.webp', '.jpeg', '.gif'),
@@ -66,9 +71,13 @@ productRoutes.patch('/:productId',
   protectRoute,
   restrictTo('seller', 'admin'),
   productValidation,
+  checkIfCategoryExistById,
+  checkExpirationDate,
   uuidValidation('productId'),
   checkIfProductExistsById,
   checkIfSellerOwnsProduct,
+  checkIfImageChanged,
+  uploadChangedImages,
   updateProduct
 );
 

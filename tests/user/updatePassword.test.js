@@ -10,6 +10,7 @@ import {expect, describe, test, jest, beforeAll, afterEach} from '@jest/globals'
 import { UserService } from '../../src/services/user.service';
 import dotenv from 'dotenv';
 import {closeAll} from '../../src/utils/scheduling.util';
+import { sellerToken } from '../mocks/product.mock';
 dotenv.config();
 
 beforeAll(async () => {
@@ -73,6 +74,14 @@ describe('Test Password Update', () => {
     expect(response.statusCode).toBe(500);
     requestSpy.mockRestore();
 
+  });
+  test('Check uses password', async () => {
+    const response = await request(app)
+      .patch('/api/v1/users/update-password')
+      .set('Authorization', `Bearer ${sellerToken}`)
+      .send(successPasswordUpdate);
+    expect(response.statusCode).toBe(400);
+    expect(response.body.message).toBe('User doesn\'t use password');
   });
 });
 afterEach(async () =>{

@@ -15,7 +15,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       firstname: DataTypes.STRING,
       lastname: DataTypes.STRING,
-      email: DataTypes.STRING,
+      email: {
+        type:DataTypes.STRING,
+        unique: true,
+      },
       phone: DataTypes.STRING,
       password: DataTypes.STRING,
       gender: DataTypes.STRING,
@@ -26,6 +29,10 @@ module.exports = (sequelize, DataTypes) => {
       isActive: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
+      },
+      usesPassword:{
+        type: DataTypes.BOOLEAN,
+        defaultValue:false
       },
       avatar: DataTypes.STRING,
       billingAddress: DataTypes.JSON,

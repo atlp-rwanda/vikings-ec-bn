@@ -2,6 +2,7 @@ import Stripe from 'stripe';
 import { CartService } from '../services/cart.service';
 import { OrderService } from '../services/order.service';
 import { PaymentService } from '../services/payment.service';
+import { ProductService } from '../services/product.service';
 import { SalesService } from '../services/sales.service';
 import { createStripeSession } from '../utils/payment.util';
 import { NotificationController as notify } from './notification.controller';
@@ -56,6 +57,7 @@ export const stripeSuccess = async (req, res) => {
 						productId: product.productId,
 						quantitySold: products[index].quantity,
 					};
+					await ProductService.updateQuantity(product.productId, products[index].quantity);
 					return await SalesService.createSales(sale);
 				})
 			);

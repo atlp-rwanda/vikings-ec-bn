@@ -60,7 +60,7 @@ subscribe(knownEvents.changePassword, async (data) => {
 export class UserController {
   static async registerUser(req, res) {
     try {
-      const user = { ...req.body, lastTimePasswordUpdated: new Date() };
+      const user = { ...req.body,usesPassword:true, lastTimePasswordUpdated: new Date() };
       user.password = await BcryptUtility.hashPassword(req.body.password);
       const { id, email, role, lastTimePasswordUpdated } =
         await UserService.register(user);

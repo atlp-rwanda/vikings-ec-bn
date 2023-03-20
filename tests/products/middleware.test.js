@@ -52,7 +52,7 @@ describe('checkIfProductExistsById middleware', () => {
     expect(res.json).toHaveBeenCalledWith({ message: 'Product not found' });
     expect(next).not.toHaveBeenCalled();
   });
-  
+
   it('should schedule the provided callback function to run at the given repetition duration', () => {
     const repetitionDuration = '0 3 * * *'; // Run at 3:00am every day
     const callback = jest.fn();
