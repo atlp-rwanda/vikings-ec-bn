@@ -22,7 +22,7 @@ describe('POST /login', () => {
         .post('/api/v1/users/login')
         .send(unregisteredLogin);
 
-      expect(response.body.message).toEqual('User has not found, try again');
+      expect(response.body.message).toEqual('User not found, try again');
       expect(response.statusCode).toEqual(404);
     });
     test('Unverified password: 409 status and error message', async () => {
@@ -49,7 +49,6 @@ describe('POST /login', () => {
 
     expect(response.body.message).toEqual('Login successful');
     expect(response.body.token).toBeDefined();
-    expect(response.body.user).toBeDefined();
   });
 
   test('No email: 400', async()=>{

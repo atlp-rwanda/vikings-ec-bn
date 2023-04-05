@@ -48,10 +48,9 @@ const router = express.Router();
 
 router.get('/redirect', (req, res) => {
   if (req.query.key) {
-    const user = JwtUtility.verifyToken(req.query.key);
     return res
       .status(200)
-      .json({ message: 'Thanks for logging in', user: user,token:req.query.key });
+      .json({ message: 'Thanks for logging in',token:req.query.key });
   } else {
     return res.status(401).json({ error: 'Unauthorized' });
   }
