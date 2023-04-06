@@ -81,7 +81,6 @@ describe('', () => {
       .send(verifiedLogin);
     expect(response.body.message).toEqual('Login successful');
     expect(response.body.token).toBeDefined();
-    expect(response.body.user).toBeDefined();
     token = response.body.token;
   });
 
@@ -91,7 +90,6 @@ describe('', () => {
       .send(adminCredentials);
     expect(response.body.message).toEqual('Login successful');
     expect(response.body.token).toBeDefined();
-    expect(response.body.user).toBeDefined();
     token2 = response.body.token;
   });
 

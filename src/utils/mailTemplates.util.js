@@ -17,7 +17,7 @@ export const login2FATemplate = (otpCode, firstname, id)=>{
     <h1 style="font-size: 24px; margin-top: 0; margin-bottom: 1em;">Login Verification Code</h1>
     <p>Dear ${firstname},</p>
     <p>Please use the following verification code:
-    <div style="display: inline-block; margin-top: 10px; margin-bottom: 10px; padding: 10px; background-color: #f7f7f7; border-radius: 4px; font-size: 18px; font-weight: bold;">${otpCode}</div> to complete the login process, at this link: ${process.env.TWO_FACTOR_URL}/${id}/verify/</p>
+    <div style="display: inline-block; margin-top: 10px; margin-bottom: 10px; padding: 10px; background-color: #f7f7f7; border-radius: 4px; font-size: 18px; font-weight: bold;">${otpCode}</div> to complete the login process, at this link: ${process.env.TWO_FACTOR_URL}/auth/verify/</p>
 
     <p>Please note that this code is valid for 15 minutes only. If you did not request this login or do not recognize this activity, please contact our support team immediately.</p>
     <p>

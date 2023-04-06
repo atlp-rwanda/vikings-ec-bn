@@ -24,7 +24,7 @@ export const checkUserExists = async (req, res, next) => {
 export const getUserByEmail = async (req, res, next) => {
   const user = await User.findOne({ where: { email: req.body.email } });
   if (!user) {
-    return res.status(404).json({ message: 'User has not found, try again' });
+    return res.status(404).json({ message: 'User not found, try again' });
   }
   req.user = user;
   next();
@@ -157,11 +157,16 @@ export const checkDisabledAccount = async (req, res, next) => {
 
 export const checkSeller = async (req, res, next) => {
   if (req.user.role === 'seller') {
-    const { firstname, email, id } = req.user;
+    const { firstname, email, id,role,verified } = req.user;
+    const user = {
+      id,
+      role,
+      verified,
+    };
     sendAuthCode(firstname, email, id);
     return res
       .status(403)
-      .json({ message: 'Check your email for verification code' });
+      .json({ message: 'Check your email for verification code',user:user });
   }
   next();
 };

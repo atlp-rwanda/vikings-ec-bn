@@ -2,7 +2,6 @@ import { UserService } from '../services/user.service.js';
 import { saveTokens } from '../services/token.service.js';
 import { BcryptUtility } from '../utils/bcrypt.util.js';
 import { JwtUtility } from '../utils/jwt.util.js';
-import models from '../database/models';
 import { sendEmail } from '../utils/sendEmail.util';
 import { resetPasswordTemplate } from '../utils/mailTemplates.util.js';
 import { emailConfig } from '../utils/mail.util';
@@ -188,7 +187,6 @@ export class UserController {
       return res.status(200).json({
         token: token,
         message: 'Login successful',
-        user: userData,
       });
     } catch (err) {
       return res.status(500).json({
@@ -241,7 +239,7 @@ export class UserController {
     try {
       let payload = {
         ...req.body,
-        billingAddress: JSON.parse(req.body.billingAddress) || {},
+        billingAddress: JSON.parse(req.body.billingAddress || '{}'),
         birthdate: new Date(req.body.birthdate || ''),
       };
       if (req.files?.avatar) {
