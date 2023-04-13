@@ -23,7 +23,6 @@ import {
   checkBirthDate,
   checkPhone,
   checkUserByEmail,
-  checkIfUsesPassword,
 } from '../../middlewares/user.middleware';
 import {
   getUserWishes,
@@ -124,7 +123,6 @@ router.patch(
   '/update-password',
   validatePassword,
   protectRoute,
-  checkIfUsesPassword,
   checkValidOldPassword,
   UserController.updatePassword
 );
@@ -160,7 +158,6 @@ router.put(
 router.post(
   '/forgot-password',
   validateEmail,
-  checkIfUsesPassword,
   checkEmailExists,
   UserController.forgotPassword
 );

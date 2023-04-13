@@ -239,9 +239,9 @@ export class UserController {
     try {
       let payload = {
         ...req.body,
-        billingAddress: JSON.parse(req.body.billingAddress || '{}'),
         birthdate: new Date(req.body.birthdate || ''),
       };
+      req.body.billingAddress && (payload.billingAddress = JSON.parse(req.body.billingAddress));
       if (req.files?.avatar) {
         const { url } = await uploadPhoto(req, res, req.files.avatar);
         payload['avatar'] = url;
@@ -280,7 +280,7 @@ export class UserController {
         email: user.email,
       };
       const resetLink = JwtUtility.generateToken(userData);
-      const link = `${process.env.BASE_URL}/reset-password?token=${resetLink}`;
+      const link = `${process.env.FRONTEND_URL}/auth/reset-password?token=${resetLink}`;
       const resetMessage = resetPasswordTemplate(user.email, link);
       sendEmail(
         emailConfig({
@@ -289,7 +289,7 @@ export class UserController {
           content: resetMessage,
         })
       );
-      return res.status(200).json({ message: link });
+      return res.status(200).json({ message: 'Email sent!, check your email for next step' });
     } catch (error) {
       return res.status(500).json({
         error: error.message,

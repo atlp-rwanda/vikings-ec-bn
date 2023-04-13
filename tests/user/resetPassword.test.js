@@ -1,7 +1,7 @@
 import request from 'supertest';
 import app from '../../src/app';
 import { connectDB } from '../../src/app';
-import { resetEmail, successResetRegister } from '../mocks/user.mock';
+import {newToken, resetEmail, successResetRegister} from '../mocks/user.mock';
 import { closeAll } from '../../src/utils/scheduling.util';
 import { resetPassword, token } from '../mocks/user.mock';
 import dotenv from 'dotenv';
@@ -21,7 +21,7 @@ beforeAll(async () => {
   await connectDB();
 });
 
-let resetToken = '';
+let resetToken = newToken;
 
 describe('Test Password reset', () => {
   test('Successful Registration', async () => {
@@ -34,11 +34,7 @@ describe('Test Password reset', () => {
     const response = await request(app)
       .post('/api/v1/users/forgot-password')
       .send(resetEmail);
-    const url = new URL(response.body.message);
-    const searchParams = new URLSearchParams(url.search);
-    resetToken = searchParams.get('token');
     expect(response.statusCode).toBe(200);
-    expect(resetToken).toBeDefined();
   });
   test('Invalid email', async () => {
     const response = await request(app)
