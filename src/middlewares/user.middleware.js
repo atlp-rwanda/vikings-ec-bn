@@ -202,18 +202,15 @@ export const VerifyResetPasswordToken = async (req, res, next) => {
 
 export const checkImageExtensions = (field, extensions) => {
     return (req, res, next) => {
-        if (req.files) {
+        if (req.files && req.files[field]) {
             const ext = path.extname(req.files[field].name);
             if (!extensions.includes(ext)) {
                 return res.status(400).json({
                     message: `Invalid extension for file '${req.files[field].name}'`,
                 });
-            } else {
-                next();
             }
-        } else {
-            next();
         }
+        next();
     };
 };
 

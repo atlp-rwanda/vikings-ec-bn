@@ -160,8 +160,8 @@ router.put(
 router.post(
   '/forgot-password',
   validateEmail,
-  checkIfUsesPassword,
   checkEmailExists,
+  checkIfUsesPassword,
   UserController.forgotPassword
 );
 
