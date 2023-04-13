@@ -7,7 +7,7 @@ const validateRegister = async (req, res, next) => {
     firstname: Joi.string().min(3).trim().required(),
     lastname: Joi.string().min(3).trim().required(),
     email: Joi.string().email().lowercase().trim().required(),
-    phone: Joi.string().regex(/^\+?[1-9][0-9]{7,14}$/),
+    phone: Joi.string().regex(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im),
     password: joiPassword
       .string()
       .min(8)
