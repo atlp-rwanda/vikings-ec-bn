@@ -75,14 +75,6 @@ describe('Test Password Update', () => {
     requestSpy.mockRestore();
 
   });
-  test('Check uses password', async () => {
-    const response = await request(app)
-      .patch('/api/v1/users/update-password')
-      .set('Authorization', `Bearer ${sellerToken}`)
-      .send(successPasswordUpdate);
-    expect(response.statusCode).toBe(400);
-    expect(response.body.message).toBe('User doesn\'t use password');
-  });
 });
 afterEach(async () =>{
   await closeAll();

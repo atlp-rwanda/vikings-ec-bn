@@ -21,7 +21,7 @@ const basicInfo = {
         flows: {
           authorizationCode: {
             authorizationUrl:
-              'https://vikings-ec-bn-mbhd.onrender.com/api/v1/users/auth/google/redirect',
+              'http://localhost:5000/api/v1/users/auth/google/redirect',
           },
         },
       },
