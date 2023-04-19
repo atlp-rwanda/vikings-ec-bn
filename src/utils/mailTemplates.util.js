@@ -3,14 +3,14 @@ export const verifyEmailTemplate = (userToken) =>{
   <div style="background-color: #f2f2f2; padding: 20px;">
     <h1 style="color: #004d99; text-align: center;">Welcome to Vikings e-commerce!</h1>
     <p style="color: #000; font-size: 16px;">Please click below to activate your account:</p>
-    <a href="${process.env.VERIFY_URL}/${userToken}" style="display: block; text-align: center; padding: 10px 20px; background-color: #004d99; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px;">Verify Your Email</a>
+    <a href="${process.env.FRONTEND_URL}/auth/verify-email/${userToken}" style="display: block; text-align: center; padding: 10px 20px; background-color: #004d99; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px;">Verify Your Email</a>
     <p style="color: #000; font-size: 14px;">Thank you for choosing Vikings e-commerce.</p>
   </div>
   `;
 };
 
 
-export const login2FATemplate = (otpCode, firstname, id)=>{
+export const login2FATemplate = (otpCode, firstname)=>{
   return `
 <body style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.5; color: #333; background-color: #f5f5f5;">
   <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff;">

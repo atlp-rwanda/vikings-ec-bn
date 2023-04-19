@@ -3,7 +3,7 @@ const productValidationSchema = Joi.object().keys({
   name: Joi.string().min(3).required(),
   price: Joi.number().integer().required(),
   categoryId: Joi.string().uuid().required(),
-  expiryDate: Joi.string().regex(/^\d{4}-\d{2}-\d{2}$/).allow(''),
+  expiryDate: Joi.string().allow(''),
   bonus: Joi.number().integer().allow(''),
   quantity:Joi.number().integer().required(),
   oldImages: Joi.alternatives().try(

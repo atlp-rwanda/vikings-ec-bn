@@ -47,7 +47,7 @@ describe('POST /Product', () => {
 			.send(validProduct);
 
 		expect(response.body.message).toEqual('Unauthorized request, try again');
-		expect(response.statusCode).toEqual(400);
+		expect(response.statusCode).toEqual(401);
 	});
 
 	test('Check seller', async () => {
