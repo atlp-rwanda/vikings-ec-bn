@@ -133,7 +133,7 @@ module.exports = {
 					images: [
 						'https://www.svz.com/wp-content/uploads/2018/05/Mango.jpg',
 						'https://www.herbazest.com/imgs/a/a/0/81861/mango.jpg',
-						'https://static.toiimg.com/thumb/msid-19708115,width-1280,resizemode-4/19708115.jpg',
+						'https://images.unsplash.com/photo-1635716279493-d1e30afc25a0',
 						'https://img.freepik.com/free-vector/vector-ripe-yellow-orange-red-whole-sliced-mango-cubes-with-leaf-isolated-white-background_1284-45465.jpg?w=2000',
 					],
 					isAvailable: true,
