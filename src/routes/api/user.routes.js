@@ -159,7 +159,6 @@ router.post(
   '/forgot-password',
   validateEmail,
   checkEmailExists,
-  checkIfUsesPassword,
   UserController.forgotPassword
 );
 
