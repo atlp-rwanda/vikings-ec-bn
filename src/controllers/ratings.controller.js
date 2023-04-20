@@ -14,22 +14,21 @@ export const productRating = async (req, res) => {
       productId,
     };
     let rate = await RatingService.getProductRatingByField({ buyerId: buyerId });
-
-    if (rate) {
-      await RatingService.updateRatings(ratings, rate.id);
-      rate = await RatingService.getProductRatingByField({ id: rate.id });
-    }
-    else {
+    if (rate.length !== 0) {
+      await RatingService.updateRatings(ratings, rate[0].id);
+      rate = await RatingService.getProductRatingByField({ id: rate[0].id });
+      await notify.notifySellerAboutProductRating(rate[0]);
+    } else {
       rate = await RatingService.createRatings(ratings);
+      await notify.notifySellerAboutProductRating(rate);
     }
-    await notify.notifySellerAboutProductRating(rate);
     return res
       .status(200)
       .json({ message: 'Product rated successfully', rate: rate });
   } catch (err) {
     return res.status(500).json({
       error: err.message,
-      message: 'Error occured while rating a product',
+      message: 'Error occurred while rating a product',
     });
   }
 
