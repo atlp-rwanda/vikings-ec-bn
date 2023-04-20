@@ -32,7 +32,7 @@ describe('/cart', () => {
       .post('/api/v1/carts/')
       .send(randomProductId);
 
-    expect(response.statusCode).toEqual(400);
+    expect(response.statusCode).toEqual(401);
     expect(response.body.message).toEqual('Unauthorized request, try again');
   });
   test('No cart: 500 and message', async () => {

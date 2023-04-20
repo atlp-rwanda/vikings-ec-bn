@@ -36,7 +36,7 @@ describe('wishlists', () => {
     const response = await request(app)
       .post('/api/v1/wishlist/product-wishes')
       .send(jordanId);
-    expect(response.statusCode).toEqual(400);
+    expect(response.statusCode).toEqual(401);
     expect(response.body.message).toEqual('Unauthorized request, try again');
   });
   test('should return a 400 status code and an error message when productId is missing', async () => {
@@ -180,14 +180,14 @@ describe('wishlists', () => {
     const response = await request(app)
       .get(`/api/v1/wishlist/${beansId}/product-wishes`)
       .send();
-    expect(response.statusCode).toEqual(400);
+    expect(response.statusCode).toEqual(401);
     expect(response.body.message).toEqual('Unauthorized request, try again');
   });
   test('No authorization (getting wishes by user): 400 and unauthorized message', async () => {
     const response = await request(app)
       .get(`/api/v1/users/${userId}/product-wishes`)
       .send();
-    expect(response.statusCode).toEqual(400);
+    expect(response.statusCode).toEqual(401);
     expect(response.body.message).toEqual('Unauthorized request, try again');
   });
   test('add a product that already in wishlist', async () => {

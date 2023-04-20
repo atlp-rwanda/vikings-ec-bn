@@ -36,7 +36,7 @@ describe('Test User Logout', () => {
     const response = await request(app)
       .post('/api/v1/users/logout')
       .set('Authorization', 'Bearer ');
-    expect(response.statusCode).toBe(400);
+    expect(response.statusCode).toBe(401);
   });
   test('Check fail to logout', async () => {
     const requestSpy = jest.spyOn(logoutService, 'revokeToken');

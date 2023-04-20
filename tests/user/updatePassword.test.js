@@ -51,7 +51,7 @@ describe('Test Password Update', () => {
     const response = await request(app)
       .patch('/api/v1/users/update-password')
       .send(successPasswordUpdate);
-    expect(response.statusCode).toBe(400);
+    expect(response.statusCode).toBe(401);
   });
 
   test('Invalid old password', async () => {

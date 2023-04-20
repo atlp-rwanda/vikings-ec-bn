@@ -11,7 +11,7 @@ export const protectRoute = async (req, res, next) => {
     jwt.verify(token, process.env.SECRET_TOKEN, async (err, user) => {
       if (err) {
         return res
-          .status(400)
+          .status(401)
           .json({ message: 'Unauthorized request, try again' });
       }
       const revokedToken = await isAuthRevoked(token);

@@ -159,9 +159,11 @@ router.post(
   '/forgot-password',
   validateEmail,
   checkEmailExists,
-  checkIfUsesPassword,
   UserController.forgotPassword
 );
+
+
+
 
 router.patch(
   '/reset-password/:token',
