@@ -42,6 +42,7 @@ export class CartController {
 			const ids = products.map((product) => product.productId);
 			const productsData = await CartService.getCartProducts(ids);
 			const productsDataWithQuantity = productsData.map((product, index) => ({
+				id: product.id,
 				name: product.name,
 				price: product.price,
 				quantity: products[index].quantity,

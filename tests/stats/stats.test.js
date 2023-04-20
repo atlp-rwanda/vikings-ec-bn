@@ -20,7 +20,7 @@ beforeAll(async () => {
 describe('statistics', () => {
 	test('Unauthorized request: 400 and unauthorized message', async () => {
 		const response = await request(app).get('/api/v1/stats/').send();
-		expect(response.statusCode).toEqual(400);
+		expect(response.statusCode).toEqual(401);
 		expect(response.body.message).toEqual('Unauthorized request, try again');
 	});
 

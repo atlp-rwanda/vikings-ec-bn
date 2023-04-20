@@ -64,7 +64,7 @@ describe('Users Endpoints', () => {
     const res = await request(app)
       .patch(`/api/v1/users/${id}`)
       .send({ role: 'seller' })
-      .expect(400);
+      .expect(401);
     expect(res.body).toHaveProperty('message', 'Unauthorized request, try again');
   });
 
@@ -127,7 +127,7 @@ describe('Users Endpoints', () => {
     const res = await request(app)
       .put(`/api/v1/users/${id}`)
       .send({ isActive: true })
-      .expect(400);
+      .expect(401);
     expect(res.body).toHaveProperty('message', 'Unauthorized request, try again');
   });
 

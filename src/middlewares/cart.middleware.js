@@ -27,10 +27,9 @@ export const addProductToCart = async (req, res, next) => {
 	const products = cart.products;
 	const existingProduct = products.find((p) => p.productId === productId);
 	if (existingProduct) {
-		const newQuantity = existingProduct.quantity + productQuantity;
 		const product = await ProductService.getProductById(productId);
-		if (product.quantity >= newQuantity) {
-			existingProduct.quantity = newQuantity;
+		if (product.quantity >= productQuantity) {
+			existingProduct.quantity = productQuantity;
 			await CartService.updateCart({ products: cart.products }, cart.id);
 		} else {
 			return res.status(400).json({

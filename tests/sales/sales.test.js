@@ -46,7 +46,7 @@ describe('PATCH /sales', () => {
       .send(acceptedStatus);
 
     expect(response.body.message).toEqual('Unauthorized request, try again');
-    expect(response.statusCode).toEqual(400);
+    expect(response.statusCode).toEqual(401);
   });
   test('Check if role is seller', async () => {
     const response = await request(app)
