@@ -23,9 +23,6 @@ export class SocketUtil {
         console.log('User disconnected', socket.id);
       });
     });
-    SocketUtil.io.on('disconnect', (socket) => {
-      console.log('user disconnected', socket.id);
-    });
   }
 }
 export const knownSockets = {

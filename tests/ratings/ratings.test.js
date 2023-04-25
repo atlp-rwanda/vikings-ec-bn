@@ -100,7 +100,7 @@ beforeAll(async () => {
         .post('/api/v1/ratings')
         .set('Authorization', `Bearer ${adminToken}`)
         .send(rate);
-      expect(res.statusCode).toBe(401);
+      expect(res.statusCode).toBe(403);
       expect(res.body.message).toEqual('You have to buy this product first in order to provide ratings and feedback');
 
     });

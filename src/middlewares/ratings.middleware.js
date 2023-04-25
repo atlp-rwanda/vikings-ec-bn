@@ -15,7 +15,7 @@ export const checkIfUserBoughtProduct = async (req, res, next) => {
   const buyerId = req.user.id;
   const orders = await OrderService.getOrderByBuyerIdAndProductId(buyerId, productId);
   if (orders.length === 0) {
-    return res.status(401).json({
+    return res.status(403).json({
       message: 'You have to buy this product first in order to provide ratings and feedback',
     });
   }
