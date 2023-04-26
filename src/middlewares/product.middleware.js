@@ -128,7 +128,7 @@ export const receivedQueryFormat = async (req, res, next) => {
 };
 
 export const checkIfImageChanged = async (req, res, next) => {
-  let oldImages = req.body.oldImages?req.body.oldImages:[];
+  let oldImages = req.body.oldImages?req.body.oldImages.split(','):[];
   const newImages = Array.isArray(req.files?.images)
     ? req.files.images
     : req.files?.images

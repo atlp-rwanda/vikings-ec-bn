@@ -120,11 +120,7 @@ export const updateProductWithNochangedImages = {
   expiryDate: '2030-02-21',
   quantity: 21,
   bonus: 300,
-  oldImages: ['http://res.cloudinary.com/djg7yg23y/image/upload/v1679297197/projects/ecommerce/06ee9c32-b93e-405e-bb33-48a6953f391d_1679297194.166.jpg',
-  'http://res.cloudinary.com/djg7yg23y/image/upload/v1679297199/projects/ecommerce/6ff703df-55de-4ac0-bb92-a9b0c1736f89_1679297197.501.jpg',
-  'http://res.cloudinary.com/djg7yg23y/image/upload/v1679297205/projects/ecommerce/dc53abf2-b7ab-4eca-a4c8-8b7c3ea223de_1679297202.304.jpg',
-  'http://res.cloudinary.com/djg7yg23y/image/upload/v1679297765/projects/ecommerce/1f40c869-3c53-41d3-a0ba-5054f563f70f_1679297756.834.jpg'
-],
+  oldImages: ['http://res.cloudinary.com/djg7yg23y/image/upload/v1679297197/projects/ecommerce/06ee9c32-b93e-405e-bb33-48a6953f391d_1679297194.166.jpg,http://res.cloudinary.com/djg7yg23y/image/upload/v1679297199/projects/ecommerce/6ff703df-55de-4ac0-bb92-a9b0c1736f89_1679297197.501.jpg,http://res.cloudinary.com/djg7yg23y/image/upload/v1679297205/projects/ecommerce/dc53abf2-b7ab-4eca-a4c8-8b7c3ea223de_1679297202.304.jpg,http://res.cloudinary.com/djg7yg23y/image/upload/v1679297765/projects/ecommerce/1f40c869-3c53-41d3-a0ba-5054f563f70f_1679297756.834.jpg'],
 };
 export const  updateProductWithLessImages ={
   name: 'coat',
@@ -133,10 +129,7 @@ export const  updateProductWithLessImages ={
   expiryDate: '2030-02-21',
   quantity: 21,
   bonus: 300,
-  oldImages: [
-    'http://res.cloudinary.com/djg7yg23y/image/upload/v1679297765/projects/ecommerce/1f40c869-3c53-41d3-a0ba-5054f563f70f_1679297756.834.jpg',
-    'http://res.cloudinary.com/djg7yg23y/image/upload/v1679297765/projects/ecommerce/1f40c869-3c53-41d3-a0ba-5054f563f70f_1679297756.834.jpg'
-]
+  oldImages: ['http://res.cloudinary.com/djg7yg23y/image/upload/v1679297197/projects/ecommerce/06ee9c32-b93e-405e-bb33-48a6953f391d_1679297194.166.jpg,http://res.cloudinary.com/djg7yg23y/image/upload/v1679297199/projects/ecommerce/6ff703df-55de-4ac0-bb92-a9b0c1736f89_1679297197.501.jpg'],
 };
 export const  updateWithOneImage ={
   name: 'coat',
@@ -145,9 +138,5 @@ export const  updateWithOneImage ={
   expiryDate: '2030-02-21',
   quantity: 21,
   bonus: 300,
-  oldImages: [
-    'http://res.cloudinary.com/djg7yg23y/image/upload/v1679297765/projects/ecommerce/1f40c869-3c53-41d3-a0ba-5054f563f70f_1679297756.834.jpg',
-    'http://res.cloudinary.com/djg7yg23y/image/upload/v1679297765/projects/ecommerce/1f40c869-3c53-41d3-a0ba-5054f563f70f_1679297756.834.jpg',
-    'http://res.cloudinary.com/djg7yg23y/image/upload/v1679297765/projects/ecommerce/1f40c869-3c53-41d3-a0ba-5054f563f70f_1679297756.834.jpg'
-]
+  oldImages: ['http://res.cloudinary.com/djg7yg23y/image/upload/v1679297197/projects/ecommerce/06ee9c32-b93e-405e-bb33-48a6953f391d_1679297194.166.jpg,http://res.cloudinary.com/djg7yg23y/image/upload/v1679297199/projects/ecommerce/6ff703df-55de-4ac0-bb92-a9b0c1736f89_1679297197.501.jpg,http://res.cloudinary.com/djg7yg23y/image/upload/v1679297205/projects/ecommerce/dc53abf2-b7ab-4eca-a4c8-8b7c3ea223de_1679297202.304.jpg'],
 };
