@@ -13,7 +13,7 @@ export const productRating = async (req, res) => {
       buyerId,
       productId,
     };
-    let rate = await RatingService.getProductRatingByField({ buyerId: buyerId });
+    let rate = await RatingService.getProductRatingByField({ buyerId: buyerId ,productId:productId });
     if (rate.length !== 0) {
       await RatingService.updateRatings(ratings, rate[0].id);
       rate = await RatingService.getProductRatingByField({ id: rate[0].id });

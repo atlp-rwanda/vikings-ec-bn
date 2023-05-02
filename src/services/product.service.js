@@ -1,10 +1,19 @@
 import { Op } from 'sequelize';
 import { User } from '../database/models/index';
-import { Products, Categories } from '../database/models/index';
+import { Products, Categories, Search } from '../database/models/index';
 
 export class ProductService {
 	static async createProduct(product) {
 		return await Products.create(product);
+	}
+	static async createSearchHistory(data) {
+		return await Search.create(data);
+	}
+	static async getSearchHistory(id) {
+		return await Search.findOne({where:{buyerId: id}});
+	}
+	static async updateSearchHistory(data,id) {
+		return await Search.update(data,{where:{buyerId:id}});
 	}
 	static async getAllProducts(limit = 10, page = 1) {
 		const offset = (page - 1) * limit;

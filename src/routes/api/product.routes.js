@@ -6,7 +6,8 @@ import {
   getSpecificProduct,
   markAvailableProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  recommendProducts
 } from '../../controllers/product.controller.js';
 import { productValidation } from '../../validations/product/product.validation';
 import validateAvailable from '../../validations/product/isAvailable.validation';
@@ -27,7 +28,6 @@ import {
 import { validateSearchCriteria } from '../../validations/product/searchProduct.validate.js';
 import { searchProductController } from '../../controllers/product.controller.js';
 import { uuidValidation } from '../../validations/user/userId.validation';
-import { validatePagination } from '../../validations/notification/notification.validation';
 const productRoutes = express.Router();
 productRoutes.post(
   '/',
@@ -56,6 +56,12 @@ productRoutes.get('/',
   receivedQueryFormat,
   searchProductController,
   removeExpiredProducts
+);
+
+productRoutes.get(
+  '/recommended',
+  protectRoute,
+  recommendProducts
 );
 
 productRoutes.get(

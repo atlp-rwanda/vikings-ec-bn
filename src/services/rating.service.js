@@ -29,4 +29,11 @@ export class RatingService {
     static async updateRatings(fields, id) {
         return await Ratings.update({ ...fields }, { where: { id: id } });
     }
+    static async getTopRated(){
+        const highRatedProducts= Ratings.findAll({
+            limit:3,
+            order:[['rate','desc']]
+        });
+        return highRatedProducts;
+      }
 }
