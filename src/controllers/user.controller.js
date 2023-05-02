@@ -171,11 +171,12 @@ export class UserController {
 
   static async loginUser(req, res) {
     try {
-      const { id, firstname, email, role, mustUpdatePassword } = req.user;
+      const { id, firstname, email, avatar, role, mustUpdatePassword } = req.user;
       const userData = {
         id,
         firstname,
         email,
+        avatar,
         role,
         mustUpdatePassword,
       };
