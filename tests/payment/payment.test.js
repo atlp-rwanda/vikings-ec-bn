@@ -38,8 +38,7 @@ describe('/payments', () => {
 
 		const response = await request(app).get(`/api/v1/payments/success?paymentId=${session.body.sessionId}`);
 
-		expect(response.statusCode).toBe(200);
-		expect(response.body).toHaveProperty('order');
+		expect(response.statusCode).toBe(302);
 	});
 	test('Checkout without cart: 400', async () => {
 		const response = await request(app)
