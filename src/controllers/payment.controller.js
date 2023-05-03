@@ -65,10 +65,7 @@ export const stripeSuccess = async (req, res) => {
 
 			await CartService.deleteCart(cart.id);
 		}
-		return res.status(200).json({
-			message: 'Order created successfully',
-			order: { id: order.id, amount: order.fullPrice },
-		});
+		return res.redirect(`${process.env.FRONTEND_URL}/payments/success/${order.id}`);
 	} catch (error) {
 		return res.status(500).json({
 			error: error.message,
