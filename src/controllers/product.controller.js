@@ -9,6 +9,8 @@ import { expiredProductMessage } from '../utils/mailTemplates.util';
 import { eventEmit, knownEvents } from '../utils/events.util';
 import { knownNotificationType } from '../services/notification.service';
 import { NotificationController as notify } from './notification.controller';
+import { RatingService } from '../services/rating.service';
+import { OrderService } from '../services/order.service';
 
 export const createProduct = async (req, res) => {
   try {
@@ -101,6 +103,16 @@ export const searchProductController = async (req, res) => {
   delete req.query.page;
   try {
     const result = await ProductService.searchProduct(req.query, limit, page);
+    const search=await ProductService.getSearchHistory(req.user?.id);
+    const buyerId=req.user.id;
+    const products=[result.rows[0]?.id];
+    search&&products.push(...search.products);
+    const data={buyerId,products};
+    if(!search){
+    ProductService.createSearchHistory(data);
+    }else{
+      ProductService.updateSearchHistory(data,req.user.id);
+    }
     return res.status(200).json({ products: result });
   } catch (err) {
     return res.status(500).json({
@@ -180,4 +192,16 @@ export const deleteProduct = async (req, res) => {
         message: 'Error occured while deleting product',
       });
   }
+};
+
+export const recommendProducts=async(req,res)=>{
+  const highRatedProducts=await RatingService.getTopRated();
+  const hr=highRatedProducts.map((product)=>product=product.productId);
+  const getOrders= await OrderService.getAllOrders(10,1,req.user);
+  const searchHistory=await ProductService.getSearchHistory(req.user.id);
+  const boughtProducts = getOrders.items.flatMap((item) => item.products.map((product) => product.productId));
+  const sh = searchHistory?.products?.map((item) => item) ?? [];
+  let recommended=[...hr,...boughtProducts,...sh];
+  recommended=recommended.filter((item)=>item!==null);
+  res.status(200).json({message:'Recommended products',products:recommended});
 };
