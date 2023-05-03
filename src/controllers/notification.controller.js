@@ -72,7 +72,7 @@ export class NotificationController {
   static async notifySellersOnBuyProduct(sales, buyerId) {
     eventEmit(knownEvents.onNotification, {
       type: knownNotificationType.newOrder,
-      message: ' Your order received successful. we will keep you in touch ',
+      message: ' Your order was received successfully. We will keep you updated. ',
       receiverId: buyerId,
     });
     const salesProduct = await NotificationController.getProductSale(sales);
@@ -80,7 +80,7 @@ export class NotificationController {
     salesProduct.map((each) => {
       return eventEmit(knownEvents.onNotification, {
         type: knownNotificationType.newOrder,
-        message: `You have new order made by ${buyer.firstname} ${buyer.lastname}. 
+        message: `You have a new order made by ${buyer.firstname} ${buyer.lastname}. 
            ${each.sale.quantitySold} ${each.product.name} `,
         receiverId: each.product.userId,
       });
@@ -108,7 +108,7 @@ export class NotificationController {
     const product = await ProductService.getProductById(ratings.productId);
     eventEmit(knownEvents.onNotification, {
       type: knownNotificationType.productRating,
-      message: `Your product ${product.name} with ${ratings.rate}`,
+      message: `Your product ${product.name} was rated with ${ratings.rate} stars`,
       receiverId: product.userId,
     });
   }

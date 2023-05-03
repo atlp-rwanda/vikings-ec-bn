@@ -39,7 +39,7 @@ schedule(repetitionDuration, async () => {
       UserService.updateUser({ mustUpdatePassword: true }, eachUser.id);
       eventEmit(knownEvents.onNotification, {
         type: knownNotificationType.changePassword,
-        message: 'Please it is to change your password for security purpose',
+        message: 'Please, it is time to change your password for security purposes',
         receiverId: eachUser.id,
       });
     }
