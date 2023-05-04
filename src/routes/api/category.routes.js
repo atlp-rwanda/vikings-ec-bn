@@ -17,6 +17,6 @@ categoryRoutes
 		checkIfCategoryExistsByName,
 		addCategory
 	)
-	.get(protectRoute, restrictTo('seller', 'admin'), getCategories);
+	.get(protectRoute, restrictTo('buyer','seller', 'admin'), getCategories);
 
 export default categoryRoutes;
