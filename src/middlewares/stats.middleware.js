@@ -20,7 +20,7 @@ export const validateStats  = async (req, res, next) => {
     }
     req.stats = {}
     next()
-    
+
 };
 export const getWishes = async (req, res, next) => {
     if(req.statsFields.includes(knownStats.wishes)){
@@ -42,18 +42,18 @@ export const getWishes = async (req, res, next) => {
               reject(e);
             }
           })();
-          
+
         });
       }));
       let productWithWishes = sellerWishes.reduce((previousValue, currentWish) => {
         const productWished = currentWish.products.forEach(each => {
-          const eachWish = {id: each.id, name: each.name}
+            const eachWish = {id: each.id, name: each.name, image:each.images[0]};
           if(!previousValue[eachWish.id]){
             previousValue[eachWish.id] = {...eachWish, count : 0}
           }
           previousValue[eachWish.id].count = previousValue[eachWish.id].count + 1;
         })
-      
+
         return previousValue;
       }, {});
       productWithWishes = Object.keys(productWithWishes).map(each => productWithWishes[each]);
@@ -92,6 +92,7 @@ export const getSales = async (req, res, next) => {
               wishes: currentValue.product.wished,
               sales: 0,
               price: currentValue.product.price,
+                image: currentValue.product.images[0],
               categoryId: currentValue.product.categoryId
             }
           }
@@ -108,7 +109,7 @@ export const getSales = async (req, res, next) => {
           ...productSalesStats[each]
         }
       })
-         
+
       const salesbycategory = productStatistics.reduce((previousValue,currentValue) => {
         if(!previousValue[currentValue.categoryId]){
           previousValue[currentValue.categoryId] = 0
@@ -143,7 +144,7 @@ export const getProductCreated = async (req, res, next) => {
         const start = req.query.start;
         const end = req.query.end;
         const productStats = await ProductService.getProductsStatsbySeller(start, end, sellerId);
-      
+
         req.stats = {...req.stats, productCreated: productStats.length,}
     }
     next();
@@ -152,10 +153,12 @@ export const getExpired = async (req, res, next) => {
     if(req.statsFields.includes(knownStats.expiredProduct)){
         const sellerId = req.user.id;
 
-        const products = await ProductService.getExpiredProductStats()
+        const products = await ProductService.getExpiredProductStats(sellerId);
       const productWithTotalLost = products.map(product =>{
         return {
           id: product.id,
+            name: product.name,
+            image: product.images[0],
           quantity: product.quantity,
           price: product.price,
           totalPrice: product.quantity * product.price
