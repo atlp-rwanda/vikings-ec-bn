@@ -16,6 +16,7 @@ module.exports = {
             '$2b$10$UZX4Fy9x4yJp4rTgiw0imelLLg.7JnGrrHqoPvbq9ThUlOu8e4n1e',
           role: 'admin',
           isActive: true,
+          usesPassword:true,
           createdAt: new Date(),
           updatedAt: new Date(),
           verified: true,

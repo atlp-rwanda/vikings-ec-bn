@@ -37,12 +37,12 @@ export class NotificationService {
 }
 
 export const knownNotificationType = {
-  changePassword: 'change-password',
-  productExpired: 'product-expired',
-  productWished: 'product-wished',
-  productDeleted: 'product-deleted',
-  productAvailable: 'product-available',
-  newOrder: 'new-order',
-  changeOrderStatus: 'change-order-status',
-  productRating: 'product-rating',
+  changePassword: 'Change password',
+  productExpired: 'Product expired',
+  productWished: 'Product wished',
+  productDeleted: 'Product deleted',
+  productAvailable: 'Product available',
+  newOrder: 'New order',
+  changeOrderStatus: 'Change order status',
+  productRating: 'Product rating',
 };

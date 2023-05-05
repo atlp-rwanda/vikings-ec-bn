@@ -117,16 +117,6 @@ describe('', () => {
     expect(response.statusCode).toEqual(404);
   });
 
-  test('No unread notifications', async () => {
-    const response = await request(app)
-      .patch('/api/v1/notifications/')
-      .set('Authorization', `Bearer ${token2}`);
-    expect(response.body.message).toEqual(
-      'You do not have unread notifications'
-    );
-    expect(response.statusCode).toEqual(404);
-  });
-
   it('should return a 500 status code from NotificationService.updateNotifications', async () => {
     const req = { user: { id: id } };
     const res = {

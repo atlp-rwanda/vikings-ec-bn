@@ -73,7 +73,7 @@ export const removeExpiredProducts = async (req, res) => {
     eventEmit(knownEvents.onNotification, {
       receiverId: req.user.id,
       type: knownNotificationType.productExpired,
-      message: `${req.product.name} has been expired`,
+      message: `${req.product.name} has expired`,
     });
 
     return res
@@ -141,7 +141,7 @@ export const markAvailableProduct = async (req, res) => {
       await notify.notifyProductLovers(
         productId,
         knownNotificationType.productAvailable,
-        `Product ${req.product.name} is available know `
+        `Product ${req.product.name} is available now`
       );
     }
     return res
@@ -176,12 +176,12 @@ export const deleteProduct = async (req, res) => {
     eventEmit(knownEvents.onNotification, {
       receiverId: req.product.userId,
       type: knownNotificationType.productDeleted,
-      message: `${req.product.name} has been Delete by ${req.user.email}`,
+      message: `${req.product.name} has been deleted by ${req.user.email}`,
     });
     await notify.notifyProductLovers(
       productId,
       knownNotificationType.productDeleted,
-      `Product ${req.product.name} has been delete `
+      `Product ${req.product.name} has been deleted`
     );
     return res.status(200).json({ message: 'Product deleted successfully' });
   } catch (err) {

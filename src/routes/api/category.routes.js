@@ -16,6 +16,7 @@ categoryRoutes
 		categoryValidation,
 		checkIfCategoryExistsByName,
 		addCategory
+
 	)
 	.get(protectRoute, restrictTo('buyer','seller', 'admin'), getCategories);
 

@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             isRead: {
                 type: DataTypes.BOOLEAN,
-                defaultValue: true,
+                defaultValue: false,
             },
             receiverId: {
                 type: DataTypes.UUID,

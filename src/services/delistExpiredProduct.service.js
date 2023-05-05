@@ -34,6 +34,6 @@ subscribe(knownEvents.productExpired,async ({product, isExpired}) =>{
     eventEmit(knownEvents.onNotification, {
         receiverId:product.userId,
         type:knownNotificationType.productExpired,
-        message: `${product.name} has been expired`,
+        message: `${product.name} has expired`,
     });
 });

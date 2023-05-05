@@ -28,7 +28,7 @@ export class WishlistController {
       eventEmit(knownEvents.onNotification, {
         type:knownNotificationType.productWished,
         message:`Product ${product.name} has been wished by ${req.user.email}.
-         know product has ${product.wished} `,
+         now product has ${product.wished} wishes.`,
         receiverId: product.userId,
       });
       return res.status(201).json({
