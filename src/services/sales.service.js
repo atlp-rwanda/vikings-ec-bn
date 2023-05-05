@@ -1,6 +1,5 @@
 import { Op } from "sequelize";
-import { Sales } from "../database/models/index";
-
+import { Sales, Products } from "../database/models/index";
 export class SalesService {
   static async createSales(sale) {
     return await Sales.create(sale);
@@ -12,7 +11,18 @@ export class SalesService {
     return Sales.findByPk(saleId);
   }
   static async getAllSales() {
-    return Sales.findAll();
+    return await Sales.findAll({
+        include: [
+            {
+                model: Products,
+                attributes: {
+                    exclude: [
+                        'seller',
+                    ],
+                },
+            },
+        ],
+    });
   }
   static async updateSaleStatusById(orderStatus, id) {
     return await Sales.update({ status: orderStatus }, { where: { id: id } });

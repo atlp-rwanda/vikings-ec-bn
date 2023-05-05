@@ -177,6 +177,7 @@ router.get(
   protectRoute,
   getUserWishes,
   restrictTo('buyer', 'admin'),
+  uuidValidation('userId'),
   checkIfUserExistById,
   WishlistController.getWishByUser
 );

@@ -84,10 +84,11 @@ export class ProductService {
 		return products;
 	}
 
-	static async getExpiredProductStats() {
+	static async getExpiredProductStats(sellerId) {
 		const expiredProducts = await Products.findAll({
 			where: {
 				isExpired: true,
+				userId: sellerId
 			},
 		});
 		return expiredProducts;
