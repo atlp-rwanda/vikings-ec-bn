@@ -64,6 +64,7 @@ export class WishlistController {
       let productsId = wishes.productsId;
       const products = await CartService.getCartProducts(productsId);
       const wishData = products.map((products) => ({
+        id: products.id,
         name: products.name,
         price: products.price,
         images: products.images,
@@ -84,13 +85,13 @@ export class WishlistController {
     try {
       const wishes = req.wishlist;
       const productsId = wishes.productsId;
-      const { product_id } = req.params;
-      await WishService.updateWishlist(
-        { productsId: productsId },
-        wishes.id
+      const { productId } = req.params;
+      const productToRemove = wishes.productsId.findIndex(
+          (product) => product === productId
       );
+      wishes.productsId.splice(productToRemove, 1);
+      await WishService.updateWishlist( { productsId: wishes.productsId }, wishes.id);
       return res.status(200).json({
-        product_id: product_id,
         message: 'Item removed from wishlist successfully',
       });
     } catch (error) {
