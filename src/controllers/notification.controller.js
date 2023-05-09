@@ -91,7 +91,7 @@ export class NotificationController {
     salesProduct.map((each) => {
       return eventEmit(knownEvents.onNotification, {
         type: knownNotificationType.changeOrderStatus,
-        message: `order with id ${each.orderId} has been ${status} `,
+        message: `order with id ${each.sale.orderId} has been ${status} `,
         receiverId: each.product.userId,
       });
     });

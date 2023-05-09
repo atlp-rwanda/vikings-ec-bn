@@ -42,13 +42,6 @@ export const getAllProducts = async (req, res) => {
       products.totalItems = rows.length;
       products.rows = rows;
     }
-    if (role === 'buyer') {
-      const rows = products.rows.filter(
-        (product) => product.isAvailable === true
-      );
-      products.totalItems = rows.length;
-      products.rows = rows;
-    }
     return res.status(200).json({ products: products });
   } catch (err) {
     return res

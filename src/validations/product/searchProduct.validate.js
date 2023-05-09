@@ -9,7 +9,7 @@ export const validateSearchCriteria = async (req, res, next) => {
     limit,
     page
   } = req.query;
-  if (name && !/^[a-zA-Z0-9\s]+$/.test(name)) {
+  if (name && !/^[a-zA-Z0-9\s-]+$/.test(name)) {
     return res.status(400).json({ error: 'Invalid product name' });
   }
   if (category && !/^[a-zA-Z0-9\s]+$/.test(category)) {
@@ -29,7 +29,7 @@ export const validateSearchCriteria = async (req, res, next) => {
     if (!getCategoryId) {} else {
       req.query['category'] = getCategoryId.id;
     }
-  } 
+  }
   if (req.user.role === 'seller' && Object.keys(req.query).length > 2) {
     return res.status(403).json({
       message: 'You are not allowed to perform this task',
