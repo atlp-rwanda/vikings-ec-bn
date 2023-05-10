@@ -25,6 +25,7 @@ export class OrderService {
 			where,
 			limit: limit,
 			offset: offset,
+			order: [['updatedAt', 'DESC']],
 		});
 		const totalPages = Math.ceil(count / limit);
 		return {

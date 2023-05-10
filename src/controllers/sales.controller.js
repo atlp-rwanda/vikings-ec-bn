@@ -22,17 +22,18 @@ export class SalesController {
 
     static async getSales(req, res) {
         try {
+            const { limit, page } = req.query;
             const sellerId = req.user.id;
-            const sales = await SalesService.getAllSales();
+            const sales = await SalesService.getAllSales(limit, page);
             let sellerSales = [];
-            for (const sale of sales) {
+            for (const sale of sales.items) {
                 const productId = sale.productId;
                 const product = await ProductService.getProductById(productId);
                 if (sellerId === product.userId) {
                     sellerSales.push(sale);
                 }
             }
-            return res.status(200).json({ message: 'All seller sales retrieved successfully', sellerSales: sellerSales });
+            return res.status(200).json({ message: 'All seller sales retrieved successfully', sales: sellerSales, meta: sales.meta });
         } catch (error) {
             return res.status(500).json({
                 error: error.message,
@@ -40,6 +41,7 @@ export class SalesController {
             });
         }
     }
+
 
     static async getSale(req, res) {
         try {

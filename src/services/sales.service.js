@@ -10,21 +10,37 @@ export class SalesService {
   static async getSale(saleId) {
     return Sales.findByPk(saleId);
   }
-  static async getAllSales() {
-    return await Sales.findAll({
-        include: [
-            {
-                model: Products,
-                attributes: {
-                    exclude: [
-                        'seller',
-                    ],
+    static async getAllSales(limit, page) {
+        const offset = (page - 1) * limit;
+        const sales = await Sales.findAndCountAll({
+            order: [['updatedAt', 'DESC']],
+            include: [
+                {
+                    model: Products,
+                    attributes: {
+                        exclude: [
+                            'seller',
+                        ],
+                    },
                 },
+            ],
+            limit: limit,
+            offset: offset
+        });
+        const totalPages = Math.ceil(sales.count / limit);
+        return {
+            items: sales.rows,
+            meta: {
+                totalItems: sales.count,
+                itemCount: sales.rows.length,
+                itemsPerPage: limit,
+                totalPages,
+                currentPage: page,
             },
-        ],
-    });
-  }
-  static async updateSaleStatusById(orderStatus, id) {
+        };
+    }
+
+    static async updateSaleStatusById(orderStatus, id) {
     return await Sales.update({ status: orderStatus }, { where: { id: id } });
   }
 

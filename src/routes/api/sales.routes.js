@@ -1,11 +1,12 @@
 import express from 'express';
 import { SalesController } from '../../controllers/sales.controller';
 import { protectRoute, restrictTo } from '../../middlewares/auth.middleware';
-import { checkIfOrderExists } from '../../middlewares/order.middleware';
+import {checkIfOrderExists, receivedPaginationFormat} from '../../middlewares/order.middleware';
 import { checkIfSellerOwnsProduct } from '../../middlewares/product.middleware';
 import { checkIfSaleExists } from '../../middlewares/sales.middleware';
 import statusValidation from '../../validations/sale/status.validation';
 import { uuidValidation } from '../../validations/user/userId.validation';
+import validatePagination from '../../validations/order/order.validation';
 
 const salesRoutes = express.Router();
 
@@ -28,6 +29,8 @@ salesRoutes
   .get(
     protectRoute,
     restrictTo('buyer', 'admin'),
+    validatePagination,
+    receivedPaginationFormat,
     uuidValidation('orderId'),
     checkIfOrderExists,
     SalesController.getOrderSales
