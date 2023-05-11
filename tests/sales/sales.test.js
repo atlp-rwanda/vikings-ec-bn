@@ -214,7 +214,7 @@ describe('Sales endpoints', () => {
 
   it('should return 200 status code', async () => {
     const response = await request(app)
-      .get('/api/v1/sales/')
+      .get('/api/v1/sales?limit=1&&page=1')
       .set('Authorization', `Bearer ${sellerToken}`)
       .send();
 
@@ -260,7 +260,7 @@ describe('Sales endpoints', () => {
   });
 
   it('should return a 500 status code and an error message if an error occurs', async () => {
-    const req = { user: { id: sellerId } };
+    const req = { user: { id: sellerId }, query: { limit: 10, page: 1} };
     const res = {
       status: jest.fn(() => res),
       json: jest.fn(),

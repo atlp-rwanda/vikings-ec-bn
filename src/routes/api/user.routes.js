@@ -38,7 +38,7 @@ import validateAuthCode from '../../validations/user/2facode.validation.js';
 import validateEmail from '../../validations/email.validation.js';
 import { WishlistController } from '../../controllers/wishlist.controller';
 import { uuidValidation } from '../../validations/user/userId.validation.js';
-import validatePagenation from '../../validations/order/order.validation.js';
+import validatePagination from '../../validations/order/order.validation.js';
 import { receivedPaginationFormat } from '../../middlewares/order.middleware.js';
 
 googlePass();
@@ -132,7 +132,7 @@ router.post('/logout', protectRoute, logout);
 router.get('/',
   protectRoute,
   restrictTo('admin'),
-  validatePagenation,
+  validatePagination,
   receivedPaginationFormat,
   UserController.getAllUsers);
 
