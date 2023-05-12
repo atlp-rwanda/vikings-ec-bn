@@ -69,7 +69,6 @@ productRoutes.get(
   protectRoute,
   uuidValidation('productId'),
   checkIfProductExistsById,
-  checkIfProductIsAvailableById,
   checkIfSellerOwnsProduct,
   getSpecificProduct
 );

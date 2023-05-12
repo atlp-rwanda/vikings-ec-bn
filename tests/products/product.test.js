@@ -350,8 +350,8 @@ describe('GET /Products:productId', () => {
 		const response = await request(app)
 			.get(`/api/v1/products/${unavailableProduct}`)
 			.set('Authorization', `Bearer ${notSeller}`);
-		expect(response.body.message).toEqual('Product is not available');
-		expect(response.statusCode).toEqual(404);
+		expect(response.body.product).toBeDefined();
+		expect(response.statusCode).toEqual(200);
 	});
 
 	test('Given valid productId and available', async () => {
